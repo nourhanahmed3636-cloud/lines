@@ -542,6 +542,30 @@ html.dark .homehero .greet h1,html.dark .homehero .greet p{text-shadow:0 2px 16p
 .bgpick button i{position:absolute;top:4px;right:4px;width:20px;height:20px;border-radius:50%;background:rgba(0,0,0,.55);color:#fff;font-style:normal;font-size:13px;display:grid;place-items:center}
 .bgpick button.on{outline:3px solid var(--v1);outline-offset:2px;transform:scale(1.04)}
 
+
+/* buttons tinted with the background's colour (not fully transparent) */
+.chip,.iconbtn,.seg,.btn.soft,.btn.ghost,.outline,.lqty button,.sel3 button,.prio button,.typepick button,.taskpick{
+  background:color-mix(in srgb,var(--v1) 16%,rgba(255,255,255,.84))!important;border:1px solid color-mix(in srgb,var(--v1) 22%,rgba(255,255,255,.7))!important;color:color-mix(in srgb,var(--v1) 75%,#1f1d3a)}
+.chip{color:color-mix(in srgb,var(--v1) 70%,#1f1d3a)}
+.iconbtn{color:var(--v1)}
+.seg button{color:color-mix(in srgb,var(--v1) 45%,#8f8aa3)}
+.seg .pill{background:#fff}
+.chip.on,.sel3 button.on,.typepick button.on{background:var(--grad)!important;color:#fff!important;border-color:transparent!important}
+.prio button.on{background:var(--c)!important;color:#fff!important}
+.btn.soft{color:var(--v1)}
+.btn.ghost{color:color-mix(in srgb,var(--v1) 60%,#1f1d3a)}
+.nav-in{background:linear-gradient(135deg,color-mix(in srgb,var(--v1) 14%,rgba(255,255,255,.86)),color-mix(in srgb,var(--v1) 8%,rgba(255,255,255,.7)))!important;border-color:color-mix(in srgb,var(--v1) 20%,#fff)!important}
+.nav .tab{color:color-mix(in srgb,var(--v1) 35%,#8f8aa3)}
+.pills span{background:color-mix(in srgb,var(--v1) 14%,rgba(255,255,255,.8))!important;border-color:color-mix(in srgb,var(--v1) 20%,#fff)!important}
+html.dark .chip,html.dark .iconbtn,html.dark .seg,html.dark .btn.soft,html.dark .btn.ghost,html.dark .outline,html.dark .lqty button,html.dark .sel3 button,html.dark .prio button,html.dark .typepick button,html.dark .taskpick{
+  background:color-mix(in srgb,var(--v1) 26%,rgba(18,14,44,.82))!important;border-color:color-mix(in srgb,var(--v1) 35%,rgba(255,255,255,.1))!important;color:#f2effd}
+html.dark .iconbtn,html.dark .btn.soft{color:color-mix(in srgb,var(--v1) 60%,#fff)}
+html.dark .seg .pill{background:color-mix(in srgb,var(--v1) 45%,rgba(255,255,255,.1))}
+html.dark .seg button{color:#c9c3e6}
+html.dark .nav-in{background:linear-gradient(135deg,color-mix(in srgb,var(--v1) 24%,rgba(18,14,44,.88)),color-mix(in srgb,var(--v1) 14%,rgba(14,10,36,.8)))!important}
+html.dark .nav .tab{color:#a49dc8}
+html.dark .pills span{background:color-mix(in srgb,var(--v1) 28%,rgba(18,14,44,.7))!important}
+
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 </style>
 </head>
@@ -732,30 +756,52 @@ addEventListener("resize",()=>{if(FXS.type)startFx(FXS.type)});
 /* ---------------- your own background photos: enhanced, stored on this phone ---------------- */
 function rgb2hsl(r,g,b){const mx=Math.max(r,g,b),mn=Math.min(r,g,b);let h=0,s=0;const l=(mx+mn)/2;if(mx!==mn){const d=mx-mn;s=l>.5?d/(2-mx-mn):d/(mx+mn);h=mx===r?(g-b)/d+(g<b?6:0):mx===g?(b-r)/d+2:(r-g)/d+4;h/=6}return [h,s,l]}
 function hsl2hex(h,s,l){const f=n=>{const k=(n+h*12)%12,a=s*Math.min(l,1-l);return Math.round(255*(l-a*Math.max(-1,Math.min(k-3,9-k,1)))).toString(16).padStart(2,"0")};return "#"+f(0)+f(8)+f(4)}
-async function enhancePhoto(file){
+async function enhancePhoto(file,ready){
   const url=URL.createObjectURL(file);const im=await new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=rej;i.src=url});
   let w=im.naturalWidth,h=im.naturalHeight;const tw=Math.min(1170,Math.max(900,w));let sc=tw/w;if(h*sc>2700)sc=2700/h;const W=Math.round(w*sc),H=Math.round(h*sc);
   let src=im;if(sc>1.6){const mid=document.createElement("canvas");mid.width=Math.round(w*Math.sqrt(sc));mid.height=Math.round(h*Math.sqrt(sc));const m2=mid.getContext("2d");m2.imageSmoothingQuality="high";m2.drawImage(im,0,0,mid.width,mid.height);src=mid}
   const cv=document.createElement("canvas");cv.width=W;cv.height=H;const cx=cv.getContext("2d");cx.imageSmoothingQuality="high";cx.drawImage(src,0,0,W,H);URL.revokeObjectURL(url);
-  const d=cx.getImageData(0,0,W,H),p=d.data,o=new Uint8ClampedArray(p.length);const amt=sc>1.2?.55:.35;
+  if(!ready){const d=cx.getImageData(0,0,W,H),p=d.data,o=new Uint8ClampedArray(p.length);const amt=sc>1.2?.55:.35;
   for(let y=0;y<H;y++)for(let x=0;x<W;x++){const i=(y*W+x)*4;
     for(let c=0;c<3;c++){let v=p[i+c];if(x>0&&x<W-1&&y>0&&y<H-1){const n=(p[i+c-4]+p[i+c+4]+p[i+c-W*4]+p[i+c+W*4])/4;v=v+(v-n)*amt}o[i+c]=v}
     const r=o[i],g=o[i+1],b=o[i+2],L=.299*r+.587*g+.114*b;
     for(let c=0;c<3;c++){let v=o[i+c];v=L+(v-L)*1.1;v=(v-128)*1.05+130;o[i+c]=v}o[i+3]=255}
-  d.data.set(o);cx.putImageData(d,0,0);
+  d.data.set(o);cx.putImageData(d,0,0)}
   const sm=document.createElement("canvas");sm.width=40;sm.height=80;const s2=sm.getContext("2d");s2.drawImage(cv,0,0,40,80);const q=s2.getImageData(0,0,40,80).data;
   const hist=new Float32Array(24);let Lsum=0;const band=(y0,y1)=>{let r=0,g=0,b=0,n=0;for(let y=y0;y<y1;y++)for(let x=0;x<40;x++){const i=(y*40+x)*4;r+=q[i];g+=q[i+1];b+=q[i+2];n++}return "#"+[r,g,b].map(v=>Math.round(v/n).toString(16).padStart(2,"0")).join("")};
   for(let i=0;i<q.length;i+=4){const [hh,ss,ll]=rgb2hsl(q[i]/255,q[i+1]/255,q[i+2]/255);Lsum+=ll;if(ss>.2&&ll>.2&&ll<.9)hist[Math.floor(hh*24)%24]+=ss*(1-Math.abs(ll-.6))}
   const ord=[...hist.keys()].sort((a,b)=>hist[b]-hist[a]);const b1=ord[0];const b2=ord.find(b=>Math.min(Math.abs(b-b1),24-Math.abs(b-b1))>=3&&hist[b]>hist[b1]*.15)??(b1+3)%24;
-  const hu=b=>(b+.5)/24;const acc=[hsl2hex(hu(b1),.68,.5),hsl2hex(hu(b1),.75,.62),hsl2hex(hu(b2),.72,.66),hsl2hex(hu(b1),.8,.74)];
+  const hu=b=>(b+.5)/24;const acc=[hsl2hex(hu(b1),.58,.52),hsl2hex(hu(b1),.66,.63),hsl2hex(hu(b2),.72,.66),hsl2hex(hu(b1),.8,.74)];
   const bright=Lsum/(q.length/4);
   const blob=await new Promise(r=>cv.toBlob(r,"image/jpeg",.86));
   return {blob,acc,ph:[band(0,16),band(32,48),band(64,80)],m:bright>.42?"light":"dark",fx:bright>.42?"sparkle":"dust"};
 }
 function hydrateImgs(root){root.querySelectorAll("img[data-lid]").forEach(im=>{const id=im.dataset.lid;if(LOCALURL[id]){im.src=LOCALURL[id];return}
   idbGet(id).then(bl=>{if(bl){LOCALURL[id]=URL.createObjectURL(bl);im.src=LOCALURL[id]}}).catch(()=>{})})}
+let zipLoading=null;
+function loadZip(){if(window.JSZip)return Promise.resolve();if(zipLoading)return zipLoading;
+  zipLoading=new Promise((res,rej)=>{const s=document.createElement("script");s.src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js";s.onload=res;s.onerror=rej;document.head.appendChild(s)});return zipLoading}
+function mergeBackup(j){let n=0;if(!j||j.app!=="lines-backup"||typeof j.items!=="object")return -1;
+  Object.entries(j.items).forEach(([k,v])=>{if(!v||typeof v!=="object"||!v.kind)return;const cur=S.items[k];if(cur&&(cur.upd||0)>=(v.upd||0))return;S.items[k]=v;persist(k,v);n++});return n}
+/* one file can bring back your data and your backgrounds: a .zip with backup.json + images */
+async function importAny(files){
+  let data=0,pics=[];
+  for(const f of files){
+    if(/\.zip$/i.test(f.name)||f.type==="application/zip"){
+      toast("Opening the pack…",1500);try{await loadZip()}catch(e){toast("Couldn't open the zip — check your connection");continue}
+      const z=await JSZip.loadAsync(f);
+      for(const [name,entry] of Object.entries(z.files)){if(entry.dir||name.startsWith("__MACOSX"))continue;
+        if(/\.json$/i.test(name)){try{const n=mergeBackup(JSON.parse(await entry.async("string")));if(n>0)data+=n}catch(e){}}
+        else if(/\.(jpe?g|png|webp)$/i.test(name)){const b=await entry.async("blob");pics.push(new File([b],name.split("/").pop(),{type:/png$/i.test(name)?"image/png":"image/jpeg"}))}}
+    }else if(/\.json$/i.test(f.name)||f.type==="application/json"){try{const n=mergeBackup(JSON.parse(await f.text()));if(n>0)data+=n}catch(e){}}
+    else if(/^image\//.test(f.type)||/\.(jpe?g|png|webp|heic)$/i.test(f.name))pics.push(f);
+  }
+  if(data){lastTab=null;render();toast(`Your data is back ✓ (${data} items)`,2500)}
+  if(pics.length)await addPhotos(pics);
+  return data+pics.length;
+}
 async function addPhotos(files){
-  let n=0;for(const f of files){try{toast(`Enhancing ${n+1}/${files.length}…`,1200);const e=await enhancePhoto(f);
+  let n=0;for(const f of files){try{toast(`Adding background ${n+1}/${files.length}…`,1200);const e=await enhancePhoto(f,/^HD_/i.test(f.name));
     const r=await upload(new File([e.blob],"bg.jpg",{type:"image/jpeg"}));if(!r)continue;
     put({kind:"ubg",id:uid(),assetId:r.id,n:"My photo",m:e.m,ph:e.ph,acc:e.acc,fx:e.fx,created:Date.now()},true);n++}catch(err){}}
   render();toast(n?`Added ${n} background${n>1?"s":""} ✨`:"Couldn't add those photos");return n;
@@ -1894,7 +1940,7 @@ function settingsSheet(){
    <label class="l">Background</label>
    <div class="sel3" id="s-shuf"><button type="button" data-v="1" class="${m.bgPin?"":"on"}">🔀 New one every open</button><button type="button" data-v="0" class="${m.bgPin?"on":""}">📌 Keep one</button></div>
    <div class="bgpick" id="s-bg">${bgList().map(k=>{const b=bgInfo(k);return `<button data-v="${k}" class="${(m.bgPin||CURBG)===k?"on":""}"><img alt="" loading="lazy" decoding="async" src="${bgSrc(k,true)}"${bgInfo(k).src&&String(bgInfo(k).src).startsWith("local:")?` data-lid="${bgInfo(k).src}"`:""}><span>${b.m==="dark"?"🌙":"☀️"}</span>${k.startsWith("u:")?`<i data-del="${k}">×</i>`:""}</button>`}).join("")}</div>
-   <label class="btn soft block" style="margin-top:12px">📷 Add from Photos<input type="file" id="s-photos" accept="image/*" multiple hidden></label>
+   <label class="btn soft block" style="margin-top:12px">📷 Add from Photos or Files<input type="file" id="s-photos" accept="image/*,.zip,application/zip" multiple hidden></label>
    <div class="muted" style="margin-top:8px;line-height:1.6">Your photos are sharpened, colour-boosted and sized for your screen, then saved privately on this phone. Buttons take each background's colours.</div>
    <label class="l">Sound effects</label><div class="sel3" id="s-snd"><button type="button" data-v="1" class="${m.sound!==false?"on":""}">🔊 On</button><button type="button" data-v="0" class="${m.sound===false?"on":""}">🔇 Off</button></div>
    <label class="l">Daily review reminder</label><input type="time" id="s-time" value="${esc(m.reviewTime||"21:00")}">
@@ -1911,7 +1957,7 @@ function settingsSheet(){
      el.querySelectorAll("#s-bg button").forEach(x=>x.classList.toggle("on",x===b));el.querySelectorAll("#s-shuf button").forEach(x=>x.classList.toggle("on",x.dataset.v==="0"));
      setMetaQ({bgPin:k},true);if((info.m==="dark")!==isDark()&&info.m!=="both"){setMetaQ({theme:info.m==="dark"?"dark":"light"},true);applyTheme();themeIcons()}applyBg(k);render();sfx("tick")};
    hydrateImgs(el);
-   el.querySelector("#s-photos").onchange=async ev=>{const fs=[...ev.target.files];if(!fs.length)return;const n=await addPhotos(fs);if(n){closeSheet(true);settingsSheet()}};
+   el.querySelector("#s-photos").onchange=async ev=>{const fs=[...ev.target.files];if(!fs.length)return;const n=await importAny(fs);if(n){closeSheet(true);settingsSheet()}};
    const p=el.querySelector("#s-perm");p&&(p.onclick=async()=>{try{const r=await Notification.requestPermission();toast(r==="granted"?"Notifications on ✅":"This browser doesn't allow notifications here")}catch(e){toast("This browser doesn't allow notifications here")}});
    el.querySelector("#s-exp").onclick=()=>{const j=JSON.stringify({app:"lines-backup",v:1,at:Date.now(),items:S.items});
      try{navigator.clipboard.writeText(j).then(()=>toast("Backup copied ✓ — paste it into Import on your other device"),()=>showExp(j))}catch(err){showExp(j)}};
@@ -1931,9 +1977,11 @@ function widgetData(){
     idea:h&&h.type==="text"?{q:h.text.slice(0,140),b:b?b.t:""}:null};
 }
 function showExp(j){sheet(`<h3 style="font-size:20px">Your backup</h3><div class="muted" style="margin-bottom:10px">Select all and copy.</div><textarea readonly id="bx" style="min-height:160px;font-size:11px">${esc(j)}</textarea>`,el=>{const t=el.querySelector("#bx");t.focus();t.select()})}
-function importSheet(){sheet(`<h3 style="font-size:20px">Import backup</h3><div class="muted" style="margin-bottom:10px">Paste a backup you exported. It's added to what's here — nothing gets deleted.</div><label class="btn indigo block">📄 Choose backup file<input type="file" id="bi-f" accept=".json,application/json,text/plain" hidden></label><div class="muted" style="text-align:center;margin:10px 0">or paste it</div><textarea id="bi" style="min-height:120px;font-size:11px" placeholder="Paste here…"></textarea><button class="btn soft block" style="margin-top:14px" id="bi-go">Import pasted text</button>`,el=>{
-  el.querySelector("#bi-f").onchange=async ev=>{const f=ev.target.files[0];if(!f)return;el.querySelector("#bi").value=await f.text();el.querySelector("#bi-go").click()};
-  el.querySelector("#bi-go").onclick=()=>{let j;try{j=JSON.parse(el.querySelector("#bi").value)}catch(e){return toast("That doesn't look like a Lines backup")}
+function importSheet(){sheet(`<h3 style="font-size:20px">Import backup</h3><div class="muted" style="margin-bottom:10px">Choose a backup file or pack, or paste a backup or an import link. It's added to what's here — nothing gets deleted.</div><label class="btn indigo block">📄 Choose backup file (.json or .zip)<input type="file" id="bi-f" accept=".json,.zip,application/json,application/zip,text/plain" multiple hidden></label><div class="muted" style="text-align:center;margin:10px 0">or paste it</div><textarea id="bi" style="min-height:120px;font-size:11px" placeholder="Paste here…"></textarea><button class="btn soft block" style="margin-top:14px" id="bi-go">Import pasted text</button>`,el=>{
+  el.querySelector("#bi-f").onchange=async ev=>{const fs=[...ev.target.files];if(!fs.length)return;closeSheet();await importAny(fs)};
+  el.querySelector("#bi-go").onclick=()=>{let j;const raw=el.querySelector("#bi").value.trim();
+    const m=raw.match(/#import=([A-Za-z0-9_-]+)/);if(m){try{const bin=atob(m[1].replace(/-/g,"+").replace(/_/g,"/"));j=JSON.parse(new TextDecoder().decode(Uint8Array.from(bin,c=>c.charCodeAt(0))))}catch(e){return toast("That link didn't work")}}
+    else try{j=JSON.parse(raw)}catch(e){return toast("That doesn't look like a Lines backup")}
     if(!j||j.app!=="lines-backup"||typeof j.items!=="object")return toast("That doesn't look like a Lines backup");
     let n=0;Object.entries(j.items).forEach(([k,v])=>{if(!v||typeof v!=="object"||!v.kind)return;const cur=S.items[k];if(cur&&(cur.upd||0)>=(v.upd||0))return;S.items[k]=v;persist(k,v);n++});
     closeSheet();lastTab=null;render();toast(`Imported ${n} item${n===1?"":"s"} ✓`)}})}
