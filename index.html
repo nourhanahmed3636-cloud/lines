@@ -516,6 +516,13 @@ html.dark .homehero .scene:not(svg){filter:brightness(.6) saturate(1.15)}
 html.dark .homehero{-webkit-mask-image:linear-gradient(#000 58%,transparent);mask-image:linear-gradient(#000 58%,transparent)}
 .themepick button{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;padding:12px 6px!important}
 
+
+/* theme toggle */
+.themebtn svg{width:21px;height:21px;transition:transform .6s var(--spring)}
+.themebtn:active svg{transform:rotate(-40deg) scale(.85)}
+::view-transition-old(root),::view-transition-new(root){animation:none;mix-blend-mode:normal}
+::view-transition-new(root){z-index:2}
+
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 </style>
 </head>
@@ -525,6 +532,7 @@ html.dark .homehero{-webkit-mask-image:linear-gradient(#000 58%,transparent);mas
   <div class="top">
     <div class="brandrow"><button class="iconbtn" id="backbtn" data-act="back" aria-label="Menu"><span class="dots4"><i></i><i></i><i></i><i></i></span></button><div class="brand"><span>Lines</span></div></div>
     <div class="tools">
+      <button class="iconbtn themebtn" data-act="theme" aria-label="Light or dark"></button>
       <button class="iconbtn" data-act="settings" aria-label="Settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></button>
       <button class="avatar" data-act="go" data-v="stats" aria-label="Insights"><b>N</b></button>
     </div>
@@ -906,6 +914,20 @@ const MQ=window.matchMedia?matchMedia("(prefers-color-scheme: dark)"):null;
 function applyTheme(){const t=meta().theme||"auto";const dark=t==="dark"||(t==="auto"&&MQ&&MQ.matches);
   document.documentElement.classList.toggle("dark",dark);const m=document.querySelector('meta[name=theme-color]');if(m)m.content=dark?"#0d0a24":"#efe3f7"}
 MQ&&MQ.addEventListener&&MQ.addEventListener("change",()=>{applyTheme()});
+const ICON_SUN='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.2 5.2l1.6 1.6M17.2 17.2l1.6 1.6M5.2 18.8l1.6-1.6M17.2 6.8l1.6-1.6"/></svg>';
+const ICON_MOON='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11z"/></svg>';
+const isDark=()=>document.documentElement.classList.contains("dark");
+function themeIcons(){document.querySelectorAll(".themebtn").forEach(b=>b.innerHTML=isDark()?ICON_SUN:ICON_MOON)}
+function toggleTheme(ev){
+  const next=isDark()?"light":"dark";
+  const run=()=>{put(Object.assign({},meta(),{theme:next}),true);applyTheme();themeIcons()};
+  sfx("tick");
+  if(document.startViewTransition&&!matchMedia("(prefers-reduced-motion: reduce)").matches){
+    const x=ev&&ev.clientX||innerWidth-40,y=ev&&ev.clientY||40;const r=Math.hypot(Math.max(x,innerWidth-x),Math.max(y,innerHeight-y));
+    const t=document.startViewTransition(run);
+    t.ready.then(()=>document.documentElement.animate({clipPath:[`circle(0px at ${x}px ${y}px)`,`circle(${r}px at ${x}px ${y}px)`]},{duration:650,easing:"cubic-bezier(.22,1,.36,1)",pseudoElement:"::view-transition-new(root)"})).catch(()=>{});
+  }else run();
+}
 function render(){applyTheme();
   const nav=$("#nav");
   if(!nav.children.length)nav.innerHTML=NAV.map(n=>n?`<button class="tab" data-act="tab" data-v="${n[0]}">${ico(n[0])}${n[1]}<span class="dot"></span></button>`:`<button class="plus" data-act="quick" aria-label="Add">${ico("plus",2.4)}</button>`).join("");
@@ -920,7 +942,7 @@ function render(){applyTheme();
   if(keep){const el=document.getElementById(keep);if(el){el.focus();try{el.setSelectionRange(pos,pos)}catch(e){}}}
   if(changed){v.classList.remove("enter");void v.offsetWidth;v.classList.add("enter");lastTab=S.tab;scrollTo({top:0,behavior:"instant"});countUps(v)}
   else{const c2=v.querySelector(".carousel");if(c2)c2.scrollLeft=cx}
-  v.querySelectorAll(".seg").forEach(movePill);bindCarousel();
+  v.querySelectorAll(".seg").forEach(movePill);bindCarousel();themeIcons();
 }
 function movePill(seg){const b=seg.querySelector("button.on"),p=seg.querySelector(".pill");if(!b||!p)return;p.style.left=b.offsetLeft+"px";p.style.width=b.offsetWidth+"px"}
 addEventListener("resize",()=>document.querySelectorAll(".seg").forEach(movePill));
@@ -995,7 +1017,7 @@ function vHome(){
   return `
   <div class="homehero ${dark?"dark":""}">${sceneSVG(sk,7,"sky")}
    <div class="hh"><div class="hrow"><button class="avatar" data-act="go" data-v="stats" aria-label="Insights"><b>N</b></button>
-    <div class="pills"><span>🔥 ${st}</span><span>✨ ${hls.length}</span><button class="iconbtn" style="width:36px;height:36px;border-radius:12px" data-act="settings" aria-label="Settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></button></div></div>
+    <div class="pills"><span>🔥 ${st}</span><span>✨ ${hls.length}</span><button class="iconbtn themebtn" style="width:36px;height:36px;border-radius:12px" data-act="theme" aria-label="Light or dark"></button><button class="iconbtn" style="width:36px;height:36px;border-radius:12px" data-act="settings" aria-label="Settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></button></div></div>
     <div class="greet"><h1>${hi}, Nourhan</h1><p>${st?`Day ${st} — keep the streak alive ✨`:"Make today productive and creative ✨"}</p></div></div></div>
   <div class="lift">${pomoMini()}
   <div class="g"><div class="row between"><h3 style="margin:0">Today's focus</h3><span class="count">${tt.length?`${tt.length-left.length}/${tt.length}`:"0"}</span></div>
@@ -1917,6 +1939,7 @@ const ACT={
  wNav:el=>{S.weekCur=dkey(addDays(parseD(S.weekCur),7*(+el.dataset.v)));render()},
  mNav:el=>{const [y,m]=S.monthCur.split("-").map(Number);const d=new Date(y,m-1+(+el.dataset.v),1);S.monthCur=d.getFullYear()+"-"+pad(d.getMonth()+1);render()},
  settings:()=>settingsSheet(),
+ theme:(el,ev)=>toggleTheme(ev),
  quick:()=>quickSheet(),
  // body
  fplan:el=>setMeta({fastPlan:+el.dataset.v}),
