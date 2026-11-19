@@ -773,7 +773,8 @@ async function enhancePhoto(file,ready){
   const ord=[...hist.keys()].sort((a,b)=>hist[b]-hist[a]);const b1=ord[0];const b2=ord.find(b=>Math.min(Math.abs(b-b1),24-Math.abs(b-b1))>=3&&hist[b]>hist[b1]*.15)??(b1+3)%24;
   const hu=b=>(b+.5)/24;const acc=[hsl2hex(hu(b1),.58,.52),hsl2hex(hu(b1),.66,.63),hsl2hex(hu(b2),.72,.66),hsl2hex(hu(b1),.8,.74)];
   const bright=Lsum/(q.length/4);
-  const blob=await new Promise(r=>cv.toBlob(r,"image/jpeg",.86));
+  const keep=ready&&/jpe?g|webp/i.test(file.type||file.name||"")&&w<=1440&&h<=3200;
+  const blob=keep?file:await new Promise(r=>cv.toBlob(r,"image/jpeg",ready?.93:.86));
   return {blob,acc,ph:[band(0,16),band(32,48),band(64,80)],m:bright>.42?"light":"dark",fx:bright>.42?"sparkle":"dust"};
 }
 function hydrateImgs(root){root.querySelectorAll("img[data-lid]").forEach(im=>{const id=im.dataset.lid;if(LOCALURL[id]){im.src=LOCALURL[id];return}
