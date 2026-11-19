@@ -448,6 +448,74 @@ body.home .top{display:none}
 .tile .ic{width:56px!important;height:56px!important;border-radius:19px!important}
 .tile{font-size:11.5px!important}
 
+
+/* ===== vivid gradient background ===== */
+.bg{background:linear-gradient(165deg,#e3d6ff 0%,#f6d9ee 32%,#ffe3cf 58%,#d6e4ff 100%)!important}
+.bg i{opacity:.7!important;filter:blur(60px)!important}
+.bg i:nth-child(1){background:#b9a2ff!important}
+.bg i:nth-child(2){background:#ffaed6!important}
+.bg i:nth-child(3){background:#9ec2ff!important}
+.bg::after{content:"";position:absolute;inset:0;background:radial-gradient(70% 50% at 50% 0%,rgba(255,255,255,.35),transparent 70%)}
+/* ===== mirror glass ===== */
+.g,.chip,.iconbtn,.seg{background:linear-gradient(135deg,rgba(255,255,255,.62),rgba(255,255,255,.26))!important;backdrop-filter:blur(26px) saturate(1.8);-webkit-backdrop-filter:blur(26px) saturate(1.8);border:1px solid rgba(255,255,255,.7)!important}
+.g{box-shadow:inset 0 1px 0 rgba(255,255,255,.9),inset 0 -1px 0 rgba(255,255,255,.25),0 22px 44px -20px rgba(70,40,160,.38),0 2px 8px rgba(70,40,160,.06)!important;overflow:hidden}
+.g::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(118deg,rgba(255,255,255,.55) 0%,rgba(255,255,255,.08) 28%,transparent 42%,transparent 78%,rgba(255,255,255,.18) 100%);mix-blend-mode:soft-light}
+.g>*{position:relative}
+.chip.on{background:var(--grad)!important;border-color:transparent!important}
+.nav-in{background:linear-gradient(135deg,rgba(255,255,255,.7),rgba(255,255,255,.4))!important;backdrop-filter:blur(28px) saturate(1.8)!important}
+.card{border-radius:20px;padding:14px}
+/* ===== dark mode ===== */
+html.dark{color-scheme:dark}
+html.dark body{background:#0d0a24}
+html.dark{--ink:#f2effd;--ink2:#c9c3e6;--muted:#9a93bd;--line:rgba(255,255,255,.08);--v1:#9d8cff;
+  --grad:linear-gradient(135deg,#5b5cf6 0%,#8a6bff 55%,#d77fe0 100%)}
+html.dark .bg{background:linear-gradient(165deg,#0e0b2b 0%,#1e1452 35%,#2b1650 62%,#0c1a42 100%)!important}
+html.dark .bg i{opacity:.45!important}
+html.dark .bg i:nth-child(1){background:#5b3fd6!important}
+html.dark .bg i:nth-child(2){background:#b03a8f!important}
+html.dark .bg i:nth-child(3){background:#2b5bd6!important}
+html.dark .bg::after{background:radial-gradient(70% 50% at 50% 0%,rgba(140,110,255,.18),transparent 70%)}
+html.dark .g,html.dark .chip,html.dark .iconbtn,html.dark .seg{background:linear-gradient(135deg,rgba(255,255,255,.13),rgba(255,255,255,.04))!important;border-color:rgba(255,255,255,.13)!important}
+html.dark .g{box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 24px 48px -20px rgba(0,0,0,.6)!important}
+html.dark .g::before{background:linear-gradient(118deg,rgba(255,255,255,.16) 0%,transparent 34%,transparent 80%,rgba(255,255,255,.06) 100%);mix-blend-mode:normal}
+html.dark .chip.on{background:var(--grad)!important}
+html.dark .nav-in{background:linear-gradient(135deg,rgba(30,24,70,.82),rgba(20,16,48,.7))!important;border-color:rgba(255,255,255,.1)!important;box-shadow:0 18px 40px -10px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.1)!important}
+html.dark .nav .plus{box-shadow:0 14px 28px -6px rgba(120,100,255,.7),inset 0 2px 0 rgba(255,255,255,.3),0 0 0 6px rgba(20,16,48,.9)!important}
+html.dark .sheet{background:linear-gradient(170deg,rgba(34,27,74,.97),rgba(18,14,44,.98))!important;box-shadow:0 -20px 50px -20px rgba(0,0,0,.7)}
+html.dark input[type=text],html.dark input[type=date],html.dark input[type=time],html.dark input[type=search],html.dark input[type=datetime-local],html.dark textarea,html.dark select{background:rgba(255,255,255,.06)!important;border-color:rgba(255,255,255,.14)!important;color:var(--ink)}
+html.dark ::placeholder{color:#7f78a3}
+html.dark .search input{background:transparent!important}
+html.dark .seg .pill{background:rgba(255,255,255,.16);box-shadow:none}
+html.dark .seg button.on{color:#fff}
+html.dark .avatar b{background:#1d1745;color:#c9bcff}
+html.dark .btn.ghost{background:rgba(255,255,255,.08)}
+html.dark .btn.soft{background:rgba(138,107,255,.2);color:#c8bbff}
+html.dark .btn.white{background:#fff;color:#4f56e8}
+html.dark .btn.danger{background:rgba(255,90,140,.15);color:#ff8fb4}
+html.dark .tag{background:rgba(138,107,255,.2);color:#c8bbff}
+html.dark .outline{background:rgba(255,255,255,.06);border-color:#9d8cff;color:#c8bbff}
+html.dark .check{border-color:#5f5986;background:rgba(255,255,255,.04)}
+html.dark .mini .lav{background:rgba(150,120,255,.24)}html.dark .mini .mint{background:rgba(95,211,181,.2)}html.dark .mini .peach{background:rgba(255,178,122,.2)}html.dark .mini .sky{background:rgba(106,168,255,.2)}
+html.dark .bar{background:rgba(255,255,255,.09)}
+html.dark .heat i{background:rgba(255,255,255,.07)}
+html.dark .heat i.l1{background:#3d3480}html.dark .heat i.l2{background:#5b46c0}html.dark .heat i.l3{background:#7c5cff}html.dark .heat i.l4{background:#a48cff}
+html.dark .kpis div,html.dark .lrow .le,html.dark .week b{background:rgba(255,255,255,.07)}
+html.dark .week b.on{background:var(--grad)}
+html.dark .food .fi{background:rgba(255,178,122,.18)}
+html.dark .rfront{background:linear-gradient(160deg,rgba(44,35,92,.96),rgba(26,20,58,.96));border-color:rgba(255,255,255,.1)}
+html.dark .ghostcard{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.1)}
+html.dark .prio button,html.dark .typepick button,html.dark .sel3 button,html.dark .lqty button{background:rgba(255,255,255,.08)}
+html.dark .sel3 button.on,html.dark .typepick button.on{background:var(--grad)}
+html.dark .taskpick{background:rgba(138,107,255,.16);color:#c8bbff}
+html.dark [style*="#faf6fd"],html.dark [style*="rgba(255,255,255,.6)"],html.dark [style*="rgba(255,255,255,.7)"]{background:rgba(255,255,255,.06)!important}
+html.dark .homehero .greet h1,html.dark .homehero .greet p{color:#fff!important;text-shadow:0 2px 16px rgba(10,5,40,.55)}
+html.dark .pills span{background:rgba(20,16,48,.45);color:#fff;border-color:rgba(255,255,255,.18)}
+html.dark .cover{box-shadow:0 16px 26px -12px rgba(0,0,0,.7),inset 7px 0 0 rgba(0,0,0,.18)}
+html.dark .toast{background:rgba(255,255,255,.92);color:#1f1d3a}
+html.dark .homehero .scene:not(svg){filter:brightness(.6) saturate(1.15)}
+html.dark .homehero{-webkit-mask-image:linear-gradient(#000 58%,transparent);mask-image:linear-gradient(#000 58%,transparent)}
+.themepick button{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;padding:12px 6px!important}
+
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 </style>
 </head>
@@ -833,7 +901,12 @@ async function upload(file){
 const NAV=[["home","Home"],["plan","Plan"],null,["body","Body"],["lib","Library"]];
 const VIEWS={home:()=>vHome(),lib:()=>vLib(),rev:()=>vRev(),plan:()=>vPlan(),jour:()=>vJour(),stats:()=>vStats(),body:()=>vBody(),focus:()=>vFocus()};
 let lastTab=null;
-function render(){
+/* theme: auto (follows the phone) · light · dark */
+const MQ=window.matchMedia?matchMedia("(prefers-color-scheme: dark)"):null;
+function applyTheme(){const t=meta().theme||"auto";const dark=t==="dark"||(t==="auto"&&MQ&&MQ.matches);
+  document.documentElement.classList.toggle("dark",dark);const m=document.querySelector('meta[name=theme-color]');if(m)m.content=dark?"#0d0a24":"#efe3f7"}
+MQ&&MQ.addEventListener&&MQ.addEventListener("change",()=>{applyTheme()});
+function render(){applyTheme();
   const nav=$("#nav");
   if(!nav.children.length)nav.innerHTML=NAV.map(n=>n?`<button class="tab" data-act="tab" data-v="${n[0]}">${ico(n[0])}${n[1]}<span class="dot"></span></button>`:`<button class="plus" data-act="quick" aria-label="Add">${ico("plus",2.4)}</button>`).join("");
   nav.querySelectorAll(".tab").forEach(b=>b.classList.toggle("on",b.dataset.v===S.tab));
@@ -1762,6 +1835,7 @@ async function openReader(id){
 function settingsSheet(){
   const m=meta();const canN="Notification" in window;let scene=m.scene||"auto";
   sheet(`<h3 style="font-size:20px">Settings</h3>
+   <label class="l">Appearance</label><div class="sel3 themepick" id="s-th">${[["auto","🌓","Auto"],["light","☀️","Light"],["dark","🌙","Dark"]].map(([k,i,n])=>`<button data-v="${k}" class="${(m.theme||"auto")===k?"on":""}"><span style="font-size:20px">${i}</span>${n}</button>`).join("")}</div>
    <label class="l">Scenery</label><div class="scenes" id="s-sc"><button data-v="auto" class="${scene==="auto"?"on":""}" style="background:linear-gradient(135deg,#9fb8ff,#ff9b6e 50%,#1f1b58)"><span>Auto</span></button>${Object.keys(SCENES).map(k=>`<button data-v="${k}" class="${scene===k?"on":""}">${sceneSVG(k,2,"sky")}<span>${SCENES[k].name}</span></button>`).join("")}</div>
    <div class="muted" style="margin-top:8px">Auto follows the time of day: sunrise, daylight, sunset and night.</div>
    <label class="l">Sound effects</label><div class="sel3" id="s-snd"><button type="button" data-v="1" class="${m.sound!==false?"on":""}">🔊 On</button><button type="button" data-v="0" class="${m.sound===false?"on":""}">🔇 Off</button></div>
@@ -1772,6 +1846,7 @@ function settingsSheet(){
    <div class="row"><button class="btn ghost" style="flex:1" id="s-exp">⬆️ Export</button><button class="btn ghost" style="flex:1" id="s-imp">⬇️ Import</button></div>
    <button class="btn indigo block" style="margin-top:12px" id="s-save">Save</button>`,el=>{
    let snd=m.sound!==false;el.querySelector("#s-snd").onclick=e=>{const b=e.target.closest("button");if(!b)return;snd=b.dataset.v==="1";el.querySelectorAll("#s-snd button").forEach(x=>x.classList.toggle("on",x===b));if(snd){const was=meta().sound;S.items.meta_main&&(S.items.meta_main.sound=true);SND.chime()}};
+   el.querySelector("#s-th").onclick=ev=>{const b=ev.target.closest("button");if(!b)return;el.querySelectorAll("#s-th button").forEach(x=>x.classList.toggle("on",x===b));setMetaQ({theme:b.dataset.v},true);applyTheme();sfx("tick")};
    el.querySelector("#s-sc").onclick=e=>{const b=e.target.closest("button");if(!b)return;scene=b.dataset.v;el.querySelectorAll("#s-sc button").forEach(x=>x.classList.toggle("on",x===b))};
    const p=el.querySelector("#s-perm");p&&(p.onclick=async()=>{try{const r=await Notification.requestPermission();toast(r==="granted"?"Notifications on ✅":"This browser doesn't allow notifications here")}catch(e){toast("This browser doesn't allow notifications here")}});
    el.querySelector("#s-exp").onclick=()=>{const j=JSON.stringify({app:"lines-backup",v:1,at:Date.now(),items:S.items});
@@ -1897,7 +1972,6 @@ setInterval(()=>{
 },30000);
 if(!VIEWS[S.tab])S.tab="home";
 loadLocal();
-/* one-time import from a private link: #import=<base64url JSON> (the hash never leaves the phone) */
 (function(){const h=location.hash;if(!h.startsWith("#import="))return;
   try{const b=h.slice(8).replace(/-/g,"+").replace(/_/g,"/");const bin=atob(b);const bytes=Uint8Array.from(bin,c=>c.charCodeAt(0));
     const j=JSON.parse(new TextDecoder().decode(bytes));let n=0;
