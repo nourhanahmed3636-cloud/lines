@@ -759,7 +759,10 @@ function rgb2hsl(r,g,b){const mx=Math.max(r,g,b),mn=Math.min(r,g,b);let h=0,s=0;
 function hsl2hex(h,s,l){const f=n=>{const k=(n+h*12)%12,a=s*Math.min(l,1-l);return Math.round(255*(l-a*Math.max(-1,Math.min(k-3,9-k,1)))).toString(16).padStart(2,"0")};return "#"+f(0)+f(8)+f(4)}
 async function enhancePhoto(file,ready){
   const url=URL.createObjectURL(file);const im=await new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=rej;i.src=url});
-  let w=im.naturalWidth,h=im.naturalHeight;const tw=Math.min(1170,Math.max(900,w));let sc=tw/w;if(h*sc>2700)sc=2700/h;const W=Math.round(w*sc),H=Math.round(h*sc);
+  let w=im.naturalWidth,h=im.naturalHeight;if(w>=1280&&w<=1440&&h>w)ready=true;
+  const keep=ready&&/jpe?g|webp/i.test(file.type||file.name||"")&&w<=1440&&h<=3200;
+  if(keep){URL.revokeObjectURL(url);return Object.assign(sampleBg(im),{blob:file,ready:true})}
+  const tw=Math.min(1170,Math.max(900,w));let sc=tw/w;if(h*sc>2700)sc=2700/h;const W=Math.round(w*sc),H=Math.round(h*sc);
   let src=im;if(sc>1.6){const mid=document.createElement("canvas");mid.width=Math.round(w*Math.sqrt(sc));mid.height=Math.round(h*Math.sqrt(sc));const m2=mid.getContext("2d");m2.imageSmoothingQuality="high";m2.drawImage(im,0,0,mid.width,mid.height);src=mid}
   const cv=document.createElement("canvas");cv.width=W;cv.height=H;const cx=cv.getContext("2d");cx.imageSmoothingQuality="high";cx.drawImage(src,0,0,W,H);URL.revokeObjectURL(url);
   if(!ready){const d=cx.getImageData(0,0,W,H),p=d.data,o=new Uint8ClampedArray(p.length);const amt=sc>1.2?.55:.35;
@@ -768,21 +771,23 @@ async function enhancePhoto(file,ready){
     const r=o[i],g=o[i+1],b=o[i+2],L=.299*r+.587*g+.114*b;
     for(let c=0;c<3;c++){let v=o[i+c];v=L+(v-L)*1.1;v=(v-128)*1.05+130;o[i+c]=v}o[i+3]=255}
   d.data.set(o);cx.putImageData(d,0,0)}
-  const sm=document.createElement("canvas");sm.width=40;sm.height=80;const s2=sm.getContext("2d");s2.drawImage(cv,0,0,40,80);const q=s2.getImageData(0,0,40,80).data;
+  const blob=await new Promise(r=>cv.toBlob(r,"image/jpeg",ready?.93:.86));
+  const out=Object.assign(sampleBg(cv),{blob,ready});cv.width=cv.height=0;if(src!==im)src.width=src.height=0;return out;
+}
+function sampleBg(cv){
+  const sm=document.createElement("canvas");sm.width=40;sm.height=80;const s2=sm.getContext("2d");s2.drawImage(cv,0,0,40,80);const q=s2.getImageData(0,0,40,80).data;sm.width=sm.height=0;
   const hist=new Float32Array(24);let Lsum=0;const band=(y0,y1)=>{let r=0,g=0,b=0,n=0;for(let y=y0;y<y1;y++)for(let x=0;x<40;x++){const i=(y*40+x)*4;r+=q[i];g+=q[i+1];b+=q[i+2];n++}return "#"+[r,g,b].map(v=>Math.round(v/n).toString(16).padStart(2,"0")).join("")};
   for(let i=0;i<q.length;i+=4){const [hh,ss,ll]=rgb2hsl(q[i]/255,q[i+1]/255,q[i+2]/255);Lsum+=ll;if(ss>.2&&ll>.2&&ll<.9)hist[Math.floor(hh*24)%24]+=ss*(1-Math.abs(ll-.6))}
   const ord=[...hist.keys()].sort((a,b)=>hist[b]-hist[a]);const b1=ord[0];const b2=ord.find(b=>Math.min(Math.abs(b-b1),24-Math.abs(b-b1))>=3&&hist[b]>hist[b1]*.15)??(b1+3)%24;
   const hu=b=>(b+.5)/24;const acc=[hsl2hex(hu(b1),.58,.52),hsl2hex(hu(b1),.66,.63),hsl2hex(hu(b2),.72,.66),hsl2hex(hu(b1),.8,.74)];
   const bright=Lsum/(q.length/4);
-  const keep=ready&&/jpe?g|webp/i.test(file.type||file.name||"")&&w<=1440&&h<=3200;
-  const blob=keep?file:await new Promise(r=>cv.toBlob(r,"image/jpeg",ready?.93:.86));
-  return {blob,acc,ph:[band(0,16),band(32,48),band(64,80)],m:bright>.42?"light":"dark",fx:bright>.42?"sparkle":"dust"};
+  return {acc,ph:[band(0,16),band(32,48),band(64,80)],m:bright>.42?"light":"dark",fx:bright>.42?"sparkle":"dust"};
 }
 function hydrateImgs(root){root.querySelectorAll("img[data-lid]").forEach(im=>{const id=im.dataset.lid;if(LOCALURL[id]){im.src=LOCALURL[id];return}
   idbGet(id).then(bl=>{if(bl){LOCALURL[id]=URL.createObjectURL(bl);im.src=LOCALURL[id]}}).catch(()=>{})})}
 let zipLoading=null;
 function loadZip(){if(window.JSZip)return Promise.resolve();if(zipLoading)return zipLoading;
-  zipLoading=new Promise((res,rej)=>{const s=document.createElement("script");s.src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js";s.onload=res;s.onerror=rej;document.head.appendChild(s)});return zipLoading}
+  zipLoading=new Promise((res,rej)=>{const s=document.createElement("script");s.src="jszip.min.js";s.onload=res;s.onerror=()=>{const t=document.createElement("script");t.src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js";t.onload=res;t.onerror=e=>{zipLoading=null;rej(e)};document.head.appendChild(t)};document.head.appendChild(s)});return zipLoading}
 function mergeBackup(j){let n=0;if(!j||j.app!=="lines-backup"||typeof j.items!=="object")return -1;
   Object.entries(j.items).forEach(([k,v])=>{if(!v||typeof v!=="object"||!v.kind)return;const cur=S.items[k];if(cur&&(cur.upd||0)>=(v.upd||0))return;S.items[k]=v;persist(k,v);n++});return n}
 /* one file can bring back your data and your backgrounds: a .zip with backup.json + images */
@@ -805,11 +810,11 @@ async function importAny(files){
 const hx3=s=>[1,3,5].map(i=>parseInt(String(s).slice(i,i+2),16)||0);
 function phDist(a,b){if(!a||!b||a.length!==b.length)return 1e9;let t=0;a.forEach((c,i)=>{const p=hx3(c),q=hx3(b[i]);for(let j=0;j<3;j++)t+=Math.abs(p[j]-q[j])});return t}
 async function addPhotos(files){
-  let n=0,rep=0,hd=0;for(const f of files){try{toast(`Adding background ${n+1}/${files.length}…`,1200);const isHD=/^HD_/i.test(f.name);const e=await enhancePhoto(f,isHD);
+  let n=0,rep=0,hd=0;for(const f of files){try{toast(`Adding background ${n+1}/${files.length}…`,1500);await new Promise(r=>setTimeout(r,16));const e=await enhancePhoto(f,/^HD_/i.test(f.name));const isHD=e.ready;
     const r=await upload(new File([e.blob],"bg.jpg",{type:"image/jpeg"}));if(!r)continue;
-    const nid=uid(),src=isHD?f.name.replace(/\.\w+$/,""):null;
+    const nid=uid(),src=/^HD_/i.test(f.name)?f.name.replace(/\.\w+$/,""):null;
     if(isHD){hd++;// replace the older copy of the same picture (same name, or same colours from an earlier pack)
-      const us=all("ubg");const old=us.find(u=>u.src===src)||us.filter(u=>!u.src).map(u=>[u,phDist(u.ph,e.ph)]).filter(x=>x[1]<60).sort((a,b)=>a[1]-b[1]).map(x=>x[0])[0];
+      const us=all("ubg");const old=(src&&us.find(u=>u.src===src))||us.filter(u=>!u.src).map(u=>[u,phDist(u.ph,e.ph)]).filter(x=>x[1]<60).sort((a,b)=>a[1]-b[1]).map(x=>x[0])[0];
       if(old){if(String(old.assetId).startsWith("local:"))idbDel(old.assetId);const k=old._k||"ubg_"+old.id;delete S.items[k];persist(k,null);rep++;
         if(meta().bgPin==="u:"+old.id)setMetaQ({bgPin:"u:"+nid},true)}}
     put({kind:"ubg",id:nid,assetId:r.id,n:"My photo",src,m:e.m,ph:e.ph,acc:e.acc,fx:e.fx,created:Date.now()},true);n++}catch(err){}}
