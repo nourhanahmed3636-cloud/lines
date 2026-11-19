@@ -790,16 +790,29 @@ function loadZip(){if(window.JSZip)return Promise.resolve();if(zipLoading)return
   zipLoading=new Promise((res,rej)=>{const s=document.createElement("script");s.src="jszip.min.js";s.onload=res;s.onerror=()=>{const t=document.createElement("script");t.src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js";t.onload=res;t.onerror=e=>{zipLoading=null;rej(e)};document.head.appendChild(t)};document.head.appendChild(s)});return zipLoading}
 function mergeBackup(j){let n=0;if(!j||j.app!=="lines-backup"||typeof j.items!=="object")return -1;
   Object.entries(j.items).forEach(([k,v])=>{if(!v||typeof v!=="object"||!v.kind)return;const cur=S.items[k];if(cur&&(cur.upd||0)>=(v.upd||0))return;S.items[k]=v;persist(k,v);n++});return n}
+/* tiny built-in unzip (no download needed): stored entries, deflate via DecompressionStream */
+async function readZip(f){const buf=await f.arrayBuffer(),dv=new DataView(buf),u8=new Uint8Array(buf),L=buf.byteLength;let e=-1;
+  for(let i=L-22;i>=Math.max(0,L-65557);i--)if(dv.getUint32(i,true)===0x06054b50){e=i;break}
+  if(e<0)throw new Error("zip");const cnt=dv.getUint16(e+10,true);let p=dv.getUint32(e+16,true);const td=new TextDecoder(),out=[];
+  for(let k=0;k<cnt;k++){if(dv.getUint32(p,true)!==0x02014b50)throw new Error("cd");
+    const meth=dv.getUint16(p+10,true),csz=dv.getUint32(p+20,true),nl=dv.getUint16(p+28,true),xl=dv.getUint16(p+30,true),cl=dv.getUint16(p+32,true),lo=dv.getUint32(p+42,true);
+    const name=td.decode(u8.subarray(p+46,p+46+nl));p+=46+nl+xl+cl;if(name.endsWith("/"))continue;
+    const ds=lo+30+dv.getUint16(lo+26,true)+dv.getUint16(lo+28,true);let blob=new Blob([u8.subarray(ds,ds+csz)]);
+    if(meth===8){if(!window.DecompressionStream)throw new Error("deflate");blob=await new Response(blob.stream().pipeThrough(new DecompressionStream("deflate-raw"))).blob()}
+    else if(meth!==0)throw new Error("method");
+    out.push({name,blob})}
+  return out}
 /* one file can bring back your data and your backgrounds: a .zip with backup.json + images */
 async function importAny(files){
   let data=0,pics=[];
   for(const f of files){
-    if(/\.zip$/i.test(f.name)||f.type==="application/zip"){
-      toast("Opening the pack…",1500);try{await loadZip()}catch(e){toast("Couldn't open the zip — check your connection");continue}
-      const z=await JSZip.loadAsync(f);
-      for(const [name,entry] of Object.entries(z.files)){if(entry.dir||name.startsWith("__MACOSX"))continue;
-        if(/\.json$/i.test(name)){try{const n=mergeBackup(JSON.parse(await entry.async("string")));if(n>0)data+=n}catch(e){}}
-        else if(/\.(jpe?g|png|webp)$/i.test(name)){const b=await entry.async("blob");pics.push(new File([b],name.split("/").pop(),{type:/png$/i.test(name)?"image/png":"image/jpeg"}))}}
+    if(/\.zip$/i.test(f.name)||/zip/i.test(f.type||"")){
+      toast("Opening the pack…",1500);let ents=null;
+      try{ents=await readZip(f)}catch(e){try{await loadZip();const z=await JSZip.loadAsync(f);ents=[];for(const [name,en] of Object.entries(z.files))if(!en.dir)ents.push({name,blob:await en.async("blob")})}catch(e2){}}
+      if(!ents){toast("Couldn't read that zip — open the unzipped folder and pick the photos instead",4500);continue}
+      for(const {name,blob} of ents){if(name.startsWith("__MACOSX"))continue;
+        if(/\.json$/i.test(name)){try{const n=mergeBackup(JSON.parse(await blob.text()));if(n>0)data+=n}catch(e){}}
+        else if(/\.(jpe?g|png|webp)$/i.test(name)){pics.push(new File([blob],name.split("/").pop(),{type:/png$/i.test(name)?"image/png":"image/jpeg"}))}}
     }else if(/\.json$/i.test(f.name)||f.type==="application/json"){try{const n=mergeBackup(JSON.parse(await f.text()));if(n>0)data+=n}catch(e){}}
     else if(/^image\//.test(f.type)||/\.(jpe?g|png|webp|heic)$/i.test(f.name))pics.push(f);
   }
@@ -822,7 +835,7 @@ async function addPhotos(files){
   render();toast(n?(rep?`${n} HD backgrounds ✨ (${rep} old copies replaced)`:`Added ${n} background${n>1?"s":""} ✨`):"Couldn't add those photos",3000);return n;
 }
 function hdBanner(){if(meta().hdDone)return "";
-  return `<label class="g hdban"><span class="hdic">🖼️</span><span style="flex:1;min-width:0"><b>HD backgrounds</b><small>Tap, then choose <b>Lines-Restore-HD.zip</b> — old copies are replaced for you</small></span><input type="file" id="hd-f" accept=".zip,application/zip,image/*" multiple hidden><button class="iconbtn" data-act="hdx" aria-label="Dismiss" style="width:30px;height:30px;border-radius:10px">×</button></label>`}
+  return `<label class="g hdban"><span class="hdic">🖼️</span><span style="flex:1;min-width:0"><b>HD backgrounds</b><small>Tap → Choose Files → pick <b>Lines-Restore-HD.zip</b> (or open its folder and select all). Old copies are replaced for you</small></span><input type="file" id="hd-f" accept=".zip,application/zip,.json,application/json,image/*" multiple hidden><button class="iconbtn" data-act="hdx" aria-label="Dismiss" style="width:30px;height:30px;border-radius:10px">×</button></label>`}
 document.addEventListener("change",async ev=>{if(ev.target&&ev.target.id==="hd-f"){const fs=[...ev.target.files];if(fs.length)await importAny(fs)}});
 /* ---------------- sound effects (synthesised with Web Audio, no files) ---------------- */
 let AC=null;
@@ -1958,7 +1971,7 @@ function settingsSheet(){
    <label class="l">Background</label>
    <div class="sel3" id="s-shuf"><button type="button" data-v="1" class="${m.bgPin?"":"on"}">🔀 New one every open</button><button type="button" data-v="0" class="${m.bgPin?"on":""}">📌 Keep one</button></div>
    <div class="bgpick" id="s-bg">${bgList().map(k=>{const b=bgInfo(k);return `<button data-v="${k}" class="${(m.bgPin||CURBG)===k?"on":""}"><img alt="" loading="lazy" decoding="async" src="${bgSrc(k,true)}"${bgInfo(k).src&&String(bgInfo(k).src).startsWith("local:")?` data-lid="${bgInfo(k).src}"`:""}><span>${b.m==="dark"?"🌙":"☀️"}</span>${k.startsWith("u:")?`<i data-del="${k}">×</i>`:""}</button>`}).join("")}</div>
-   <label class="btn soft block" style="margin-top:12px">📷 Add from Photos or Files<input type="file" id="s-photos" accept="image/*,.zip,application/zip" multiple hidden></label>
+   <label class="btn soft block" style="margin-top:12px">📷 Add from Photos or Files<input type="file" id="s-photos" accept="image/*,.zip,application/zip,.json,application/json" multiple hidden></label>
    <div class="muted" style="margin-top:8px;line-height:1.6">Your photos are sharpened, colour-boosted and sized for your screen, then saved privately on this phone. Buttons take each background's colours.</div>
    <label class="l">Sound effects</label><div class="sel3" id="s-snd"><button type="button" data-v="1" class="${m.sound!==false?"on":""}">🔊 On</button><button type="button" data-v="0" class="${m.sound===false?"on":""}">🔇 Off</button></div>
    <label class="l">Daily review reminder</label><input type="time" id="s-time" value="${esc(m.reviewTime||"21:00")}">
@@ -2112,7 +2125,7 @@ loadLocal();
     history.replaceState(null,"",location.pathname);S.tab="home";setTimeout(()=>toast(`Your data is here ✓ (${n} items added)`,3500),600);
   }catch(e){history.replaceState(null,"",location.pathname);setTimeout(()=>toast("That import link didn't work"),600)}})();
 render();setSync();initCloud();
-if("serviceWorker" in navigator&&location.protocol==="https:")navigator.serviceWorker.register("sw.js").catch(()=>{});
+if("serviceWorker" in navigator&&location.protocol==="https:"){const hadSW=!!navigator.serviceWorker.controller;let rl=0;navigator.serviceWorker.addEventListener("controllerchange",()=>{if(hadSW&&!rl){rl=1;location.reload()}});navigator.serviceWorker.register("sw.js").then(r=>{document.addEventListener("visibilitychange",()=>{if(!document.hidden)r.update().catch(()=>{})})}).catch(()=>{})}
 </script>
 </body>
 </html>
