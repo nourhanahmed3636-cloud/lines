@@ -1,9 +1,9 @@
-const C="lines-v1795093647";
+const C="lines-v1795094437";
 const CORE=["./","./index.html","./manifest.json","./icon-180.png","./icon-192.png","./icon-512.png","./jszip.min.js"];
 const THUMBS=["./bg/t/aurora.jpg", "./bg/t/cotton.jpg", "./bg/t/darkglass.jpg", "./bg/t/dawn.jpg", "./bg/t/dusk.jpg", "./bg/t/glass.jpg", "./bg/t/glowtide.jpg", "./bg/t/midsilk.jpg", "./bg/t/mistlake.jpg", "./bg/t/moonlake.jpg", "./bg/t/night.jpg", "./bg/t/nightbokeh.jpg", "./bg/t/northern.jpg", "./bg/t/peachsilk.jpg", "./bg/t/ribbons.jpg", "./bg/t/rosecloud.jpg", "./bg/t/sea.jpg", "./bg/t/silk.jpg", "./bg/t/swirl.jpg"];
 self.addEventListener("install",e=>{e.waitUntil(caches.open(C).then(c=>c.addAll(CORE).then(()=>c.addAll(THUMBS).catch(()=>{}))));self.skipWaiting()});
 self.addEventListener("activate",e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==C).map(x=>caches.delete(x)))));self.clients.claim()});
-self.addEventListener("fetch",e=>{const r=e.request;if(r.method!=="GET")return;const u=new URL(r.url);
+self.addEventListener("fetch",e=>{const r=e.request;if(r.method!=="GET")return;const u=new URL(r.url);if(u.pathname.includes("/hd/"))return;
   const sameOrigin=u.origin===location.origin;
   // pages: show the cached copy instantly, refresh it in the background (stale-while-revalidate)
   if(r.mode==="navigate"||(sameOrigin&&/\/(index\.html)?$/.test(u.pathname))){
