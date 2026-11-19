@@ -567,6 +567,7 @@ html.dark .nav .tab{color:#a49dc8}
 html.dark .pills span{background:color-mix(in srgb,var(--v1) 28%,rgba(18,14,44,.7))!important}
 
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+.hdban{display:flex;align-items:center;gap:12px;cursor:pointer;background:var(--grad)!important;color:#fff!important;border:0!important}.hdban small{display:block;font-size:12.5px;opacity:.92;line-height:1.35;margin-top:2px}.hdban b{font-weight:700}.hdic{font-size:26px}.hdban .iconbtn{background:rgba(255,255,255,.25)!important;color:#fff!important;border:0!important}
 </style>
 </head>
 <body>
@@ -801,12 +802,23 @@ async function importAny(files){
   if(pics.length)await addPhotos(pics);
   return data+pics.length;
 }
+const hx3=s=>[1,3,5].map(i=>parseInt(String(s).slice(i,i+2),16)||0);
+function phDist(a,b){if(!a||!b||a.length!==b.length)return 1e9;let t=0;a.forEach((c,i)=>{const p=hx3(c),q=hx3(b[i]);for(let j=0;j<3;j++)t+=Math.abs(p[j]-q[j])});return t}
 async function addPhotos(files){
-  let n=0;for(const f of files){try{toast(`Adding background ${n+1}/${files.length}…`,1200);const e=await enhancePhoto(f,/^HD_/i.test(f.name));
+  let n=0,rep=0,hd=0;for(const f of files){try{toast(`Adding background ${n+1}/${files.length}…`,1200);const isHD=/^HD_/i.test(f.name);const e=await enhancePhoto(f,isHD);
     const r=await upload(new File([e.blob],"bg.jpg",{type:"image/jpeg"}));if(!r)continue;
-    put({kind:"ubg",id:uid(),assetId:r.id,n:"My photo",m:e.m,ph:e.ph,acc:e.acc,fx:e.fx,created:Date.now()},true);n++}catch(err){}}
-  render();toast(n?`Added ${n} background${n>1?"s":""} ✨`:"Couldn't add those photos");return n;
+    const nid=uid(),src=isHD?f.name.replace(/\.\w+$/,""):null;
+    if(isHD){hd++;// replace the older copy of the same picture (same name, or same colours from an earlier pack)
+      const us=all("ubg");const old=us.find(u=>u.src===src)||us.filter(u=>!u.src).map(u=>[u,phDist(u.ph,e.ph)]).filter(x=>x[1]<60).sort((a,b)=>a[1]-b[1]).map(x=>x[0])[0];
+      if(old){if(String(old.assetId).startsWith("local:"))idbDel(old.assetId);const k=old._k||"ubg_"+old.id;delete S.items[k];persist(k,null);rep++;
+        if(meta().bgPin==="u:"+old.id)setMetaQ({bgPin:"u:"+nid},true)}}
+    put({kind:"ubg",id:nid,assetId:r.id,n:"My photo",src,m:e.m,ph:e.ph,acc:e.acc,fx:e.fx,created:Date.now()},true);n++}catch(err){}}
+  if(hd)setMetaQ({hdDone:true},true);
+  render();toast(n?(rep?`${n} HD backgrounds ✨ (${rep} old copies replaced)`:`Added ${n} background${n>1?"s":""} ✨`):"Couldn't add those photos",3000);return n;
 }
+function hdBanner(){if(meta().hdDone)return "";
+  return `<label class="g hdban"><span class="hdic">🖼️</span><span style="flex:1;min-width:0"><b>HD backgrounds</b><small>Tap, then choose <b>Lines-Restore-HD.zip</b> — old copies are replaced for you</small></span><input type="file" id="hd-f" accept=".zip,application/zip,image/*" multiple hidden><button class="iconbtn" data-act="hdx" aria-label="Dismiss" style="width:30px;height:30px;border-radius:10px">×</button></label>`}
+document.addEventListener("change",async ev=>{if(ev.target&&ev.target.id==="hd-f"){const fs=[...ev.target.files];if(fs.length)await importAny(fs)}});
 /* ---------------- sound effects (synthesised with Web Audio, no files) ---------------- */
 let AC=null;
 function ac(){if(!AC){try{AC=new (window.AudioContext||window.webkitAudioContext)()}catch(e){AC=null}}if(AC&&AC.state==="suspended")AC.resume().catch(()=>{});return AC}
@@ -1099,7 +1111,7 @@ function vHome(){
    <div class="hh"><div class="hrow"><button class="avatar" data-act="go" data-v="stats" aria-label="Insights"><b>N</b></button>
     <div class="pills"><span>🔥 ${st}</span><span>✨ ${hls.length}</span><button class="iconbtn themebtn" style="width:36px;height:36px;border-radius:12px" data-act="theme" aria-label="Light or dark"></button><button class="iconbtn" style="width:36px;height:36px;border-radius:12px" data-act="settings" aria-label="Settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></button></div></div>
     <div class="greet"><h1>${hi}, Nourhan</h1><p>${st?`Day ${st} — keep the streak alive ✨`:"Make today productive and creative ✨"}</p></div></div></div>
-  <div class="lift">${pomoMini()}
+  <div class="lift">${hdBanner()}${pomoMini()}
   <div class="g"><div class="row between"><h3 style="margin:0">Today's focus</h3><span class="count">${tt.length?`${tt.length-left.length}/${tt.length}`:"0"}</span></div>
    <div class="mini">${minis.map(m=>`<div class="${m.c}"><span${dir(m.t)}>${esc(m.t)}</span><small>${esc(m.s)}</small></div>`).join("")}</div>
    <button class="btn indigo block" data-act="goReview">${done?"Review again":"Start daily review"}</button></div>
@@ -1992,6 +2004,7 @@ function quickSheet(){
 }
 
 const ACT={
+  hdx:()=>{setMetaQ({hdDone:true})},
  tab:el=>{S.tab=el.dataset.v;history.replaceState(null,"","#"+S.tab);render()},
  go:el=>{if(!el.dataset.v)return;S.tab=el.dataset.v;history.replaceState(null,"","#"+S.tab);render()},
  back:()=>{S.tab="home";history.replaceState(null,"","#home");render()},
