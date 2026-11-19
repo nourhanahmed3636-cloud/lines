@@ -1896,7 +1896,16 @@ setInterval(()=>{
   try{if("Notification" in window&&Notification.permission==="granted")new Notification("Lines",{body:"Time for your daily review ✨"})}catch(e){}
 },30000);
 if(!VIEWS[S.tab])S.tab="home";
-loadLocal();render();setSync();initCloud();
+loadLocal();
+/* one-time import from a private link: #import=<base64url JSON> (the hash never leaves the phone) */
+(function(){const h=location.hash;if(!h.startsWith("#import="))return;
+  try{const b=h.slice(8).replace(/-/g,"+").replace(/_/g,"/");const bin=atob(b);const bytes=Uint8Array.from(bin,c=>c.charCodeAt(0));
+    const j=JSON.parse(new TextDecoder().decode(bytes));let n=0;
+    if(j&&j.app==="lines-backup"&&j.items)Object.entries(j.items).forEach(([k,v])=>{if(!v||!v.kind)return;const cur=S.items[k];if(cur&&(cur.upd||0)>=(v.upd||0))return;S.items[k]=v;n++});
+    try{localStorage.setItem("lines-app",JSON.stringify(S.items))}catch(e){}
+    history.replaceState(null,"",location.pathname);S.tab="home";setTimeout(()=>toast(`Your data is here ✓ (${n} items added)`,3500),600);
+  }catch(e){history.replaceState(null,"",location.pathname);setTimeout(()=>toast("That import link didn't work"),600)}})();
+render();setSync();initCloud();
 if("serviceWorker" in navigator&&location.protocol==="https:")navigator.serviceWorker.register("sw.js").catch(()=>{});
 </script>
 </body>
