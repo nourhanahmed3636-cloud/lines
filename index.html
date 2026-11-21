@@ -944,6 +944,13 @@ html.dark .x2q.x2sm .qa,html.dark .x2q .qa{color:#5eead4;background:rgba(45,212,
 .sheet.xfull td,.sheet.xfull th{border-color:rgba(255,255,255,.15)!important}
 /* voice clips in explanations */
 .exam2 audio,.exam audio{width:100%;height:40px;margin:8px 0;border-radius:12px;display:block}
+
+/* spaced-repetition cards in the same dark flip style */
+.exam2 .cnt{font-size:15px;gap:9px}.sheet.xfull .cn{color:#93c5fd}.sheet.xfull .cl{color:#fda4af}.sheet.xfull .cr{color:#86efac}
+.x2state{font-size:11.5px;font-weight:900;letter-spacing:.04em;padding:5px 10px;border-radius:999px}.x2state.nw{background:rgba(147,197,253,.16);color:#93c5fd}.x2state.lr{background:rgba(253,164,175,.16);color:#fda4af}.x2state.rv{background:rgba(134,239,172,.14);color:#86efac}
+.x2hr{height:1px;margin:16px 0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.25),transparent)}
+.x2gr{margin-top:0;gap:8px}.x2gr .gr{height:62px;border-radius:18px;justify-content:center}.x2gr .gr b{font-size:15px}.x2gr .gr small{font-size:11.5px}
+.x2gr .g1{background:linear-gradient(135deg,#fb7185,#e11d48)}.x2gr .g2{background:linear-gradient(135deg,#fbbf24,#d97706)}.x2gr .g3{background:linear-gradient(135deg,#2dd4bf,#0e7490)}.x2gr .g4{background:linear-gradient(135deg,#60a5fa,#2563eb)}
 </style>
 </head>
 <body>
@@ -2599,16 +2606,21 @@ function decksCard(){if(!QP)return "";const D=deckList(),left=Math.max(0,mcfg().
    <div class="dkroot"><b>📦 ${esc(QP.name)}</b><small>${QP.cards.length.toLocaleString()} cards · ${D.length} decks · ${D.reduce((a,d)=>a+d.subs.length,0)} sub-decks</small></div>
    ${D.map(d=>row(d.name,d.cards,"d:"+d.s,false,d.s)+(open[d.s]?`<div class="dksubs">${d.subs.map(x=>row(x.name,x.cards,x.key,true,d.s)).join("")}</div>`:"")).join("")}
    <p class="muted" style="font-size:12px;margin:10px 0 0">Tap a deck or sub-deck to study just that part. Tap › to open its sub-decks.</p></div>`}
-function cardView(){const ci=SS.q[SS.i],q=qBuild(ci),st=qsGet(qst(),q.id);const left=SS.q.slice(SS.i);const nN=left.filter(x=>SS.newSet.has(x)&&!qst()[cid(QP.cards[x])]).length;
-  const nR=left.length-nN;
-  const body=`<div class="exh"><div class="cnt"><span class="cn">${nN}</span><span class="cl">${SS.learn}</span><span class="cr">${nR}</span></div><span class="muted" style="font-size:12px;margin-left:auto">${SS.i+1}/${SS.q.length}</span><button class="iconbtn" data-act="cdQuit" aria-label="Close" style="width:32px;height:32px">×</button></div>
-   <div class="exsub"><span class="sdot" style="background:${mcol(q.s)}"></span>${esc(SS.label||msubj(q.s))}<span class="muted">&nbsp;·&nbsp;${st?(st[0]?"review":"learning"):"new"}</span></div>
-   <div class="exq" dir="auto">${SS.show?fillQ(q):q.q}</div>
-   ${SS.show?`${!q.aH?`<div class="exans" dir="auto">${q.a}</div>`:""}${q.ex?`<details class="exex" open><summary>Explanation</summary><div dir="auto">${q.ex}</div></details>`:""}
-     <div class="grades">${[[1,"Again"],[2,"Hard"],[3,"Good"],[4,"Easy"]].map(([g,l])=>`<button class="gr g${g}" data-act="cdGrade" data-g="${g}"><small>${fIvl(nextIvl(st,g))}</small><b>${l}</b></button>`).join("")}</div>`
-    :`<button class="btn primary block" data-act="cdShow" style="margin-top:14px">Show answer</button>`}`;
-  const ov=$("#ov");if(ov&&ov.querySelector(".cards")){const x=ov.querySelector(".cards");x.innerHTML=body;hydrateQImgs(x);x.scrollTop=0;return}
-  sheet(`<div class="exam cards medp">${body}</div>`,el=>hydrateQImgs(el))}
+function cardBack(q){return `${!q.aH?`<div class="x2q" dir="auto">${q.q}</div><div class="x2hr"></div><div class="x2big x2long" dir="auto">${q.a}</div>`:`<div class="x2q" dir="auto">${fillQ(q)}</div>`}
+   ${q.ex?`<div class="x2ex"><div class="x2exh">Explanation</div><div dir="auto">${q.ex}</div></div>`:""}${q.src?`<div class="x2src">Source · ${esc(q.src)}</div>`:""}`}
+function cardView(){const ci=SS.q[SS.i],q=qBuild(ci),st=qsGet(qst(),q.id);const left=SS.q.slice(SS.i),m=qst();const nN=left.filter(x=>SS.newSet.has(x)&&!m[cid(QP.cards[x])]).length,nR=Math.max(0,left.length-nN-SS.learn);
+  const short=plain(q.q).length<130,tot=SS.q.length;
+  const body=`<div class="x2top"><button class="x2x" data-act="cdQuit" aria-label="Close">×</button><div class="x2prog"><i style="width:${SS.i/tot*100}%"></i></div><div class="cnt"><span class="cn">${nN}</span><span class="cl">${SS.learn}</span><span class="cr">${nR}</span></div></div>
+   <div class="x2meta"><span class="x2chip" style="--c:${mcol(q.s)}"><span class="sdot" style="background:${mcol(q.s)}"></span>${esc(SS.label||msubj(q.s))}</span><span class="x2state ${st?(st[0]?"rv":"lr"):"nw"}">${st?(st[0]?"Review":"Learning"):"New card"}</span></div>
+   <div class="x2stage"><div class="x2stack s2"></div><div class="x2stack s1"></div>
+    <div class="fcard deal" id="fcard" style="--c:${mcol(q.s)}"><div class="face front" data-act="cdShow"><div class="x2q ${short?"x2c":""}" dir="auto">${q.q}</div><div class="x2tap">Think of the answer, then tap the card</div></div><div class="face back" id="fback"></div></div></div>
+   <div class="x2bar" id="xbar"><button class="btn primary block x2btn" data-act="cdShow">Show answer</button></div>`;
+  const ov=$("#ov");if(ov&&ov.querySelector(".exam2")){const x=ov.querySelector(".exam2");x.classList.add("cards");x.innerHTML=body;hydrateQImgs(x);ov.querySelector(".sheet").scrollTop=0;return}
+  sheet(`<div class="exam2 cards medp">${body}</div>`,()=>{const sh=document.querySelector("#ov .sheet");sh&&sh.classList.add("xfull");hydrateQImgs(document.querySelector("#ov"))})}
+function cardFlip(){if(!SS||SS.show)return;SS.show=true;const ci=SS.q[SS.i],q=qBuild(ci),st=qsGet(qst(),q.id);const fb=$("#fback"),fc=$("#fcard"),bar=$("#xbar");if(!fb)return;
+  fb.innerHTML=cardBack(q);hydrateQImgs(fb);
+  bar.innerHTML=`<div class="grades x2gr">${[[1,"Again"],[2,"Hard"],[3,"Good"],[4,"Easy"]].map(([g,l])=>`<button class="gr g${g}" data-act="cdGrade" data-g="${g}"><small>${fIvl(nextIvl(st,g))}</small><b>${l}</b></button>`).join("")}</div>`;
+  fc.classList.remove("deal");fc.classList.add("flip");setTimeout(()=>{const sh=$("#ov .sheet");sh&&sh.scrollTo({top:0,behavior:"smooth"})},300)}
 function cardGrade(g){const ci=SS.q[SS.i],q=qBuild(ci),st=qsGet(qst(),q.id);const wasNew=!st;qGrade(q.id,g);SS.xp+=wasNew?2:1;sfx(g===1?"soft":"tick");
   if(g===1){SS.q.splice(Math.min(SS.q.length,SS.i+4),0,ci);SS.learn++}else if(st&&!st[0]&&SS.learn>0)SS.learn--;
   SS.show=false;if(SS.i+1<SS.q.length){SS.i++;cardView()}else cardsEnd()}
@@ -2900,9 +2912,9 @@ Object.assign(ACTX,{
   exQuit:()=>{if(EX&&EX.res.length){examEnd()}else{EX=null;closeSheet()}},exDone:()=>{closeSheet();render()},
   packLoad:()=>medLoadPack($("#pk-code").value),ankiLog:()=>ankiLog($("#ak-n").value),ankiLog2:()=>ankiLog($("#ak-n2").value),
   medTaskDet:()=>{taskSheet({date:today(),med:true,color:"#14b8a6"})},
-  cdStart:()=>startCards(),
+  cdStart:()=>startCards(),cdFlip:()=>cardFlip(),
   deckTog:el=>{const o=S.deckOpen||(S.deckOpen={});o[el.dataset.s]=!o[el.dataset.s];render()},
-  deckStudy:el=>{const k=el.dataset.k;let cards,label;if(k.startsWith("d:")){const s_=+k.slice(2);cards=QP.bySubj[s_]||[];label=msubj(s_)}else{const [s_,t]=k.split(":").map(Number);cards=QP.tcards[k]||[];label=msubj(s_)+" › "+(t<0?"Other":QP.tn[s_][t])}startCards(cards,label)},cdShow:()=>{SS.show=true;cardView()},cdGrade:el=>cardGrade(+el.dataset.g),
+  deckStudy:el=>{const k=el.dataset.k;let cards,label;if(k.startsWith("d:")){const s_=+k.slice(2);cards=QP.bySubj[s_]||[];label=msubj(s_)}else{const [s_,t]=k.split(":").map(Number);cards=QP.tcards[k]||[];label=msubj(s_)+" › "+(t<0?"Other":QP.tn[s_][t])}startCards(cards,label)},cdShow:()=>cardFlip(),cdGrade:el=>cardGrade(+el.dataset.g),
   cdQuit:()=>{if(SS&&SS.xp)addXP("med",SS.xp,"Cards");SS=null;closeSheet();render()},
 });
 FORMX.medTask=f=>{const i=f.querySelector("input");const title=i.value.trim();if(!title)return;sfx("pop");i.value="";put({kind:"task",id:uid(),title,date:"",time:"",prio:0,done:false,med:true,color:"#14b8a6",created:Date.now()})};
