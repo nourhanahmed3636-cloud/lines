@@ -862,6 +862,17 @@ html.dark .mtile{background:rgba(255,255,255,.06)}.mtile:active{transform:scale(
 .tcgrid button::before{content:"";position:absolute;left:3px;right:3px;top:2px;height:40%;border-radius:7px;background:linear-gradient(rgba(255,255,255,.5),rgba(255,255,255,0))}
 .tcgrid button.on{transform:scale(1.12);outline:3px solid #16121c;outline-offset:2px}html.dark .tcgrid button.on{outline-color:#fff}
 .tcgrid button.on::after{content:"✓";position:absolute;inset:0;display:grid;place-items:center;color:#fff;font-weight:900;font-size:14px;text-shadow:0 1px 2px rgba(0,0,0,.5)}
+
+/* deck list (Anki-style) */
+.dkh{display:flex;gap:4px}.dkh span,.dk{width:38px;text-align:center;font-size:11px;font-weight:800}.dkh .n,.dk.n{color:#2563eb}.dkh .l,.dk.l{color:#e11d48}.dkh .d,.dk.d{color:#16a34a}
+.dk{font-size:14px;font-weight:900}.dk.z{opacity:.25}
+.dkroot{margin:12px 0 6px;padding:10px 12px;border-radius:14px;background:color-mix(in srgb,var(--v1) 9%,transparent)}.dkroot b{display:block;font-size:14px}.dkroot small{font-size:11.5px;color:var(--muted)}
+.dkrow{display:flex;align-items:center;gap:4px;padding:8px 0;border-bottom:1px solid var(--line)}
+.dkc{width:26px;height:26px;border-radius:8px;flex:none;font-size:18px;font-weight:900;color:var(--muted);background:color-mix(in srgb,var(--v1) 8%,transparent);transition:transform .35s var(--spring)}.dkc.op{transform:rotate(90deg);color:var(--v1)}
+.dkn{flex:1;min-width:0;cursor:pointer;position:relative;padding:0 4px 5px}.dkn b{display:block;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.dkn small{font-size:11px;color:var(--muted)}
+.dkn i{position:absolute;left:4px;bottom:0;height:3px;border-radius:3px;opacity:.75;max-width:calc(100% - 8px)}
+.dkrow.sub{padding-left:14px}.dkrow.sub .dkn b{font-size:13px;font-weight:600}.dkl{width:12px;height:22px;flex:none;border-left:2px solid color-mix(in srgb,var(--v1) 25%,transparent);border-bottom:2px solid color-mix(in srgb,var(--v1) 25%,transparent);border-radius:0 0 0 8px;margin:-14px 2px 0 4px}
+.dksubs{animation:rvIn .45s var(--ease) both}
 </style>
 </head>
 <body>
@@ -2494,15 +2505,31 @@ function newCandidates(k){if(!QP||k<=0)return [];const m=qst(),seenN=new Set(),o
   if(out.length<k){const sub=new Set(ch.map(c=>c.subj));sub.forEach(s_=>add(QP.bySubj[s_]||[]))}
   if(out.length<k)add(QP.cards.map((_,i)=>i));return out}
 let SS=null;
-async function startCards(){const P=await medPack();if(!P){closeSheet(true);S.medTab="exam";S.tab="mrcp";render();return toast("Load your questions first (Study tab)",3000)}
-  const m=qst(),td=dnum(today()),due=[];P.cards.forEach((c,i)=>{const st=qsGet(m,cid(c));if(st&&st[1]<=td)due.push([i,st[1]])});due.sort((a,b)=>a[1]-b[1]);
-  const nw=newCandidates(Math.max(0,mcfg().perDay-cardCounts().newToday));
-  if(!due.length&&!nw.length)return toast("All cards done for today ✓",2500);
-  SS={q:due.slice(0,400).map(x=>x[0]).concat(nw),i:0,nNew:nw.length,nRev:Math.min(400,due.length),newSet:new Set(nw),xp:0,show:false,learn:0};cardView()}
+async function startCards(only,label){const P=await medPack();if(!P){closeSheet(true);S.medTab="exam";S.tab="mrcp";render();return toast("Load your questions first (Study tab)",3000)}
+  const m=qst(),td=dnum(today()),due=[],pool=only||P.cards.map((_,i)=>i);pool.forEach(i=>{const st=qsGet(m,cid(P.cards[i]));if(st&&st[1]<=td)due.push([i,st[1]])});due.sort((a,b)=>a[1]-b[1]);
+  const left=Math.max(0,mcfg().perDay-cardCounts().newToday);let nw;
+  if(only){const k=left||10,sn=new Set(),o=[];for(const i of only){if(o.length>=k)break;const c=P.cards[i];if(m[cid(c)]||sn.has(c[0]))continue;sn.add(c[0]);o.push(i)}nw=o}else nw=newCandidates(left);
+  if(!due.length&&!nw.length)return toast(only?"No cards left in this deck ✓":"All cards done for today ✓",2500);
+  SS={q:due.slice(0,400).map(x=>x[0]).concat(nw),i:0,nNew:nw.length,nRev:Math.min(400,due.length),newSet:new Set(nw),xp:0,show:false,learn:0,label:label||""};cardView()}
+/* decks → sub-decks (subjects → topics), with Anki-style counts */
+function deckList(){if(!QP)return [];return MSUBJ.map((n,s_)=>{const cs=QP.bySubj[s_]||[];if(!cs.length)return null;
+  const subs=(QP.tn[s_]||[]).map((t,i)=>({key:s_+":"+i,name:t,cards:QP.tcards[s_+":"+i]||[]})).filter(x=>x.cards.length);const o=QP.tcards[s_+":-1"]||[];
+  if(o.length&&subs.length)subs.push({key:s_+":-1",name:"Other "+n.toLowerCase(),cards:o});return {s:s_,name:n,cards:cs,subs}}).filter(Boolean)}
+function deckCounts(cards,left){const m=qst(),td=dnum(today());let nw=0,lr=0,due=0,seen=0;for(const ci of cards){const st=qsGet(m,cid(QP.cards[ci]));if(!st){nw++;continue}seen++;if(st[1]<=td){if(st[0])due++;else lr++}}
+  return {nw,lr,due,seen,n:cards.length,nt:Math.min(nw,left)}}
+function decksCard(){if(!QP)return "";const D=deckList(),left=Math.max(0,mcfg().perDay-cardCounts().newToday),open=S.deckOpen||(S.deckOpen={});
+  const row=(name,cards,key,sub,s_)=>{const c=deckCounts(cards,left),pc=Math.round(c.seen/Math.max(1,c.n)*100);
+    return `<div class="dkrow ${sub?"sub":""}">${sub?`<span class="dkl"></span>`:`<button class="dkc ${open[s_]?"op":""}" data-act="deckTog" data-s="${s_}" aria-label="Open">›</button>`}
+     <div class="dkn" data-act="deckStudy" data-k="${key}"><b${dir(name)}>${sub?"":`<span class="sdot" style="background:${mcol(s_)}"></span>`}${esc(name)}</b><small>${c.n} cards · ${pc}% seen</small><i style="width:${pc}%;background:${sub?mcol(s_):mcol(s_)}"></i></div>
+     <span class="dk n ${c.nt?"":"z"}">${c.nt}</span><span class="dk l ${c.lr?"":"z"}">${c.lr}</span><span class="dk d ${c.due?"":"z"}">${c.due}</span></div>`};
+  return `<div class="g"><div class="row between"><h3 style="margin:0">Decks 🗂️</h3><div class="dkh"><span class="n">New</span><span class="l">Learn</span><span class="d">Due</span></div></div>
+   <div class="dkroot"><b>📦 ${esc(QP.name)}</b><small>${QP.cards.length.toLocaleString()} cards · ${D.length} decks · ${D.reduce((a,d)=>a+d.subs.length,0)} sub-decks</small></div>
+   ${D.map(d=>row(d.name,d.cards,"d:"+d.s,false,d.s)+(open[d.s]?`<div class="dksubs">${d.subs.map(x=>row(x.name,x.cards,x.key,true,d.s)).join("")}</div>`:"")).join("")}
+   <p class="muted" style="font-size:12px;margin:10px 0 0">Tap a deck or sub-deck to study just that part. Tap › to open its sub-decks.</p></div>`}
 function cardView(){const ci=SS.q[SS.i],q=qBuild(ci),st=qsGet(qst(),q.id);const left=SS.q.slice(SS.i);const nN=left.filter(x=>SS.newSet.has(x)&&!qst()[cid(QP.cards[x])]).length;
   const nR=left.length-nN;
   const body=`<div class="exh"><div class="cnt"><span class="cn">${nN}</span><span class="cl">${SS.learn}</span><span class="cr">${nR}</span></div><span class="muted" style="font-size:12px;margin-left:auto">${SS.i+1}/${SS.q.length}</span><button class="iconbtn" data-act="cdQuit" aria-label="Close" style="width:32px;height:32px">×</button></div>
-   <div class="exsub"><span class="sdot" style="background:${mcol(q.s)}"></span>${esc(msubj(q.s))}<span class="muted">&nbsp;·&nbsp;${st?(st[0]?"review":"learning"):"new"}</span></div>
+   <div class="exsub"><span class="sdot" style="background:${mcol(q.s)}"></span>${esc(SS.label||msubj(q.s))}<span class="muted">&nbsp;·&nbsp;${st?(st[0]?"review":"learning"):"new"}</span></div>
    <div class="exq" dir="auto">${SS.show?q.q.replace(/<span class="qb">[\s\S]*?<\/span>/g,`<span class="qa">${q.aH||esc(q.a)}</span>`):q.q}</div>
    ${SS.show?`${!q.aH?`<div class="exans" dir="auto">${q.a}</div>`:""}${q.ex?`<details class="exex" open><summary>Explanation</summary><div dir="auto">${q.ex}</div></details>`:""}
      <div class="grades">${[[1,"Again"],[2,"Hard"],[3,"Good"],[4,"Easy"]].map(([g,l])=>`<button class="gr g${g}" data-act="cdGrade" data-g="${g}"><small>${fIvl(nextIvl(st,g))}</small><b>${l}</b></button>`).join("")}</div>`
@@ -2706,6 +2733,7 @@ function medExamTab(){const c=mcfg();if(!c.pack||!c.pack.n)return `<div class="g
    <div class="ctoday"><div><b class="cn">${nl}</b><small>new</small></div><div><b class="cr">${cc.due}</b><small>due</small></div><div><b>${cc.newToday}</b><small>learned today</small></div></div>
    <button class="btn primary block" data-act="cdStart" ${nl||cc.due?"":"disabled"}>${nl||cc.due?"Study cards":"All done today ✓"}</button>
    <div class="muted" style="font-size:12px;margin:14px 0 4px">Next 7 days</div><div class="fcast">${cc.fc.map((n,i)=>`<div><small>${n}</small><i style="height:${Math.max(4,n/fmx*100)}%"></i><b>${i?"SMTWTFS"[addDays(new Date(),i).getDay()]:"Today"}</b></div>`).join("")}</div></div>
+  ${decksCard()}
   <div class="g"><div class="row between"><div><h3 style="margin:0">Daily exam</h3><small class="muted">${c.pack.n.toLocaleString()} notes · ${Object.keys(m).length.toLocaleString()} questions seen${c.pack.img?"":` · <span id="pbw" style="display:inline-block;width:60px;height:5px;border-radius:4px;background:rgba(0,0,0,.08);vertical-align:middle;overflow:hidden"><i id="packbar" style="display:block;height:100%;width:0;background:var(--v1)"></i></span> pictures`}</small></div><span class="tag">🔥 ${examStreak()} day${examStreak()===1?"":"s"}</span></div>
    <div class="row" style="gap:8px;margin-top:12px"><button class="btn primary" style="flex:1" data-act="exStart">Start today's exam</button><button class="btn soft" style="flex:none" data-act="exWrong" ${wrongDue?"":"disabled"}>↺ Mistakes (${wrongDue})</button></div>
    ${last.length?`<div class="exbars">${last.map(e=>{const p=Math.round(e.ok/e.n*100);return `<div><i style="height:${Math.max(6,p)}%;background:${p>=80?"#14b8a6":p>=60?"#f59e0b":"#f43f5e"}"></i><small>${parseD(e.date).getDate()}</small></div>`}).join("")}</div>`:""}</div>
@@ -2787,7 +2815,9 @@ Object.assign(ACTX,{
   exQuit:()=>{if(EX&&EX.res.length){examEnd()}else{EX=null;closeSheet()}},exDone:()=>{closeSheet();render()},
   packLoad:()=>medLoadPack($("#pk-code").value),ankiLog:()=>ankiLog($("#ak-n").value),ankiLog2:()=>ankiLog($("#ak-n2").value),
   medTaskDet:()=>{taskSheet({date:today(),med:true,color:"#14b8a6"})},
-  cdStart:()=>startCards(),cdShow:()=>{SS.show=true;cardView()},cdGrade:el=>cardGrade(+el.dataset.g),
+  cdStart:()=>startCards(),
+  deckTog:el=>{const o=S.deckOpen||(S.deckOpen={});o[el.dataset.s]=!o[el.dataset.s];render()},
+  deckStudy:el=>{const k=el.dataset.k;let cards,label;if(k.startsWith("d:")){const s_=+k.slice(2);cards=QP.bySubj[s_]||[];label=msubj(s_)}else{const [s_,t]=k.split(":").map(Number);cards=QP.tcards[k]||[];label=msubj(s_)+" › "+(t<0?"Other":QP.tn[s_][t])}startCards(cards,label)},cdShow:()=>{SS.show=true;cardView()},cdGrade:el=>cardGrade(+el.dataset.g),
   cdQuit:()=>{if(SS&&SS.xp)addXP("med",SS.xp,"Cards");SS=null;closeSheet();render()},
 });
 FORMX.medTask=f=>{const i=f.querySelector("input");const title=i.value.trim();if(!title)return;sfx("pop");i.value="";put({kind:"task",id:uid(),title,date:"",time:"",prio:0,done:false,med:true,color:"#14b8a6",created:Date.now()})};
