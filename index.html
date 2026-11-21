@@ -821,6 +821,8 @@ html.dark .mtile{background:rgba(255,255,255,.06)}.mtile:active{transform:scale(
 .st .mtile{animation:popIn .6s var(--spring) both}.st .mtile:nth-child(2){animation-delay:.08s}.st .mtile:nth-child(3){animation-delay:.16s}
 .st .ahm i{animation:cellIn .5s var(--ease) both;animation-delay:calc(.3s + var(--d)*18ms)}@keyframes cellIn{from{opacity:0;transform:scale(.3)}}
 .st .fcast i,.st .exbars i{transform-origin:bottom;animation:growY .9s var(--spring) both}.st .fcast div:nth-child(n) i{animation-delay:calc(.2s + var(--k,0)*.05s)}@keyframes growY{from{transform:scaleY(0)}}
+
+.nav-in .ng{flex:1;display:flex;min-width:0}.nav .tab{min-width:0}
 </style>
 </head>
 <body>
@@ -1196,6 +1198,7 @@ const I={
  clock:'<circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9 2h6"/>',
  cam:'<path d="M4 8h3l2-3h6l2 3h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="3.5"/>',
  back:'<path d="M15 18l-6-6 6-6"/>',
+ med:'<path d="M5 3H4a1 1 0 0 0-1 1v5a5 5 0 0 0 10 0V4a1 1 0 0 0-1-1h-1"/><path d="M8 14v1a6 6 0 0 0 12 0v-3"/><circle cx="20" cy="10" r="2"/>',
 };
 const ico=(k,w)=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${w||1.9}" stroke-linecap="round" stroke-linejoin="round">${I[k]}</svg>`;
 
@@ -1291,7 +1294,7 @@ async function upload(file){
 }
 
 /* ---------------- render ---------------- */
-const NAV=[["home","Home"],["plan","Plan"],null,["body","Body"],["lib","Library"]];
+const NAV=[["home","Home"],["plan","Plan"],["med","Medicine"],null,["body","Body"],["lib","Library"]];
 const VIEWS={home:()=>vHome(),lib:()=>vLib(),rev:()=>vRev(),plan:()=>vPlan(),jour:()=>vJour(),stats:()=>vStats(),body:()=>vBody(),focus:()=>vFocus(),med:()=>vMedicine(),mrcp:()=>vMrcp(),ocd:()=>vOcd()};
 let lastTab=null;
 /* theme: auto (follows the phone) · light · dark */
@@ -1315,9 +1318,10 @@ function toggleTheme(ev){
 }
 function render(){applyTheme();syncBg();
   const nav=$("#nav");
-  if(!nav.children.length)nav.innerHTML=NAV.map(n=>n?`<button class="tab" data-act="tab" data-v="${n[0]}">${ico(n[0])}${n[1]}<span class="dot"></span></button>`:`<button class="plus" data-act="quick" aria-label="Add">${ico("plus",2.4)}</button>`).join("");
-  nav.querySelectorAll(".tab").forEach(b=>b.classList.toggle("on",b.dataset.v===S.tab));
-  document.body.classList.toggle("home",S.tab==="home");const bb=$("#backbtn");const sub=["rev","stats","jour","focus","med","mrcp","ocd"].includes(S.tab);
+  if(!nav.children.length){const tb=n=>`<button class="tab" data-act="tab" data-v="${n[0]}">${ico(n[0])}${n[1]}<span class="dot"></span></button>`,k=NAV.indexOf(null);
+    nav.innerHTML=`<div class="ng">${NAV.slice(0,k).map(tb).join("")}</div><button class="plus" data-act="quick" aria-label="Add">${ico("plus",2.4)}</button><div class="ng">${NAV.slice(k+1).map(tb).join("")}</div>`}
+  nav.querySelectorAll(".tab").forEach(b=>b.classList.toggle("on",b.dataset.v===S.tab||(b.dataset.v==="med"&&S.tab==="mrcp")));
+  document.body.classList.toggle("home",S.tab==="home");const bb=$("#backbtn");const sub=["rev","stats","jour","focus","mrcp","ocd"].includes(S.tab);
   bb.innerHTML=sub?ico("back",2.2):`<span class="dots4"><i></i><i></i><i></i><i></i></span>`;bb.dataset.act=sub?"back":"go";bb.dataset.v=sub?"":"stats";
   const v=$("#view");const fn=VIEWS[S.tab]||VIEWS.home;
   const active=document.activeElement;const keep=active&&v.contains(active)&&active.id?active.id:null;const pos=keep&&active.selectionStart;
