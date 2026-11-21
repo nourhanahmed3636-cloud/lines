@@ -574,6 +574,46 @@ html.dark .pills span{background:color-mix(in srgb,var(--v1) 28%,rgba(18,14,44,.
 html.dark .g{background:linear-gradient(135deg,color-mix(in srgb,var(--v1) 16%,rgba(20,15,46,.8)),color-mix(in srgb,var(--v1) 10%,rgba(12,9,30,.7)))!important;border-color:rgba(255,255,255,.16)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 0 0 1px rgba(0,0,0,.25),0 26px 50px -18px rgba(0,0,0,.75)!important}
 .nav-in{background:linear-gradient(135deg,color-mix(in srgb,var(--v1) 12%,rgba(255,255,255,.93)),color-mix(in srgb,var(--v1) 8%,rgba(255,255,255,.84)))!important;box-shadow:0 18px 40px -12px color-mix(in srgb,var(--v1) 45%,rgba(40,20,110,.5)),inset 0 1px 0 #fff!important}
 html.dark .nav-in{background:linear-gradient(135deg,color-mix(in srgb,var(--v1) 22%,rgba(16,12,40,.92)),color-mix(in srgb,var(--v1) 12%,rgba(10,8,28,.88)))!important}
+
+/* calendar v2: multi-day bars, clearer cells */
+.calh{display:grid;grid-template-columns:repeat(7,1fr);text-align:center;margin:10px 0 6px}
+.calh div{font-size:11px;font-weight:800;color:var(--muted);letter-spacing:.03em}
+.wk{display:grid;grid-template-columns:repeat(7,1fr);column-gap:3px;margin-bottom:4px}
+.cd{position:relative;border-radius:13px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:3px 0 4px;font-size:14px;font-weight:700;color:inherit;background:transparent;border:0;transition:background .3s,transform .35s var(--spring)}
+.cd:active{transform:scale(.92)}
+.cd.we{background:color-mix(in srgb,var(--v1) 6%,transparent)}
+.cd .dn{width:27px;height:27px;border-radius:50%;display:grid;place-items:center;line-height:1}
+.cd.out .dn,.cd.out .ds{opacity:.3}
+.cd.today .dn{background:color-mix(in srgb,var(--v1) 18%,transparent);color:var(--v1);box-shadow:inset 0 0 0 1.5px var(--v1)}
+.cd.sel{background:var(--grad)!important;color:#fff;box-shadow:0 10px 20px -8px color-mix(in srgb,var(--v1) 75%,transparent)}
+.cd.sel .dn{background:rgba(255,255,255,.25);color:#fff;box-shadow:none}
+.cd .ds{display:flex;gap:3px;height:6px;align-items:center}
+.cd .ds i{width:6px;height:6px;border-radius:50%;background:var(--pk)}
+.cd .ds i.j{background:var(--bl)}
+.cd .ds em.ok,.calleg em.okl{font-style:normal;font-size:10px;font-weight:900;line-height:6px;color:#1fbf8a}.calleg em.okl{font-size:12px;line-height:1}.cd.sel .ds em.ok{color:#fff}
+.cd.sel .ds i{box-shadow:0 0 0 1.5px rgba(255,255,255,.9)}
+.cd .more{position:absolute;right:3px;bottom:1px;font-size:9px;font-weight:800;opacity:.75}
+.bar2{z-index:1;pointer-events:none;align-self:center;height:15px;margin:0 -2px;background:var(--tc);color:#fff;font-size:10px;font-weight:700;line-height:15px;padding:0 5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;box-shadow:0 3px 8px -3px color-mix(in srgb,var(--tc) 80%,transparent),inset 0 0 0 1px rgba(255,255,255,.25)}
+.bar2.h{border-top-left-radius:8px;border-bottom-left-radius:8px;margin-left:3px}
+.bar2.tl{border-top-right-radius:8px;border-bottom-right-radius:8px;margin-right:3px}
+.bar2.dn{opacity:.45;text-decoration:line-through}
+.calleg{display:flex;flex-wrap:wrap;gap:12px;margin-top:12px;font-size:12px;font-weight:600;color:var(--muted)}
+.calleg span{display:flex;align-items:center;gap:5px}
+.calleg i{width:8px;height:8px;border-radius:50%;display:inline-block}
+.calleg b{width:18px;height:8px;border-radius:5px;background:linear-gradient(90deg,#ff5c9a,#7c5cff);display:inline-block}
+.task.tcol{box-shadow:inset 4px 0 0 var(--tc);padding-left:12px;border-radius:4px}
+.tprog{height:4px;border-radius:4px;background:color-mix(in srgb,var(--tc) 18%,transparent);margin-top:7px;overflow:hidden;max-width:220px}
+.tprog i{display:block;height:100%;background:var(--tc);border-radius:4px;transition:width .5s var(--ease)}
+.tag.rtag{background:color-mix(in srgb,var(--tc,#7c5cff) 16%,transparent)!important;color:var(--tc,#7c5cff)!important;margin-right:4px}
+.spanl{font-size:13px;margin-top:8px;color:var(--muted)}
+.spanl b{color:var(--v1)}
+.tcolors{display:flex;flex-wrap:wrap;gap:7px;margin-top:4px}
+.tcolors button{width:28px;height:28px;border-radius:10px;border:0;transition:transform .3s var(--spring);box-shadow:0 4px 10px -4px rgba(0,0,0,.3)}
+.tcolors button.none{width:auto;padding:0 8px;font-size:11px;font-weight:700;background:color-mix(in srgb,var(--v1) 12%,#fff);color:var(--v1)}
+.tcolors button.on{outline:3px solid currentColor;outline-offset:2px;transform:scale(1.1)}
+.tcolors button:not(.none).on{outline-color:#16121c}
+html.dark .tcolors button:not(.none).on{outline-color:#fff}
+.wdot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px;vertical-align:1px}
 </style>
 </head>
 <body>
@@ -994,7 +1034,7 @@ function setSync(msg){$("#sync").textContent=msg||(S.mode==="db"?"☁️ Synced 
 
 /* ---------------- activity data (for streaks & charts) ---------------- */
 function revCount(k){const m=meta();const c=(m.revCount||{})[k];if(c!=null)return c;return (m.reviewed||[]).includes(k)?5:0}
-function doneOn(k){return all("task").filter(t=>t.done&&(t.doneAt?dkey(new Date(t.doneAt))===k:t.date===k)).length}
+function doneOn(k){return all("task").reduce((n,t)=>n+(isRange(t)?((t.doneDays||[]).includes(k)?1:0):(t.done&&(t.doneAt?dkey(new Date(t.doneAt))===k:t.date===k)?1:0)),0)}
 function jourOn(k){return all("journal").filter(j=>j.date===k).length}
 function activity(k,m){m=m||"all";return m==="rev"?revCount(k):m==="task"?doneOn(k):revCount(k)+doneOn(k)+jourOn(k)}
 function streak(){const set=new Set(meta().reviewed||[]);let d=new Date();if(!set.has(dkey(d)))d=addDays(d,-1);let n=0;while(set.has(dkey(d))){n++;d=addDays(d,-1)}return n}
@@ -1087,13 +1127,23 @@ addEventListener("resize",()=>document.querySelectorAll(".seg").forEach(movePill
 function seg(items,cur,act){return `<div class="seg"><span class="pill"></span>${items.map(([k,n])=>`<button class="${cur===k?"on":""}" data-act="${act}" data-v="${k}">${n}</button>`).join("")}</div>`}
 function bindCarousel(){const c=$(".carousel"),d=$(".cdots");if(!c||!d||c._b)return;c._b=1;c.addEventListener("scroll",()=>{const i=Math.round(c.scrollLeft/(c.firstElementChild.offsetWidth+14));d.querySelectorAll("i").forEach((x,j)=>x.classList.toggle("on",j===i))},{passive:true})}
 
+/* multi-day tasks: date = start, end = last day; ticked per day in doneDays */
+const isRange=t=>!!(t&&t.end&&t.date&&t.end>t.date);
+function rangeDays(t){const o=[];let d=parseD(t.date);for(let i=0;i<400;i++){const k=dkey(d);o.push(k);if(k>=t.end)break;d=addDays(d,1)}return o}
+const dayDone=(t,k)=>isRange(t)?(t.doneDays||[]).includes(k):!!t.done;
+const TCOL=["#ff5c9a","#7c5cff","#3d8bff","#1fbf8a","#ff9f2e","#ff6b57","#b25cff","#12b5c9"];
+const tColor=t=>t.color||(isRange(t)?TCOL[hash(String(t.id||t.title))%TCOL.length]:"");
 function taskRow(t){
-  const c=PRIO[t.prio||0].c;const when=[t.date&&t.date!==today()?fmt(t.date,{day:"numeric",month:"short"}):"",t.time||""].filter(Boolean).join(" · ");
-  const g=t.goalId&&get("goal_"+t.goalId);
-  return `<div class="task ${t.done?"done":""}"><button class="check ${t.done?"done":""}" style="--c:${t.prio?c:"#7c5cff"};${t.prio?"":"border-color:#cfc8e6"}" data-act="toggle" data-id="${t.id}" aria-label="Done"></button>
-  <div class="t" data-act="editTask" data-id="${t.id}"><span class="tt"${dir(t.title)}>${esc(t.title)}</span>${when||g?`<div class="muted" style="margin-top:3px">${g?`<span class="tag">🎯 ${esc(g.title)}</span>`:""}${esc(when)}</div>`:""}</div>${t.prio?`<span style="width:8px;height:8px;border-radius:50%;background:${c};flex:none"></span>`:""}</div>`;
+  const c=PRIO[t.prio||0].c,col=tColor(t),R=isRange(t);let when,prog="";
+  if(R){const days=rangeDays(t),dd=(t.doneDays||[]).filter(x=>days.includes(x)).length,pc=Math.round(dd/days.length*100);
+    when=(t._day?`Day ${days.indexOf(t._day)+1} of ${days.length}`:`${dd}/${days.length} days`)+` · ${fmt(t.date,{day:"numeric",month:"short"})} → ${fmt(t.end,{day:"numeric",month:"short"})}`+(t.time?" · "+t.time:"");
+    prog=`<div class="tprog"><i style="width:${pc}%"></i></div>`}
+  else when=[t.date&&t.date!==today()?fmt(t.date,{day:"numeric",month:"short"}):"",t.time||""].filter(Boolean).join(" · ");
+  const g=t.goalId&&get("goal_"+t.goalId);const cc=col||(t.prio?c:"#7c5cff");
+  return `<div class="task ${t.done?"done":""} ${col?"tcol":""}" style="${col?`--tc:${col}`:""}"><button class="check ${t.done?"done":""}" style="--c:${cc};${col||t.prio?"":"border-color:#cfc8e6"}" data-act="toggle" data-id="${t.id}" data-day="${t._day||""}" aria-label="Done"></button>
+  <div class="t" data-act="editTask" data-id="${t.id}"><span class="tt"${dir(t.title)}>${esc(t.title)}</span>${when||g?`<div class="muted" style="margin-top:3px">${R?'<span class="tag rtag">⟷ Multi-day</span>':""}${g?`<span class="tag">🎯 ${esc(g.title)}</span>`:""}${esc(when)}</div>`:""}${prog}</div>${t.prio?`<span style="width:8px;height:8px;border-radius:50%;background:${c};flex:none"></span>`:""}</div>`;
 }
-function tasksFor(k){return all("task").filter(t=>t.date===k).sort((a,b)=>(a.done-b.done)||(b.prio||0)-(a.prio||0)||(a.time||"99").localeCompare(b.time||"99"))}
+function tasksFor(k){return all("task").filter(t=>t.date===k||(isRange(t)&&t.date<=k&&k<=t.end)).map(t=>isRange(t)?Object.assign({},t,{done:dayDone(t,k),_day:k}):t).sort((a,b)=>(a.done-b.done)||(isRange(b)-isRange(a))||(b.prio||0)-(a.prio||0)||(a.time||"99").localeCompare(b.time||"99"))}
 function qa(id,date,ph){return `<form class="quickadd" data-form="quickTask" data-date="${date}"><input type="text" id="${id}" dir="auto" placeholder="${ph||"Add a task…"}" autocomplete="off"><button class="btn primary plusbtn" aria-label="Add">+</button></form>`}
 function tile(act,v,label,icon,g,sh){return `<button class="tile" data-act="${act}" data-v="${v}"><span class="ic" style="background:${g};--sh:${sh}">${ico(icon,2)}</span>${label}</button>`}
 
@@ -1143,7 +1193,7 @@ function vHome(){
   const reading=allBooks().filter(b=>bookState(b.id).status==="reading");
   const pr=((get("plan_d-"+today())||{}).p||[]).filter(Boolean);
   const tt=tasksFor(today());const left=tt.filter(t=>!t.done);
-  const overdue=all("task").filter(t=>!t.done&&t.date&&t.date<today());
+  const overdue=all("task").filter(t=>!t.done&&t.date&&(t.end||t.date)<today());
   const pick=hls.length?hls[hash(today())%hls.length]:null;
   const goals=all("goal");const g0=goals.find(g=>goalProgress(g)<100);
   const ws=weekStart(new Date());const wk=[...Array(7)].map((_,i)=>dkey(addDays(ws,i)));const revSet=new Set(meta().reviewed||[]);
@@ -1321,25 +1371,41 @@ const navBtns=(act,title,sub)=>`<div class="navbtns"><button class="iconbtn" dat
 function pMonth(){
   const [y,m]=S.monthCur.split("-").map(Number);const first=new Date(y,m-1,1);const key="m-"+S.monthCur;
   const start=weekStart(first);const dim=new Date(y,m,0).getDate();const off=Math.round((first-start)/864e5);const cnt=Math.ceil((off+dim)/7)*7;
-  const tasks=all("task");const jd=new Set(all("journal").map(j=>j.date));
-  let cells="";for(let i=0;i<cnt;i++){const d=addDays(start,i);const k=dkey(d);const n=tasks.filter(t=>t.date===k&&!t.done).length;
-    cells+=`<button class="d ${d.getMonth()!==m-1?"out":""} ${k===today()?"today":""} ${k===S.selDay?"sel":""}" data-act="selDay" data-v="${k}">${d.getDate()}<span class="ds">${n?"<i></i>":""}${n>2?"<i></i>":""}${jd.has(k)?'<i class="j"></i>':""}</span></button>`}
-  const st=tasksFor(S.selDay);
-  return `<div class="g">${navBtns("mNav",first.toLocaleDateString("en-GB",{month:"long",year:"numeric"}))}<div class="cal">${["Sa","Su","Mo","Tu","We","Th","Fr"].map(x=>`<div class="h">${x}</div>`).join("")}${cells}</div>
-   <div class="muted" style="margin-top:10px">🩷 tasks · 💙 journal</div></div>
+  const tasks=all("task"),ranges=tasks.filter(isRange),singles=tasks.filter(t=>!isRange(t)&&t.date);const jd=new Set(all("journal").map(j=>j.date));
+  let weeks="";
+  for(let w=0;w<cnt/7;w++){
+    const wk=[...Array(7)].map((_,i)=>dkey(addDays(start,w*7+i))),a=wk[0],b=wk[6];
+    const segs=ranges.filter(t=>t.date<=b&&t.end>=a).sort((p,q)=>p.date.localeCompare(q.date)||q.end.localeCompare(p.end));
+    const lanes=[],bars=[],more=Array(7).fill(0);
+    segs.forEach(t=>{const s0=wk.indexOf(t.date<a?a:t.date),e0=wk.indexOf(t.end>b?b:t.end);let L=lanes.findIndex(x=>x<s0);if(L<0){L=lanes.length;lanes.push(-1)}
+      if(L>=3){for(let i=s0;i<=e0;i++)more[i]++;return}lanes[L]=e0;bars.push({t,s0,e0,L,h:t.date>=a,tl:t.end<=b})});
+    const nl=Math.min(lanes.length,3);
+    const cells=wk.map((k,i)=>{const d=parseD(k);const ds=singles.filter(t=>t.date===k);const open=ds.filter(t=>!t.done);
+      const dots=open.slice(0,3).map(t=>`<i style="background:${tColor(t)||"var(--pk)"}"></i>`).join("")+(jd.has(k)?'<i class="j"></i>':"")+(!open.length&&ds.length?'<em class="ok">✓</em>':"");
+      return `<button class="cd ${d.getMonth()!==m-1?"out":""} ${k===today()?"today":""} ${k===S.selDay?"sel":""} ${i===0||i===6?"we":""}" style="grid-column:${i+1};grid-row:1 / -1" data-act="selDay" data-v="${k}"><span class="dn">${d.getDate()}</span><span class="ds">${dots}</span>${more[i]?`<span class="more">+${more[i]}</span>`:""}</button>`}).join("");
+    const bs=bars.map(({t,s0,e0,L,h,tl})=>`<div class="bar2 ${h?"h":""} ${tl?"tl":""} ${t.done?"dn":""}" style="grid-column:${s0+1} / ${e0+2};grid-row:${L+2};--tc:${tColor(t)}"><span${dir(t.title)}>${h||s0===0?esc(t.title):""}</span></div>`).join("");
+    weeks+=`<div class="wk" style="grid-template-rows:32px ${nl?`repeat(${nl},17px) `:""}12px">${cells}${bs}</div>`;
+  }
+  const st=tasksFor(S.selDay);const mk=S.monthCur;
+  const inMonth=tasks.filter(t=>t.date&&((t.date.slice(0,7)===mk)||(isRange(t)&&t.date.slice(0,7)<=mk&&t.end.slice(0,7)>=mk)));
+  const dn=inMonth.filter(t=>t.done).length;
+  return `<div class="g calg">${navBtns("mNav",first.toLocaleDateString("en-GB",{month:"long",year:"numeric"}),`<div class="muted" style="font-size:12px;margin-top:2px">${inMonth.length?`${dn}/${inMonth.length} done · ${inMonth.filter(isRange).length} multi-day`:"No tasks yet"}</div>`)}
+   <div class="calh">${["Sat","Sun","Mon","Tue","Wed","Thu","Fri"].map(x=>`<div>${x}</div>`).join("")}</div>${weeks}
+   <div class="calleg"><span><i style="background:var(--pk)"></i>Task</span><span><i style="background:var(--bl)"></i>Journal</span><span><em class="okl">✓</em>All done</span><span><b></b>Multi-day</span></div></div>
   <div class="g"><div class="row between"><h3>${fmt(S.selDay)}</h3><button class="muted" style="font-weight:800" data-act="openDay" data-v="${S.selDay}">Open day →</button></div>
-   ${st.length?st.map(taskRow).join(""):`<div class="muted">No tasks on this day</div>`}${qa("qa-month",S.selDay,"Add a task for this day…")}</div>
+   ${st.length?st.map(taskRow).join(""):`<div class="muted">No tasks on this day</div>`}${qa("qa-month",S.selDay,"Add a task for this day…")}
+   <div class="row" style="gap:8px;margin-top:12px"><button class="btn soft" style="flex:1" data-act="newRange" data-v="${S.selDay}">⟷ Multi-day task</button><button class="btn soft" style="flex:1" data-act="newTask" data-v="${S.selDay}">+ With details</button></div></div>
   <div class="g"><label class="l" style="margin-top:0">Word of the month ✨</label>${planField(key,"focus","e.g. Focus, calm, momentum…")}
    <label class="l">Top 3 goals this month</label>${[0,1,2].map(i=>`<div class="pri"><b>${i+1}</b>${planField(key,"g."+i,"Monthly goal")}</div>`).join("")}</div>
   <div class="g"><label class="l" style="margin-top:0">Month notes & review</label>${planField(key,"notes","What worked? What will you change?",1)}</div>`;
 }
 function pWeek(){
   const ws=parseD(S.weekCur);const key="w-"+S.weekCur;const days=[...Array(7)].map((_,i)=>dkey(addDays(ws,i)));
-  const tasks=all("task").filter(t=>days.includes(t.date));const pct=tasks.length?Math.round(tasks.filter(t=>t.done).length/tasks.length*100):0;
+  const per=days.map(k=>tasksFor(k)),flat=per.flat();const pct=flat.length?Math.round(flat.filter(t=>t.done).length/flat.length*100):0;
   return navBtns("wNav",`${fmt(days[0],{day:"numeric",month:"short"})} – ${fmt(days[6],{day:"numeric",month:"short"})}`)+`
   <div class="g"><div class="row between"><h3 style="margin:0">Week progress</h3><b class="gt" style="font-size:22px" data-count="${pct}" data-suf="%">${pct}%</b></div><div class="bar" style="margin-top:12px;height:10px"><i style="width:${pct}%"></i></div></div>
   <div class="g"><label class="l" style="margin-top:0">Weekly priorities</label>${[0,1,2].map(i=>`<div class="pri"><b>${i+1}</b>${planField(key,"p."+i,"Priority")}</div>`).join("")}</div>
-  <div class="g">${days.map(k=>{const t=tasks.filter(x=>x.date===k);const d=parseD(k);return `<div class="daycol ${k===today()?"today":""}" data-act="openDay" data-v="${k}"><div class="dn"><span class="muted">${d.toLocaleDateString("en-GB",{weekday:"short"})}</span><b>${d.getDate()}</b></div><div style="flex:1;min-width:0">${t.length?t.slice(0,3).map(x=>`<div style="font-size:13px;${x.done?"text-decoration:line-through;color:var(--muted)":""};white-space:nowrap;overflow:hidden;text-overflow:ellipsis"${dir(x.title)}>• ${esc(x.title)}</div>`).join("")+(t.length>3?`<div class="muted">+${t.length-3} more</div>`:""):`<span class="muted">—</span>`}</div><span class="muted">›</span></div>`}).join("")}</div>
+  <div class="g">${days.map((k,di)=>{const t=per[di];const d=parseD(k);return `<div class="daycol ${k===today()?"today":""}" data-act="openDay" data-v="${k}"><div class="dn"><span class="muted">${d.toLocaleDateString("en-GB",{weekday:"short"})}</span><b>${d.getDate()}</b></div><div style="flex:1;min-width:0">${t.length?t.slice(0,3).map(x=>`<div style="font-size:13px;${x.done?"text-decoration:line-through;color:var(--muted)":""};white-space:nowrap;overflow:hidden;text-overflow:ellipsis"${dir(x.title)}><span class="wdot" style="background:${tColor(x)||"#b9b0db"}"></span>${esc(x.title)}${isRange(x)?` <span class="muted">· ${rangeDays(x).indexOf(k)+1}/${rangeDays(x).length}</span>`:""}</div>`).join("")+(t.length>3?`<div class="muted">+${t.length-3} more</div>`:""):`<span class="muted">—</span>`}</div><span class="muted">›</span></div>`}).join("")}</div>
   <div class="g"><label class="l" style="margin-top:0">Weekly review</label>${planField(key,"notes","What did you learn this week?",1)}</div>`;
 }
 function pDay(){
@@ -1839,16 +1905,32 @@ function pTaskSheet(){
     el.addEventListener("click",e=>{const b=e.target.closest("[data-tid]");if(!b)return;setPomo({taskId:b.dataset.tid});closeSheet()})});
 }
 function taskSheet(t){
-  const isNew=!t.id;t=Object.assign({title:"",date:S.selDay||today(),time:"",prio:0,goalId:""},t);let prio=t.prio||0;
+  const isNew=!t.id;t=Object.assign({title:"",date:S.selDay||today(),end:"",time:"",prio:0,goalId:"",color:""},t);let prio=t.prio||0,color=t.color||"";
+  const SP=[[1,"1 day"],[3,"3 days"],[7,"1 week"],[14,"2 weeks"],[30,"30 days"]];
   sheet(`<h3 style="font-size:20px">${isNew?"New task":"Edit task"}</h3>
    <input type="text" id="t-title" dir="auto" placeholder="What needs doing?" value="${esc(t.title)}">
-   <div class="row"><div style="flex:1"><label class="l">Date</label><input type="date" id="t-date" value="${esc(t.date)}"></div><div style="flex:1"><label class="l">Time</label><input type="time" id="t-time" value="${esc(t.time)}"></div></div>
+   <div class="row"><div style="flex:1;min-width:0"><label class="l">From</label><input type="date" id="t-date" style="width:100%;min-width:0" value="${esc(t.date)}"></div><div style="flex:1;min-width:0"><label class="l">To <span class="muted" style="font-weight:600">(optional)</span></label><input type="date" id="t-end" style="width:100%;min-width:0" value="${esc(t.end||"")}"></div></div>
+   <div class="chips" id="t-span" style="margin:10px 0 0;flex-wrap:wrap;overflow:visible">${SP.map(([n,l])=>`<button type="button" class="chip" data-n="${n}">${l}</button>`).join("")}</div>
+   <div class="spanl" id="t-spanl"></div>
+   <label class="l">Time</label><input type="time" id="t-time" value="${esc(t.time)}">
+   <label class="l">Colour on the calendar</label><div class="tcolors" id="t-col"><button type="button" data-c="" class="none" aria-label="Auto">Auto</button>${TCOL.map(c=>`<button type="button" data-c="${c}" style="background:${c}" aria-label="${c}"></button>`).join("")}</div>
    <label class="l">Priority</label><div class="prio" id="t-prio">${PRIO.map((p,i)=>`<button type="button" data-p="${i}" style="--c:${p.c}" class="${i===prio?"on":""}">${p.n}</button>`).join("")}</div>
    <label class="l">Linked goal</label><select id="t-goal"><option value="">None</option>${all("goal").map(g=>`<option value="${g.id}" ${g.id===t.goalId?"selected":""}>${esc(g.title)}</option>`).join("")}</select>
    <div class="row" style="margin-top:20px">${isNew?"":`<button class="btn danger" id="t-del">Delete</button>`}<button class="btn primary" style="flex:1" id="t-save">Save</button></div>`,el=>{
+    const dI=el.querySelector("#t-date"),eI=el.querySelector("#t-end"),lab=el.querySelector("#t-spanl");
+    const upd=()=>{const a=dI.value,z=eI.value;eI.min=a||"";let n=1;if(a&&z&&z>a)n=Math.round((parseD(z)-parseD(a))/864e5)+1;
+      lab.innerHTML=a&&z&&z<a?'<span style="color:#e0457b">"To" is before "From"</span>':n>1?`⟷ Multi-day task · <b>${n} days</b> — tick it off each day`:"One-day task";
+      el.querySelectorAll("#t-span .chip").forEach(c=>c.classList.toggle("on",+c.dataset.n===n))};
+    dI.onchange=upd;eI.onchange=upd;eI.oninput=upd;
+    el.querySelector("#t-span").onclick=e=>{const b=e.target.closest("button");if(!b)return;if(!dI.value)dI.value=today();const n=+b.dataset.n;eI.value=n>1?dkey(addDays(parseD(dI.value),n-1)):"";upd()};
+    const paint=()=>el.querySelectorAll("#t-col button").forEach(x=>x.classList.toggle("on",x.dataset.c===color));
+    el.querySelector("#t-col").onclick=e=>{const b=e.target.closest("button");if(!b)return;color=b.dataset.c;paint()};paint();upd();
     el.querySelector("#t-prio").onclick=e=>{const b=e.target.closest("button");if(!b)return;prio=+b.dataset.p;el.querySelectorAll("#t-prio button").forEach(x=>x.classList.toggle("on",x===b))};
     el.querySelector("#t-save").onclick=()=>{const title=el.querySelector("#t-title").value.trim();if(!title)return toast("Give the task a name");
-      put(Object.assign({},t,{kind:"task",id:t.id||uid(),title,date:el.querySelector("#t-date").value,time:el.querySelector("#t-time").value,prio,goalId:el.querySelector("#t-goal").value,created:t.created||Date.now(),done:!!t.done}));closeSheet()};
+      const date=dI.value;let end=eI.value;if(date&&end&&end<date)return toast("The end date is before the start");if(!date||end<=date)end="";
+      const o=Object.assign({},t,{kind:"task",id:t.id||uid(),title,date,end,color,time:el.querySelector("#t-time").value,prio,goalId:el.querySelector("#t-goal").value,created:t.created||Date.now(),done:!!t.done});
+      if(end){const days=rangeDays(o);o.doneDays=(t.doneDays||[]).filter(x=>days.includes(x));o.done=o.doneDays.length===days.length}else delete o.doneDays;
+      put(o);closeSheet();if(end)toast(`Added for ${rangeDays(o).length} days ⟷`)};
     const d=el.querySelector("#t-del");d&&(d.onclick=()=>{del("task_"+t.id);closeSheet()});
     isNew&&setTimeout(()=>el.querySelector("#t-title").focus(),350);
   });
@@ -2045,7 +2127,7 @@ function importSheet(){sheet(`<h3 style="font-size:20px">Import backup</h3><div 
     let n=0;Object.entries(j.items).forEach(([k,v])=>{if(!v||typeof v!=="object"||!v.kind)return;const cur=S.items[k];if(cur&&(cur.upd||0)>=(v.upd||0))return;S.items[k]=v;persist(k,v);n++});
     closeSheet();lastTab=null;render();toast(`Imported ${n} item${n===1?"":"s"} ✓`)}})}
 function quickSheet(){
-  const Q=[["newTask","✅","Task","linear-gradient(135deg,#8b7bff,#5a5cf0)","rgba(90,92,240,.6)"],["newHl","✨","Highlight","linear-gradient(135deg,#ff9cc6,#e66aa6)","rgba(230,106,166,.6)"],["newEntry","📓","Journal","linear-gradient(135deg,#7fc4ff,#4f86f7)","rgba(79,134,247,.6)"],["newGoal","🎯","Goal","linear-gradient(135deg,#ffc58a,#ff9a5c)","rgba(255,154,92,.6)"],["snapQuick","📸","Snap meal","linear-gradient(135deg,#5fd3b5,#2fb38f)","rgba(47,179,143,.6)"],["foodLib","🍽️","Add food","linear-gradient(135deg,#ffb27a,#ff7eb6)","rgba(255,126,182,.6)"],["goFocus","🍅","Focus","linear-gradient(135deg,#5fd3b5,#2fb38f)","rgba(47,179,143,.6)"],["wAdd","⚖️","Weight","linear-gradient(135deg,#b6a6ff,#8a6bff)","rgba(138,107,255,.6)"]];
+  const Q=[["newTask","✅","Task","linear-gradient(135deg,#8b7bff,#5a5cf0)","rgba(90,92,240,.6)"],["newRange","🗓️","Multi-day","linear-gradient(135deg,#ff9f6b,#ff5c9a)","rgba(255,92,154,.6)"],["newHl","✨","Highlight","linear-gradient(135deg,#ff9cc6,#e66aa6)","rgba(230,106,166,.6)"],["newEntry","📓","Journal","linear-gradient(135deg,#7fc4ff,#4f86f7)","rgba(79,134,247,.6)"],["newGoal","🎯","Goal","linear-gradient(135deg,#ffc58a,#ff9a5c)","rgba(255,154,92,.6)"],["snapQuick","📸","Snap meal","linear-gradient(135deg,#5fd3b5,#2fb38f)","rgba(47,179,143,.6)"],["foodLib","🍽️","Add food","linear-gradient(135deg,#ffb27a,#ff7eb6)","rgba(255,126,182,.6)"],["goFocus","🍅","Focus","linear-gradient(135deg,#5fd3b5,#2fb38f)","rgba(47,179,143,.6)"],["wAdd","⚖️","Weight","linear-gradient(135deg,#b6a6ff,#8a6bff)","rgba(138,107,255,.6)"]];
   sheet(`<h3 style="font-size:20px">Add something</h3><div class="quick" style="grid-template-columns:repeat(3,1fr)">${Q.map(([a,e,n,g,sh])=>`<button class="g" data-act="${a}"><span class="ic" style="background:${g};--sh:${sh}">${e}</span>${n}</button>`).join("")}</div>`);
 }
 
@@ -2061,11 +2143,18 @@ const ACT={
  goReview:()=>{S.tab="rev";history.replaceState(null,"","#rev");S.review={queue:buildQueue(),i:0};render()},
  startReview:()=>{S.review={queue:buildQueue(),i:0};render()},
  rNext:el=>reviewNext(el.dataset.v),
- toggle:el=>{const t=get("task_"+el.dataset.id);if(!t)return;const n=Object.assign({},t,{done:!t.done,doneAt:!t.done?Date.now():null});
+ toggle:el=>{const t=get("task_"+el.dataset.id);if(!t)return;
+   if(isRange(t)){const days=rangeDays(t);let dd=new Set((t.doneDays||[]).filter(x=>days.includes(x)));const day=el.dataset.day;let on;
+     if(day){dd.has(day)?dd.delete(day):dd.add(day);on=dd.has(day)}else{const full=dd.size===days.length;dd=full?new Set():new Set(days);on=!full}
+     const arr=[...dd].sort(),n=Object.assign({},t,{doneDays:arr,done:arr.length===days.length,doneAt:on?Date.now():(t.doneAt||null)});
+     el.classList.toggle("done",on);el.closest(".task")&&el.closest(".task").classList.toggle("done",on);if(on)burst(el,tColor(t));
+     setTimeout(()=>{put(n);if(on&&(day||today())===today()&&!tasksFor(today()).some(x=>!x.done))confetti()},420);return}
+   const n=Object.assign({},t,{done:!t.done,doneAt:!t.done?Date.now():null});
    el.classList.toggle("done",n.done);el.closest(".task")&&el.closest(".task").classList.toggle("done",n.done);if(n.done)burst(el,t.prio?PRIO[t.prio].c:"#5a5cf0");
    setTimeout(()=>{put(n);if(n.done&&n.date===today()&&!tasksFor(today()).some(x=>!x.done))confetti()},420)},
  editTask:el=>taskSheet(Object.assign({},get("task_"+el.dataset.id))),
  newTask:el=>{closeSheet(true);taskSheet({date:el.dataset.v||today()})},
+ newRange:el=>{closeSheet(true);const d=el.dataset.v||today();taskSheet({date:d,end:dkey(addDays(parseD(d),6))})},
  newHl:()=>{closeSheet(true);hlSheet({})},
  editHl:el=>hlSheet(Object.assign({},get("hl_"+el.dataset.id))),
  fav:el=>{const h=get("hl_"+el.dataset.id);if(h)put(Object.assign({},h,{fav:!h.fav}))},
