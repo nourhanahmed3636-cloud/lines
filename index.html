@@ -182,7 +182,7 @@ a.btn{text-decoration:none;color:inherit}a.btn.primary{color:#fff}
 .plusbtn{width:48px;flex:none;padding:0}
 .addround{width:34px;height:34px;border-radius:50%;background:var(--grad);color:#fff;display:grid;place-items:center;font-size:20px;font-weight:600;box-shadow:0 8px 16px -6px rgba(109,93,252,.7);transition:transform .5s var(--spring)}
 .addround:active{transform:scale(.85) rotate(90deg)}
-input[type=text],input[type=date],input[type=time],input[type=search],textarea,select{width:100%;border:1.5px solid rgba(124,92,255,.14);border-radius:16px;padding:12px 14px;background:rgba(255,255,255,.75);outline:none;transition:border .3s,box-shadow .3s}
+input[type=text],input[type=number],input[type=date],input[type=time],input[type=search],textarea,select{width:100%;border:1.5px solid rgba(124,92,255,.14);border-radius:16px;padding:12px 14px;background:rgba(255,255,255,.75);outline:none;transition:border .3s,box-shadow .3s}
 input:focus,textarea:focus,select:focus{border-color:rgba(124,92,255,.5);box-shadow:0 0 0 4px rgba(124,92,255,.12)}
 textarea{resize:vertical;min-height:90px;line-height:1.7}
 label.l{display:block;font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);margin:14px 2px 7px}
@@ -482,7 +482,7 @@ html.dark .chip.on{background:var(--grad)!important}
 html.dark .nav-in{background:linear-gradient(135deg,rgba(30,24,70,.82),rgba(20,16,48,.7))!important;border-color:rgba(255,255,255,.1)!important;box-shadow:0 18px 40px -10px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.1)!important}
 html.dark .nav .plus{box-shadow:0 14px 28px -6px rgba(120,100,255,.7),inset 0 2px 0 rgba(255,255,255,.3),0 0 0 6px rgba(20,16,48,.9)!important}
 html.dark .sheet{background:linear-gradient(170deg,rgba(34,27,74,.97),rgba(18,14,44,.98))!important;box-shadow:0 -20px 50px -20px rgba(0,0,0,.7)}
-html.dark input[type=text],html.dark input[type=date],html.dark input[type=time],html.dark input[type=search],html.dark input[type=datetime-local],html.dark textarea,html.dark select{background:rgba(255,255,255,.06)!important;border-color:rgba(255,255,255,.14)!important;color:var(--ink)}
+html.dark input[type=text],html.dark input[type=number],html.dark input[type=date],html.dark input[type=time],html.dark input[type=search],html.dark input[type=datetime-local],html.dark textarea,html.dark select{background:rgba(255,255,255,.06)!important;border-color:rgba(255,255,255,.14)!important;color:var(--ink)}
 html.dark ::placeholder{color:#7f78a3}
 html.dark .search input{background:transparent!important}
 html.dark .seg .pill{background:rgba(255,255,255,.16);box-shadow:none}
@@ -678,7 +678,7 @@ html.dark .mwarn{background:rgba(251,146,60,.15);color:#fdba74}
 .exbars i{width:100%;border-radius:6px 6px 3px 3px;display:block}.exbars small{font-size:9.5px;color:var(--muted)}
 .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:10px;text-align:center}.ocdp .kpis{grid-template-columns:repeat(3,1fr)}
 .kpis b{display:block;font-size:19px;font-weight:800}.kpis small{font-size:10.5px;color:var(--muted)}
-.ahm{display:grid;grid-template-columns:repeat(12,1fr);grid-auto-flow:column;grid-template-rows:repeat(7,1fr);gap:3px;margin-top:14px}.ahm i{aspect-ratio:1;border-radius:3px;background:#2563eb}
+.ahm{display:grid;grid-template-columns:repeat(21,1fr);grid-auto-flow:column;grid-template-rows:repeat(7,1fr);gap:3px;margin-top:14px}.ahm i{aspect-ratio:1;border-radius:3px;background:#2563eb}
 /* exam */
 .exam{padding-bottom:6px}.exh{display:flex;align-items:center;gap:10px;margin-bottom:12px}.exdots{flex:1;display:flex;gap:4px}
 .exdots i{flex:1;height:6px;border-radius:4px;background:rgba(0,0,0,.08)}html.dark .exdots i{background:rgba(255,255,255,.12)}.exdots i.cur{background:var(--v1)}.exdots i.ok{background:#14b8a6}.exdots i.no{background:#f43f5e}
@@ -751,6 +751,76 @@ html.dark .uout button{background:rgba(255,255,255,.06)}.uout span{grid-row:1/3;
 .ctoday{display:grid;grid-template-columns:repeat(3,1fr);text-align:center;margin:12px 0}.ctoday b{display:block;font-size:26px;font-weight:900}.ctoday small{font-size:11px;color:var(--muted)}
 .fcast{display:flex;align-items:flex-end;gap:6px;height:90px}.fcast div{flex:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:3px}
 .fcast i{width:100%;border-radius:6px 6px 3px 3px;background:linear-gradient(#2dd4bf,#0e7490);display:block}.fcast small{font-size:10px;color:var(--muted);font-weight:700}.fcast b{font-size:9.5px;color:var(--muted)}
+
+.mhub{background:linear-gradient(140deg,#0ea5e9 0%,#0e7490 45%,#312e81 100%)}.hubic{font-size:46px;position:relative;animation:bob 3s ease-in-out infinite}
+.mroad{position:relative;margin-top:8px}.mroad::before{content:"";position:absolute;left:19px;top:20px;bottom:20px;width:3px;border-radius:3px;background:color-mix(in srgb,var(--v1) 25%,transparent)}
+.mstep{position:relative;display:flex;align-items:center;gap:12px;padding:11px 0;cursor:pointer}
+.mnum{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;flex:none;font-weight:900;background:#fff;color:var(--v1);box-shadow:0 6px 14px -6px rgba(0,0,0,.3);z-index:1;border:2px solid color-mix(in srgb,var(--v1) 30%,transparent)}
+html.dark .mnum{background:#1b1640}.mstep.cur .mnum{background:var(--grad);color:#fff;border:0;box-shadow:0 0 0 5px color-mix(in srgb,var(--v1) 22%,transparent);animation:glow 2s ease-in-out infinite}
+.mstep.done .mnum{background:#14b8a6;color:#fff;border:0}.mst{flex:1;min-width:0}.mst b{display:block;font-size:15px}.mst small{color:var(--muted);font-size:12px}
+.mstep:not(.cur):not(.done) .mst{opacity:.7}.mbar{height:6px;border-radius:4px;background:color-mix(in srgb,var(--v1) 15%,transparent);margin-top:7px;overflow:hidden;max-width:240px}.mbar i{display:block;height:100%;border-radius:4px;background:var(--grad)}
+.mnow{cursor:pointer}.mnowl{display:grid;gap:7px;margin-top:10px;font-size:13.5px;font-weight:600}.mnowl span{padding:9px 12px;border-radius:12px;background:color-mix(in srgb,var(--v1) 9%,transparent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* ===== Medicine hub: motion design ===== */
+.ahm i{opacity:var(--o,.08)}
+.mhub2{position:relative;overflow:hidden;border-radius:32px;padding:18px 18px 16px;margin-bottom:14px;color:#fff;
+  background:radial-gradient(120% 90% at 100% 0%,rgba(45,212,191,.55),transparent 55%),radial-gradient(90% 80% at 0% 100%,rgba(99,102,241,.55),transparent 60%),linear-gradient(150deg,#0b3b4f 0%,#0e5a73 45%,#1e2a6b 100%);
+  box-shadow:0 30px 50px -24px rgba(14,90,115,.9),inset 0 1px 0 rgba(255,255,255,.18)}
+.mhub2::after{content:"";position:absolute;inset:-40% -60%;background:linear-gradient(100deg,transparent 40%,rgba(255,255,255,.14) 50%,transparent 60%);transform:translateX(-60%);animation:shine 6s ease-in-out infinite;pointer-events:none}
+@keyframes shine{0%,55%{transform:translateX(-60%)}100%{transform:translateX(60%)}}
+.mh-bg{position:absolute;inset:0;pointer-events:none}.fl{position:absolute;font-size:28px;opacity:.16;filter:saturate(.6);animation:drift 14s ease-in-out infinite}
+.f1{left:62%;top:8%;animation-duration:16s}.f2{left:80%;top:52%;animation-duration:12s;animation-delay:-3s;font-size:22px}.f3{left:8%;top:60%;animation-duration:18s;animation-delay:-6s}.f4{left:44%;top:70%;animation-duration:15s;animation-delay:-9s;font-size:24px}.f5{left:88%;top:20%;animation-duration:13s;animation-delay:-2s;font-size:20px}
+@keyframes drift{0%,100%{transform:translate(0,0) rotate(0)}25%{transform:translate(10px,-14px) rotate(12deg)}50%{transform:translate(-6px,-24px) rotate(-8deg)}75%{transform:translate(-12px,-8px) rotate(6deg)}}
+.mh-top{position:relative;display:flex;justify-content:space-between;align-items:center}
+.live{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:800;padding:6px 11px;border-radius:999px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.2);backdrop-filter:blur(8px)}
+.live i{width:8px;height:8px;border-radius:50%;background:#34d399;box-shadow:0 0 0 0 rgba(52,211,153,.7);animation:livep 1.8s infinite}.live.warn i{background:#fbbf24;animation-name:livew}
+@keyframes livep{70%{box-shadow:0 0 0 9px rgba(52,211,153,0)}100%{box-shadow:0 0 0 0 rgba(52,211,153,0)}}@keyframes livew{70%{box-shadow:0 0 0 9px rgba(251,191,36,0)}100%{box-shadow:0 0 0 0 rgba(251,191,36,0)}}
+.beat{display:inline-flex;align-items:baseline;gap:5px;font-size:12px}.beat b{font-size:20px;font-weight:900}.beat small{opacity:.85}
+.hrt{display:inline-block;font-size:18px;animation:hb 1.1s ease-in-out infinite;transform-origin:center;align-self:center}
+@keyframes hb{0%,40%,100%{transform:scale(1)}10%{transform:scale(1.28)}20%{transform:scale(1.02)}30%{transform:scale(1.18)}}
+.mh-name{position:relative;margin-top:12px}.mh-name small{display:block;font-size:11.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;opacity:.8}
+.mh-name b{display:block;font-size:34px;font-weight:900;letter-spacing:-.02em;line-height:1.1;background:linear-gradient(90deg,#fff,#a7f3d0 60%,#fff);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:tshine 5s linear infinite}
+@keyframes tshine{to{background-position:-200% 0}}.mh-name span{font-size:13.5px;opacity:.85}
+.mon{position:relative;height:76px;margin:12px -4px 4px;border-radius:16px;background-color:rgba(0,0,0,.18);border:1px solid rgba(255,255,255,.1);overflow:hidden;
+  background-image:linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px);background-size:15px 15px}
+.mon svg{position:absolute;inset:0;width:100%;height:100%}.mon path{fill:none;stroke-linecap:round;stroke-linejoin:round}
+.ecg-base path{stroke:rgba(255,255,255,.14);stroke-width:1.6}
+.ecg-c path{stroke:#5eead4;stroke-width:2.4;stroke-dasharray:22 120;stroke-dashoffset:22;animation:comet 2.8s linear infinite;filter:drop-shadow(0 0 4px #2dd4bf)}
+.ecg-c.c2 path{stroke:#fff;stroke-width:3.2;stroke-dasharray:1.2 120;stroke-dashoffset:1.2;animation-name:comet2;filter:drop-shadow(0 0 5px #fff) drop-shadow(0 0 10px #5eead4)}
+@keyframes comet{to{stroke-dashoffset:-78}}@keyframes comet2{to{stroke-dashoffset:-98.8}}
+.ecg-dot{fill:#fff;filter:drop-shadow(0 0 6px #5eead4)}
+.mstats{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.mstats div{padding:10px 8px;border-radius:16px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.16);text-align:center;backdrop-filter:blur(6px)}
+.mstats b{display:block;font-size:24px;font-weight:900;line-height:1.05}.mstats small{font-size:10.5px;opacity:.85}
+.mhubp .lvl{background:rgba(255,255,255,.1)}
+.st .rv{animation:rvIn .85s var(--spring) both;animation-delay:calc(var(--i,0)*.09s)}
+@keyframes rvIn{from{opacity:0;transform:translateY(22px) scale(.98)}to{opacity:1;transform:none}}
+.mroad{position:relative;margin-top:10px}.mroad::before{content:"";position:absolute;left:23px;top:24px;bottom:24px;width:3px;border-radius:3px;background:linear-gradient(var(--v1),color-mix(in srgb,var(--v1) 15%,transparent));transform-origin:top}
+.st .mroad::before{animation:drawY 1.2s .35s var(--ease) both}@keyframes drawY{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+.mstep{position:relative;display:flex;align-items:center;gap:12px;padding:10px 0;cursor:pointer;transition:transform .3s var(--spring)}.mstep:active{transform:scale(.97)}
+.st .mstep{animation:popIn .7s var(--spring) both;animation-delay:calc(.4s + var(--i)*.16s)}@keyframes popIn{from{opacity:0;transform:translateX(-14px) scale(.9)}to{opacity:1;transform:none}}
+.mnode{position:relative;width:48px;height:48px;border-radius:50%;flex:none;display:grid;place-items:center;z-index:1;background:conic-gradient(var(--v1) calc(var(--p)*1%),color-mix(in srgb,var(--v1) 14%,rgba(255,255,255,.9)) 0)}
+html.dark .mnode{background:conic-gradient(var(--v1) calc(var(--p)*1%),rgba(255,255,255,.1) 0)}
+.mnum{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-size:19px;font-weight:900;background:#fff;color:var(--v1);box-shadow:0 6px 14px -6px rgba(0,0,0,.35)}
+html.dark .mnum{background:#1b1640}.mstep.done .mnum{background:linear-gradient(135deg,#2dd4bf,#0d9488);color:#fff}
+.mstep.cur .mnode::before,.mstep.cur .mnode::after{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid var(--v1);animation:ripple 2.4s ease-out infinite}.mstep.cur .mnode::after{animation-delay:1.2s}
+@keyframes ripple{from{transform:scale(1);opacity:.7}to{transform:scale(1.7);opacity:0}}
+.mstep.cur .mnum{background:var(--grad);color:#fff}
+.mst{flex:1;min-width:0}.mst b{display:block;font-size:15.5px;margin:1px 0}.mst>small{color:var(--muted);font-size:12px}.mlab{font-size:10.5px!important;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--v1)!important}
+.nowp{font-size:9.5px;font-weight:900;letter-spacing:.08em;color:#fff;background:var(--grad);padding:2px 7px;border-radius:999px;animation:nowp 2s ease-in-out infinite}@keyframes nowp{50%{opacity:.6}}
+.mstep:not(.cur):not(.done) .mst{opacity:.65}.marr{color:var(--muted);font-size:20px}
+.mbar{height:6px;border-radius:4px;background:color-mix(in srgb,var(--v1) 14%,transparent);margin-top:7px;overflow:hidden;max-width:240px}.mbar i{display:block;height:100%;border-radius:4px;background:var(--grad);transform-origin:left}
+.st .mbar i{animation:growX 1.2s .8s var(--ease) both}@keyframes growX{from{transform:scaleX(0)}}
+.mnow{border:1px solid transparent!important;background:linear-gradient(var(--glass-bg,rgba(255,255,255,.85)),var(--glass-bg,rgba(255,255,255,.85))) padding-box,var(--grad) border-box!important}
+html.dark .mnow{--glass-bg:rgba(20,16,48,.88)}
+.mtiles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.mtile{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;padding:12px 10px;border-radius:18px;background:color-mix(in srgb,var(--v1) 9%,rgba(255,255,255,.7));color:inherit;min-width:0;transition:transform .3s var(--spring)}
+html.dark .mtile{background:rgba(255,255,255,.06)}.mtile:active{transform:scale(.94)}
+.mtile span{font-size:22px}.mtile b{font-size:13.5px;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.mtile small{font-size:11px;color:var(--muted)}
+.mtile.ok{background:linear-gradient(135deg,rgba(45,212,191,.22),rgba(14,116,144,.14))}.mtile.ok small{color:#0d9488;font-weight:700}
+.st .mtile{animation:popIn .6s var(--spring) both}.st .mtile:nth-child(2){animation-delay:.08s}.st .mtile:nth-child(3){animation-delay:.16s}
+.st .ahm i{animation:cellIn .5s var(--ease) both;animation-delay:calc(.3s + var(--d)*18ms)}@keyframes cellIn{from{opacity:0;transform:scale(.3)}}
+.st .fcast i,.st .exbars i{transform-origin:bottom;animation:growY .9s var(--spring) both}.st .fcast div:nth-child(n) i{animation-delay:calc(.2s + var(--k,0)*.05s)}@keyframes growY{from{transform:scaleY(0)}}
 </style>
 </head>
 <body>
@@ -1222,7 +1292,7 @@ async function upload(file){
 
 /* ---------------- render ---------------- */
 const NAV=[["home","Home"],["plan","Plan"],null,["body","Body"],["lib","Library"]];
-const VIEWS={home:()=>vHome(),lib:()=>vLib(),rev:()=>vRev(),plan:()=>vPlan(),jour:()=>vJour(),stats:()=>vStats(),body:()=>vBody(),focus:()=>vFocus(),med:()=>vMed(),ocd:()=>vOcd()};
+const VIEWS={home:()=>vHome(),lib:()=>vLib(),rev:()=>vRev(),plan:()=>vPlan(),jour:()=>vJour(),stats:()=>vStats(),body:()=>vBody(),focus:()=>vFocus(),med:()=>vMedicine(),mrcp:()=>vMrcp(),ocd:()=>vOcd()};
 let lastTab=null;
 /* theme: auto (follows the phone) · light · dark */
 const MQ=window.matchMedia?matchMedia("(prefers-color-scheme: dark)"):null;
@@ -1247,7 +1317,7 @@ function render(){applyTheme();syncBg();
   const nav=$("#nav");
   if(!nav.children.length)nav.innerHTML=NAV.map(n=>n?`<button class="tab" data-act="tab" data-v="${n[0]}">${ico(n[0])}${n[1]}<span class="dot"></span></button>`:`<button class="plus" data-act="quick" aria-label="Add">${ico("plus",2.4)}</button>`).join("");
   nav.querySelectorAll(".tab").forEach(b=>b.classList.toggle("on",b.dataset.v===S.tab));
-  document.body.classList.toggle("home",S.tab==="home");const bb=$("#backbtn");const sub=["rev","stats","jour","focus","med","ocd"].includes(S.tab);
+  document.body.classList.toggle("home",S.tab==="home");const bb=$("#backbtn");const sub=["rev","stats","jour","focus","med","mrcp","ocd"].includes(S.tab);
   bb.innerHTML=sub?ico("back",2.2):`<span class="dots4"><i></i><i></i><i></i><i></i></span>`;bb.dataset.act=sub?"back":"go";bb.dataset.v=sub?"":"stats";
   const v=$("#view");const fn=VIEWS[S.tab]||VIEWS.home;
   const active=document.activeElement;const keep=active&&v.contains(active)&&active.id?active.id:null;const pos=keep&&active.selectionStart;
@@ -2363,7 +2433,7 @@ function newCandidates(k){if(!QP||k<=0)return [];const m=qst(),seenN=new Set(),o
   if(out.length<k){const sub=new Set(ch.map(c=>c.subj));sub.forEach(s_=>add(QP.bySubj[s_]||[]))}
   if(out.length<k)add(QP.cards.map((_,i)=>i));return out}
 let SS=null;
-async function startCards(){const P=await medPack();if(!P){closeSheet(true);S.medTab="exam";S.tab="med";render();return toast("Load your questions first (Study tab)",3000)}
+async function startCards(){const P=await medPack();if(!P){closeSheet(true);S.medTab="exam";S.tab="mrcp";render();return toast("Load your questions first (Study tab)",3000)}
   const m=qst(),td=dnum(today()),due=[];P.cards.forEach((c,i)=>{const st=qsGet(m,cid(c));if(st&&st[1]<=td)due.push([i,st[1]])});due.sort((a,b)=>a[1]-b[1]);
   const nw=newCandidates(Math.max(0,mcfg().perDay-cardCounts().newToday));
   if(!due.length&&!nw.length)return toast("All cards done for today ✓",2500);
@@ -2464,7 +2534,7 @@ function medStats(){const ch=chaps(),ex=all("exam"),m=qst();let qs=0;Object.valu
 
 /* ---- daily exam ---- */
 let EX=null;
-async function startExam(mode,subj){const P=await medPack();if(!P){closeSheet(true);S.medTab="exam";S.tab="med";render();return toast("Load your questions first (Exams tab)",3000)}
+async function startExam(mode,subj){const P=await medPack();if(!P){closeSheet(true);S.medTab="exam";S.tab="mrcp";render();return toast("Load your questions first (Study tab)",3000)}
   const c=mcfg(),N=c.dailyN||10,m=qst(),td=dnum(today());const pickFrom=(arr,k,used)=>{const a=arr.filter(i=>!used.has(i));const un=a.filter(i=>!m[cid(P.cards[i])]);const src=(un.length>=k?un:a).slice();src.sort(()=>Math.random()-.5);return src.slice(0,k)};
   const used=new Set();let picks=[];const take=l=>l.forEach(i=>{if(picks.length<N&&!used.has(i)){used.add(i);picks.push(i)}});
   if(mode==="subj"){take(pickFrom(P.bySubj[subj]||[],N,used))}
@@ -2544,7 +2614,7 @@ async function ocrPrep(f){try{const u=URL.createObjectURL(f);const im=await new 
 function medHero(){const c=mcfg(),d=daysTo(c.exam),ch=chaps(),dn=ch.filter(x=>x.studied).length,pc=ch.length?Math.round(dn/ch.length*100):0;
   const ao=daysTo(c.appOpen),ac=daysTo(c.appClose);const app=ao>0?`📝 Application opens in ${ao} days (${fmt(c.appOpen,{day:"numeric",month:"short"})})`:ac>=0?`⚠️ Apply now — closes ${fmt(c.appClose,{day:"numeric",month:"short"})}, 8am UK`:"";
   return `<div class="mhero"><svg class="ecg" viewBox="0 0 400 60" preserveAspectRatio="none"><path d="M0 34 H120 l8 -4 l6 4 H160 l6 -26 l8 50 l7 -32 l5 8 H260 l8 -5 l6 5 H400"/></svg>
-   <div class="row between" style="align-items:flex-start"><div><div class="mh-k">MRCP(UK) · Part 1</div><div class="mh-d"><b>${Math.max(0,d)}</b> days</div><div class="mh-s">to ${fmt(c.exam,{weekday:"short",day:"numeric",month:"long",year:"numeric"})}</div></div>
+   <div class="row between" style="align-items:flex-start"><div><div class="mh-k">Milestone 1 · MRCP(UK) Part 1</div><div class="mh-d"><b>${Math.max(0,d)}</b> days</div><div class="mh-s">to ${fmt(c.exam,{weekday:"short",day:"numeric",month:"long",year:"numeric"})}</div></div>
    <div class="mring" style="--p:${pc}"><b>${pc}%</b><small>plan</small></div></div>
    ${app?`<div class="mh-app">${app}</div>`:""}${lvlCard("med")}</div>`}
 function medToday(){const t=today(),c=mcfg();const plan=tasksFor(t).filter(x=>x.medPlan&&x.chap);const rv=revDue().slice(0,4);const ex=all("exam").find(e=>e.mode==="daily"&&e.date===t);const ak=get("ankid_"+t);const bh=behind();
@@ -2557,7 +2627,7 @@ function medToday(){const t=today(),c=mcfg();const plan=tasksFor(t).filter(x=>x.
    ${rv.map(({c,k})=>`<div class="mti"><span class="mic" style="background:#6366f1">🔁</span><div class="mtt"><b${dir(c.title)}>Revise: ${esc(c.title)}</b><small>Day-${k} revision</small></div><button class="chip" data-act="revDone" data-id="${c.id}" data-k="${k}">Done</button></div>`).join("")}
    ${mcfg().pack&&mcfg().pack.n?(()=>{const cc=cardCounts(),nl=Math.max(0,c.perDay-cc.newToday),fin=!cc.due&&!nl;return `<div class="mti ${fin?"done":""}"><span class="mic" style="background:#14b8a6">🗂️</span><div class="mtt"><b>Cards · ${nl} new · ${cc.due} due</b><small>${fin?"All done for today":"Spaced repetition, like Anki"}</small></div>${fin?'<span class="mok">✓</span>':`<button class="chip on" data-act="cdStart">${cc.newToday?"Continue":"Study"}</button>`}</div>`})():""}
    <div class="mti ${ex?"done":""}"><span class="mic" style="background:#0ea5e9">📝</span><div class="mtt"><b>Daily exam · ${c.dailyN} questions</b><small>${ex?`Score ${Math.round(ex.ok/ex.n*100)}% · ${ex.ok}/${ex.n}`:"From what you studied + your weak spots"}</small></div>${ex?'<span class="mok">✓</span>':`<button class="chip on" data-act="exStart">Start</button>`}</div>
-   <div class="mti ${ak?"done":""}"><span class="mic" style="background:#2563eb">🗂️</span><div class="mtt"><b>Anki</b><small>${ak?`${ak.n} cards today`:"How many cards today?"}</small></div>${ak?'<span class="mok">✓</span>':`<input id="ak-n" type="number" inputmode="numeric" placeholder="0" class="akin"><button class="chip on" data-act="ankiLog">Save</button>`}</div></div></div>`}
+   </div></div>`}
 function medPlanTab(){const ch=chaps(),c=mcfg();if(!ch.length)return `<div class="g mempty"><div style="font-size:44px">📸</div><h3>Add your chapters</h3><p class="muted">Take a photo of the contents page and the app turns it into a day-by-day plan until ${fmt(c.exam,{day:"numeric",month:"long"})}.</p>
    <button class="btn primary block" data-act="chapAdd">📸 Scan or paste chapters</button><button class="btn soft block" style="margin-top:8px" data-act="chapSubj">⚡ Use the MRCP Part 1 subjects</button></div>`;
   const by={};ch.forEach(x=>(by[x.subj]=by[x.subj]||[]).push(x));
@@ -2575,16 +2645,16 @@ function medExamTab(){const c=mcfg();if(!c.pack||!c.pack.n)return `<div class="g
    <div class="ctoday"><div><b class="cn">${nl}</b><small>new</small></div><div><b class="cr">${cc.due}</b><small>due</small></div><div><b>${cc.newToday}</b><small>learned today</small></div></div>
    <button class="btn primary block" data-act="cdStart" ${nl||cc.due?"":"disabled"}>${nl||cc.due?"Study cards":"All done today ✓"}</button>
    <div class="muted" style="font-size:12px;margin:14px 0 4px">Next 7 days</div><div class="fcast">${cc.fc.map((n,i)=>`<div><small>${n}</small><i style="height:${Math.max(4,n/fmx*100)}%"></i><b>${i?"SMTWTFS"[addDays(new Date(),i).getDay()]:"Today"}</b></div>`).join("")}</div></div>
-  <div class="g"><div class="row between"><div><h3 style="margin:0">Daily exam</h3><small class="muted">${c.pack.n.toLocaleString()} notes · ${Object.keys(m).length.toLocaleString()} questions seen${c.pack.img?"":` · <span id="pbw" style="display:inline-block;width:60px;height:5px;border-radius:4px;background:rgba(0,0,0,.08);vertical-align:middle;overflow:hidden"><i id="packbar" style="display:block;height:100%;width:0;background:var(--v1)"></i></span> pictures`}</small></div><span class="tag">🔥 ${examStreak()} days</span></div>
+  <div class="g"><div class="row between"><div><h3 style="margin:0">Daily exam</h3><small class="muted">${c.pack.n.toLocaleString()} notes · ${Object.keys(m).length.toLocaleString()} questions seen${c.pack.img?"":` · <span id="pbw" style="display:inline-block;width:60px;height:5px;border-radius:4px;background:rgba(0,0,0,.08);vertical-align:middle;overflow:hidden"><i id="packbar" style="display:block;height:100%;width:0;background:var(--v1)"></i></span> pictures`}</small></div><span class="tag">🔥 ${examStreak()} day${examStreak()===1?"":"s"}</span></div>
    <div class="row" style="gap:8px;margin-top:12px"><button class="btn primary" style="flex:1" data-act="exStart">Start today's exam</button><button class="btn soft" style="flex:none" data-act="exWrong" ${wrongDue?"":"disabled"}>↺ Mistakes (${wrongDue})</button></div>
    ${last.length?`<div class="exbars">${last.map(e=>{const p=Math.round(e.ok/e.n*100);return `<div><i style="height:${Math.max(6,p)}%;background:${p>=80?"#14b8a6":p>=60?"#f59e0b":"#f43f5e"}"></i><small>${parseD(e.date).getDate()}</small></div>`}).join("")}</div>`:""}</div>
   <div class="g"><h3 style="margin:0 0 8px">Practice by subject</h3>${MSUBJ.map((s,i)=>{const n=(QP&&QP.bySubj[i]||[]).length,a=acc[i],p=a&&a[1]?Math.round(a[0]/a[1]*100):null;return n||!QP?`<div class="sbrow" data-act="exSubj" data-s="${i}"><span class="sdot" style="background:${mcol(i)}"></span><b>${esc(s)}</b><span class="muted">${p==null?"—":p+"%"}</span><div class="sbbar"><i style="width:${p||0}%;background:${mcol(i)}"></i></div><span class="muted">›</span></div>`:""}).join("")}</div>`}
-function medAnkiTab(){const st=get("ankistat_main"),d=ankiDays();const days=[...Array(84)].map((_,i)=>dkey(addDays(new Date(),i-83)));const mx=Math.max(1,...days.map(k=>d[k]||0));
+function medAnkiTab(){const st=get("ankistat_main"),d=ankiDays();const days=[...Array(147)].map((_,i)=>dkey(addDays(new Date(),i-146)));const mx=Math.max(1,...days.map(k=>d[k]||0));
   let streak=0;{let x=new Date();if(!d[today()])x=addDays(x,-1);while(d[dkey(x)]){streak++;x=addDays(x,-1)}}
   const wk=days.slice(-7).reduce((s,k)=>s+(d[k]||0),0);
-  return `<div class="g"><div class="row between"><h3 style="margin:0">Anki 🗂️</h3><span class="tag">🔥 ${streak} days</span></div>
-   <div class="kpis"><div><b>${wk.toLocaleString()}</b><small>this week</small></div><div><b>${st&&st.ret!=null?st.ret+"%":"—"}</b><small>retention</small></div><div><b>${st?st.mature.toLocaleString():"—"}</b><small>mature</small></div><div><b>${ankiTotal().toLocaleString()}</b><small>reviews</small></div></div>
-   <div class="ahm">${days.map(k=>`<i title="${k}" style="opacity:${d[k]?.25+.75*(d[k]/mx):.08}"></i>`).join("")}</div>
+  return `<div class="g"><div class="row between"><h3 style="margin:0">Anki 🗂️</h3><span class="tag">🔥 ${streak} day${streak===1?"":"s"}</span></div>
+   <div class="kpis"><div><b data-count="${wk}">${wk.toLocaleString()}</b><small>this week</small></div><div><b ${st&&st.ret!=null?`data-count="${st.ret}" data-suf="%"`:""}>${st&&st.ret!=null?st.ret+"%":"—"}</b><small>retention</small></div><div><b ${st?`data-count="${st.mature}"`:""}>${st?st.mature.toLocaleString():"—"}</b><small>mature</small></div><div><b data-count="${ankiTotal()}">${ankiTotal().toLocaleString()}</b><small>reviews</small></div></div>
+   <div class="ahm">${days.map((k,i)=>`<i title="${k}" style="--o:${d[k]?.25+.75*(d[k]/mx):.08};--d:${Math.floor(i/7)+i%7}"></i>`).join("")}</div>
    <div class="row" style="gap:8px;margin-top:12px"><input id="ak-n2" type="number" inputmode="numeric" placeholder="Cards today" style="flex:1;min-width:0" value="${(get("ankid_"+today())||{}).n||""}"><button class="btn primary" data-act="ankiLog2">Save</button></div></div>
   <div class="g"><h3 style="margin:0 0 4px">Import full history</h3><p class="muted" style="font-size:13px;line-height:1.55">In AnkiMobile: deck list → <b>Add/Export</b> (bottom left) → <b>Export to Share</b> → <b>Save to Files</b>. Then pick that file here.${st?` Last import: ${fmt(st.at,{day:"numeric",month:"short"})}.`:""}</p>
    <label class="btn soft block" style="margin-top:8px">📥 Import Anki file<input type="file" id="anki-f" accept=".colpkg,.apkg,application/zip,application/octet-stream" hidden></label>
@@ -2593,12 +2663,12 @@ function medTodoTab(){const ts=all("task").filter(t=>t.med&&!t.medPlan).sort((a,
   return `<div class="g"><h3 style="margin:0 0 6px">Study to-do</h3>${ts.length?ts.map(taskRow).join(""):`<div class="muted">Nothing yet — add things like "Book exam centre" or "Finish Passmedicine cardio".</div>`}
    <form class="quickadd" data-form="medTask"><input type="text" id="qa-med" dir="auto" placeholder="Add a study task…" autocomplete="off"><button class="btn primary plusbtn" aria-label="Add">+</button></form>
    <button class="muted" style="margin-top:12px;font-weight:700" data-act="medTaskDet">+ With date, colour or several days</button></div>`}
-function vMed(){S.medTab=S.medTab||"today";const T=[["today","Today"],["plan","Plan"],["exam","Study"],["anki","Anki"],["todo","To-do"]];
-  const pk=mcfg().pack;if(!QP&&pk&&pk.n)medPack().then(p=>{if(p&&S.tab==="med")render()});
+function vMrcp(){if(S.medTab==="anki")S.medTab="today";S.medTab=S.medTab||"today";const T=[["today","Today"],["plan","Plan"],["exam","Study"],["todo","To-do"]];
+  const pk=mcfg().pack;if(!QP&&pk&&pk.n)medPack().then(p=>{if(p&&S.tab==="mrcp")render()});
   if(pk&&pk.n&&(pk.v||1)<2&&localStorage.getItem("lines-code")&&!window._pkUp){window._pkUp=1;setTimeout(()=>medLoadPack(null,true),600)}
-  return `<div class="medp">${medHero()}${seg(T,S.medTab,"medTab")}${({today:medToday,plan:medPlanTab,exam:medExamTab,anki:medAnkiTab,todo:medTodoTab}[S.medTab])()}${gameStrip("med")}</div>`}
+  return `<div class="medp">${medHero()}${seg(T,S.medTab,"medTab")}${({today:medToday,plan:medPlanTab,exam:medExamTab,todo:medTodoTab}[S.medTab])()}${gameStrip("med")}</div>`}
 function homeJourneys(){const c=mcfg(),L1=level("med"),L2=level("ocd");const t=tasksFor(today()).filter(x=>x.medPlan&&x.chap&&!x.done)[0];const ex=all("exam").some(e=>e.mode==="daily"&&e.date===today());
-  return `<div class="jrow"><button class="jc jmed" data-act="go" data-v="med"><span class="je">🩺</span><b>MRCP · ${Math.max(0,daysTo(c.exam))}d</b><small${t?dir(t.title):""}>${t?esc(t.title.replace("📖 ","")):ex?"Exam done ✓":"Daily exam waiting"}</small><i style="width:${L1.pct}%"></i></button>
+  return `<div class="jrow"><button class="jc jmed" data-act="go" data-v="med"><span class="je">🩺</span><b>Medicine</b><small${t?dir(t.title):""}>MRCP ${Math.max(0,daysTo(c.exam))}d · ${t?esc(t.title.replace("📖 ","")):ex?"exam done ✓":"exam waiting"}</small><i style="width:${L1.pct}%"></i></button>
    <button class="jc jocd" data-act="go" data-v="ocd"><span class="je">🌱</span><b>OCD Journey</b><small>${L2.name} · ${L2.x} XP</small><i style="width:${L2.pct}%"></i></button></div>`}
 
 /* ---- sheets ---- */
@@ -2661,6 +2731,50 @@ Object.assign(ACTX,{
 });
 FORMX.medTask=f=>{const i=f.querySelector("input");const title=i.value.trim();if(!title)return;sfx("pop");i.value="";put({kind:"task",id:uid(),title,date:"",time:"",prio:0,done:false,med:true,color:"#14b8a6",created:Date.now()})};
 document.addEventListener("change",e=>{if(e.target&&e.target.id==="anki-f"){const f=e.target.files&&e.target.files[0];e.target.value="";if(f)ankiImport(f)}});
+
+/* ---------------- Medicine: the big picture — milestones (MRCP first) + Anki ---------------- */
+const MS_DEF=[["mrcp1","MRCP(UK) Part 1","mrcp"],["mrcp2","MRCP(UK) Part 2 Written",""],["paces","MRCP(UK) PACES",""]];
+function mstones(){let L=all("mstone");if(!L.length&&!meta().msInit){MS_DEF.forEach(([id,t,link],i)=>put({kind:"mstone",id,title:t,link,order:i,date:id==="mrcp1"?mcfg().exam:"",created:Date.now()},true));setMetaQ({msInit:1},true);L=all("mstone")}
+  return L.map(m=>m.id==="mrcp1"?Object.assign({},m,{date:mcfg().exam}):m).sort((a,b)=>(a.order||0)-(b.order||0))}
+const MS_IC={mrcp1:"🩺",mrcp2:"📝",paces:"🏥"};
+function vMedicine(){const ms=mstones(),c=mcfg(),ch=chaps(),dn=ch.filter(x=>x.studied).length,pc=ch.length?Math.round(dn/ch.length*100):0;
+  const cur=ms.find(m=>!m.done);const cc=c.pack&&c.pack.n?cardCounts():null;const ex=all("exam").find(e=>e.mode==="daily"&&e.date===today());
+  const t=tasksFor(today()).filter(x=>x.medPlan&&x.chap)[0];const bh=behind().length;const days=Math.max(0,daysTo(c.exam));
+  const sd=new Set([...all("exam").map(e=>e.date),...all("ankid").map(a=>a.date),...Object.values(qst()).map(v=>v[7]!=null?dkey(new Date(v[7]*864e5+43200000)):null).filter(Boolean)]);
+  let streak=0;{let x=new Date();if(!sd.has(today()))x=addDays(x,-1);while(sd.has(dkey(x))){streak++;x=addDays(x,-1)}}
+  const ecg=`<path d="M0 44 H34 l5 -4 l5 4 H58 l4 -32 l6 56 l5 -38 l4 14 H100 l6 -7 l6 7 H134 l5 -4 l5 4 H158 l4 -32 l6 56 l5 -38 l4 14 H200 l6 -7 l6 7 H234 l5 -4 l5 4 H258 l4 -32 l6 56 l5 -38 l4 14 H300" pathLength="100"/>`;
+  return `<div class="medp mhubp">
+   <div class="mhub2 rv" style="--i:0"><div class="mh-bg"><span class="fl f1">🧬</span><span class="fl f2">💊</span><span class="fl f3">🫀</span><span class="fl f4">🧠</span><span class="fl f5">🔬</span></div>
+    <div class="mh-top"><span class="live ${bh?"warn":""}"><i></i>${bh?"Catching up":"On track"}</span><span class="beat"><span class="hrt">❤️</span><b>${streak}</b><small>day streak</small></span></div>
+    <div class="mh-name"><small>Medicine</small><b>Dr. Nourhan</b><span>Your road to MRCP(UK)</span></div>
+    <div class="mon"><svg viewBox="0 0 300 76" preserveAspectRatio="none"><g class="ecg-base">${ecg}</g><g class="ecg-c">${ecg}</g><g class="ecg-c c2">${ecg}</g></svg></div>
+    <div class="mstats"><div><b data-count="${days}">${days}</b><small>days to Part 1</small></div><div><b data-count="${pc}" data-suf="%">${pc}%</b><small>plan done</small></div><div><b data-count="${cc?cc.due+Math.max(0,c.perDay-cc.newToday):0}">${cc?cc.due+Math.max(0,c.perDay-cc.newToday):0}</b><small>cards today</small></div></div>
+    ${lvlCard("med")}</div>
+   <div class="g rv" style="--i:1"><div class="row between"><h3 style="margin:0">Your milestones</h3><button class="chip" data-act="msAdd">+ Add</button></div>
+    <div class="mroad">${ms.map((m,i)=>{const isCur=cur&&cur.id===m.id,d=m.date?daysTo(m.date):null,pr=m.id==="mrcp1"?pc:0;
+     return `<div class="mstep ${m.done?"done":""} ${isCur?"cur":""}" style="--i:${i}" data-act="msOpen" data-id="${m.id}"><span class="mnode" style="--p:${isCur?pr:m.done?100:0}"><span class="mnum">${m.done?"✓":MS_IC[m.id]||"🎯"}</span></span>
+      <div class="mst"><div class="row" style="gap:6px"><small class="mlab">Milestone ${i+1}</small>${isCur?'<span class="nowp">NOW</span>':""}</div><b${dir(m.title)}>${esc(m.title)}</b>
+      <small>${m.done?`Passed ${m.done!==true?fmt(m.done,{day:"numeric",month:"short",year:"numeric"}):""} 🎉`:m.id==="mrcp1"?`${fmt(m.date,{day:"numeric",month:"short",year:"numeric"})} · ${Math.max(0,d)} days · plan ${pc}%`:m.date?`${fmt(m.date,{day:"numeric",month:"short",year:"numeric"})}${d>0?` · ${d} days`:""}`:"Coming next — tap to set a date"}</small>
+      ${isCur&&m.id==="mrcp1"?`<div class="mbar"><i style="width:${pc}%"></i></div>`:""}</div><span class="marr">›</span></div>`}).join("")}</div></div>
+   ${cur&&cur.link==="mrcp"?`<div class="g mnow rv" style="--i:2"><div class="row between"><h3 style="margin:0">Today for MRCP</h3><button class="chip on" data-act="go" data-v="mrcp">Open ›</button></div>
+     <div class="mtiles"><button class="mtile ${t&&t.done?"ok":""}" data-act="go" data-v="mrcp"><span>📖</span><b${t?dir(t.title):""}>${t?esc(t.title.replace("📖 ","")):"Rest day"}</b><small>${t?(t.done?"Done ✓":isRange(t)?`Day ${rangeDays(t).indexOf(today())+1}/${rangeDays(t).length}`:"Today"):"No chapter"}</small></button>
+      <button class="mtile ${cc&&!cc.due&&cc.newToday>=c.perDay?"ok":""}" data-act="cdStart"><span>🗂️</span><b>${cc?`${Math.max(0,c.perDay-cc.newToday)} new`:"Cards"}</b><small>${cc?`${cc.due} due`:"Load questions"}</small></button>
+      <button class="mtile ${ex?"ok":""}" data-act="exStart"><span>📝</span><b>${ex?Math.round(ex.ok/ex.n*100)+"%":"Exam"}</b><small>${ex?"Done ✓":`${c.dailyN} questions`}</small></button></div></div>`:""}
+   <div class="rv" style="--i:3">${medAnkiTab()}</div><div class="rv" style="--i:4">${gameStrip("med")}</div></div>`}
+function msSheet(m){const isNew=!m.id;m=Object.assign({title:"",date:"",notes:""},m);
+  sheet(`<h3 style="font-size:20px">${isNew?"New milestone":"Milestone"}</h3><input type="text" id="mm-t" dir="auto" placeholder="e.g. MRCP Part 2 Written" value="${esc(m.title)}">
+   <label class="l">Target date</label><input type="date" id="mm-d" value="${esc(m.date||"")}">
+   <label class="l">Notes</label><textarea id="mm-n" dir="auto" style="min-height:80px" placeholder="Application dates, resources, plan…">${esc(m.notes||"")}</textarea>
+   ${m.link==="mrcp"?`<button class="btn soft block" style="margin-top:12px" data-act="go" data-v="mrcp">Open MRCP Part 1 plan →</button>`:""}
+   ${!isNew&&!m.done?`<button class="btn soft block" style="margin-top:8px" id="mm-pass">🎉 I passed it!</button>`:""}
+   <div class="row" style="margin-top:14px">${isNew||m.id==="mrcp1"?"":`<button class="btn danger" id="mm-del">Delete</button>`}<button class="btn primary" style="flex:1" id="mm-sv">Save</button></div>`,el=>{
+    const save=extra=>{const t=el.querySelector("#mm-t").value.trim();if(!t)return toast("Give it a name");const d=el.querySelector("#mm-d").value;
+      put(Object.assign({},m,{kind:"mstone",id:m.id||uid(),title:t,date:d,notes:el.querySelector("#mm-n").value,order:m.order??all("mstone").length,created:m.created||Date.now()},extra||{}),true);
+      if(m.id==="mrcp1"&&d&&d!==mcfg().exam){setM({exam:d},true);if(mcfg().planned)medPlan()}closeSheet();render()};
+    el.querySelector("#mm-sv").onclick=()=>save();
+    const ps=el.querySelector("#mm-pass");ps&&(ps.onclick=()=>{save({done:today()});setTimeout(()=>{confetti();sfx("success");celebrate("🎓","Milestone passed!",m.title);addXP("med",300,"Passed "+m.title)},400)});
+    const dl=el.querySelector("#mm-del");dl&&(dl.onclick=()=>{del("mstone_"+m.id);closeSheet()})})}
+Object.assign(ACTX,{msOpen:el=>{const m=mstones().find(x=>x.id===el.dataset.id);if(!m)return;if(m.link==="mrcp"&&!m.done){S.tab="mrcp";history.replaceState(null,"","#mrcp");render()}else msSheet(m)},msAdd:()=>msSheet({})});
 /* ---------------- OCD Journey: ERP fear ladder, exposures, urge surfing — as a gentle game ---------------- */
 const ocfg=()=>Object.assign({rest:2,goal:10},meta().ocd||{});
 const steps=()=>all("ostep").sort((a,b)=>(a.suds||0)-(b.suds||0));
@@ -2828,7 +2942,7 @@ const ACT={
   hdget:()=>{const i=document.getElementById("hd-code");hdUnlock(i&&i.value)},
  tab:el=>{S.tab=el.dataset.v;history.replaceState(null,"","#"+S.tab);render()},
  go:el=>{if(!el.dataset.v)return;S.tab=el.dataset.v;history.replaceState(null,"","#"+S.tab);render()},
- back:()=>{S.tab="home";history.replaceState(null,"","#home");render()},
+ back:()=>{S.tab=S.tab==="mrcp"?"med":"home";history.replaceState(null,"","#"+S.tab);render()},
  goFocus:()=>{closeSheet(true);S.tab="focus";render()},
  calendar:()=>{S.tab="plan";S.planTab="month";render()},
  goGoals:()=>{S.tab="plan";S.planTab="goals";render()},
