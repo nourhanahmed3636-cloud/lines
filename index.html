@@ -742,6 +742,15 @@ html.dark .uout button{background:rgba(255,255,255,.06)}.uout span{grid-row:1/3;
 .schart{width:100%;height:110px;margin:4px 0}.schart polyline{fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}.schart .pb{stroke:#f97316;opacity:.7}.schart .pa{stroke:#8b5cf6}.schart .ca{fill:#8b5cf6}
 .lg{display:inline-block;width:12px;height:4px;border-radius:2px;margin-right:5px;vertical-align:middle}.lg.lb{background:#f97316}.lg.la{background:#8b5cf6}
 .mok2{margin-top:10px;padding:10px 12px;border-radius:14px;background:rgba(245,158,11,.14);font-size:13px;font-weight:600}
+
+.tchips{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}.tchips span{font-size:11px;font-weight:700;padding:3px 8px;border-radius:999px;background:color-mix(in srgb,var(--v1) 12%,transparent);color:var(--v1);max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cnt{display:flex;gap:10px;font-weight:900;font-size:15px}.cn{color:#2563eb}.cl{color:#e11d48}.cr{color:#16a34a}
+.grades{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:14px}
+.gr{display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 0;border-radius:16px;color:#fff;font-weight:800;transition:transform .2s var(--spring)}.gr:active{transform:scale(.93)}
+.gr small{font-size:11px;font-weight:700;opacity:.9}.gr b{font-size:14px}.g1{background:#f43f5e}.g2{background:#f59e0b}.g3{background:#14b8a6}.g4{background:#3b82f6}
+.ctoday{display:grid;grid-template-columns:repeat(3,1fr);text-align:center;margin:12px 0}.ctoday b{display:block;font-size:26px;font-weight:900}.ctoday small{font-size:11px;color:var(--muted)}
+.fcast{display:flex;align-items:flex-end;gap:6px;height:90px}.fcast div{flex:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:3px}
+.fcast i{width:100%;border-radius:6px 6px 3px 3px;background:linear-gradient(#2dd4bf,#0e7490);display:block}.fcast small{font-size:10px;color:var(--muted);font-weight:700}.fcast b{font-size:9.5px;color:var(--muted)}
 </style>
 </head>
 <body>
@@ -2282,7 +2291,7 @@ function graceStreak(days,rest){let n=0,d=new Date(),miss={},started=false;
 const MSUBJ=["Cardiology","Respiratory","Gastroenterology","Endocrinology","Neurology","Nephrology","Rheumatology","Haematology","Infectious diseases","Dermatology","Psychiatry","Pharmacology & toxicology","Clinical sciences","Ophthalmology","Mixed"];
 const MCOL=["#e11d48","#0ea5e9","#f59e0b","#8b5cf6","#6366f1","#14b8a6","#ec4899","#dc2626","#16a34a","#d946ef","#0891b2","#ea580c","#2563eb","#65a30d","#64748b"];
 const MKW=[/cardi|heart|myocard|ecg|valv|aort|mitral|angina|pericard|arrhythm|hypertens/i,/respir|lung|pulmon|asthma|copd|chest|pleur|bronch/i,/gastro|git\b|liver|hepat|bowel|colon|pancrea|oesoph|gut|bili/i,/endocr|diabet|thyro|adrenal|pituit|metabol|bone|calcium/i,/neuro|brain|stroke|epilep|nerve|spinal|headache|movement/i,/nephro|renal|kidney|electrolyt|fluid|acid/i,/rheumat|arthrit|joint|connective|vasculit|lupus|musculo/i,/haemat|hemat|blood|anaem|anem|oncolog|cancer|leuk|lymph|coag/i,/infect|microb|virus|bacter|hiv|tropical|sexual|gum\b|antibio/i,/derma|skin/i,/psych|mental|mood|behavio/i,/pharma|drug|toxic|poison|therapeut/i,/basic|science|genetic|immun|statistic|epidemiol|physiol|biochem|cell|molecular|anatomy/i,/ophthal|eye|vision|retina/i];
-const MDEF={exam:"2027-05-26",appOpen:"2027-03-09",appClose:"2027-03-16",revWeeks:4,off:[5],dailyN:10};
+const MDEF={exam:"2027-05-26",appOpen:"2027-03-09",appClose:"2027-03-16",revWeeks:4,off:[5],dailyN:10,perDay:20};
 const mcfg=()=>Object.assign({},MDEF,meta().med||{});
 const setM=(p,q)=>setMetaQ({med:Object.assign({},meta().med||{},p)},q);
 const msubj=i=>MSUBJ[i]||"Mixed",mcol=i=>MCOL[i]||"#64748b";
@@ -2302,7 +2311,19 @@ async function medPack(){if(QP)return QP;const txt=await idbGet("qpack:notes").c
     else cards.push([ni,0])});
   cards.forEach((c,i)=>{const s=d.notes[c[0]].s;(bySubj[s]=bySubj[s]||[]).push(i)});
   Object.keys(ans).forEach(k=>ans[k]=[...ans[k]]);
-  QP={name:d.name||"MRCP notes",notes:d.notes,cards,bySubj,ans};return QP}
+  const tn={},tcards={};MSUBJ.forEach((sn,i)=>tn[i]=(d.topics||{})[sn]||[]);cards.forEach((c,i)=>{const n=d.notes[c[0]];const k=n.s+":"+(n[6]??-1);(tcards[k]=tcards[k]||[]).push(i)});
+  QP={name:d.name||"MRCP notes",v:d.v||1,notes:d.notes,cards,bySubj,ans,tn,tcards,ptxt:[]};return QP}
+const notePlain=ni=>QP.ptxt[ni]??(QP.ptxt[ni]=plain(QP.notes[ni][3]+" "+QP.notes[ni][4]).toLowerCase());
+/* topics inside a chapter: her own list (scanned/pasted) or the MRCP topics her notes are sorted into */
+const TSTOP=new Set("with from that this have into than also about other more their management treatment features causes diagnosis disease diseases disorder disorders syndrome syndromes".split(" "));
+function chTopics(ch){if(!QP)return (ch.topics||[]).map(t=>({name:t,key:"m:"+t,n:0}));const s=ch.subj;
+  if(ch.topics&&ch.topics.length)return ch.topics.map(t=>({name:t,key:"m:"+t,n:topicCards("m:"+t,ch).length}));
+  const L=(QP.tn[s]||[]).map((t,i)=>({name:t,key:s+":"+i,n:(QP.tcards[s+":"+i]||[]).length})).filter(x=>x.n);
+  const o=(QP.tcards[s+":-1"]||[]).length;if(o)L.push({name:"More "+msubj(s).toLowerCase(),key:s+":-1",n:o});return L}
+function topicCards(key,ch){if(!QP)return [];if(!key.startsWith("m:"))return QP.tcards[key]||[];
+  const ws=key.slice(2).toLowerCase().split(/[^a-z0-9]+/).filter(w=>w.length>=4&&!TSTOP.has(w));if(!ws.length)return [];
+  const GEN=new Set("infective infection chronic primary secondary clinical pulmonary cardiac hepatic kidney vascular arterial general systemic acquired congenital inherited".split(" "));
+  return (QP.bySubj[ch.subj]||[]).filter(ci=>{const t=notePlain(QP.cards[ci][0]);return ws.every(w=>t.includes(w))||ws.some(w=>w.length>=8&&!GEN.has(w)&&t.includes(w))})}
 const plain=h=>String(h).replace(/<br\s*\/?>|<\/div>|<\/li>/gi," ").replace(/<[^>]+>/g,"").replace(/&nbsp;/g," ").replace(/&amp;/g,"&").replace(/&lt;/g,"<").replace(/&gt;/g,">").replace(/\s+/g," ").trim().replace(/[.,:;]+$/,"").trim();
 const cid=c=>QP.notes[c[0]][0]+":"+c[1];
 function qBuild(ci){const [ni,cn]=QP.cards[ci],n=QP.notes[ni];const CL=/\{\{c(\d+)::([\s\S]*?)(?:::([\s\S]*?))?\}\}/g;
@@ -2320,12 +2341,53 @@ function qBuild(ci){const [ni,cn]=QP.cards[ci],n=QP.notes[ni];const CL=/\{\{c(\d
   return {ci,id:cid(QP.cards[ci]),s:n.s,q,aH:ansH,a:at,ex:n[4],src:n[5],mcq:!!opts,opts,ok:opts?opts.indexOf(at):-1}}
 /* spaced repetition per question: [box, dueDay, right, wrong] */
 const qst=()=>(get("qstat_main")||{m:{}}).m;
-function qMark(id,ok){const m=Object.assign({},qst());const s=m[id]||[0,0,0,0];const box=ok?Math.min(5,s[0]+1):0;const gap=[1,3,7,14,30,60][box];
-  m[id]=[box,dnum(today())+(ok?gap:1),s[2]+(ok?1:0),s[3]+(ok?0:1)];put({kind:"qstat",id:"main",m},true)}
+/* state per card: [interval days, due day, right, wrong, ease×100, reps, lapses, first day] — SM-2 like Anki */
+function qsGet(m,id){const v=m[id];if(!v)return null;if(v.length===4)return [[0,1,3,7,14,30][v[0]]||0,v[1],v[2],v[3],250,v[0],0,v[1]-1];return v}
+function nextIvl(st,g){if(!st||!st[0])return g===1?0:g===4?4:1;const ivl=st[0],ef=(st[4]||250)/100;
+  return g===1?0:g===2?Math.max(1,Math.round(ivl*1.2)):g===3?Math.max(ivl+1,Math.round(ivl*ef)):Math.max(ivl+2,Math.round(ivl*ef*1.3))}
+function qGrade(id,g){const m=Object.assign({},qst()),td=dnum(today()),st=qsGet(m,id);let ef=st?st[4]||250:250;const ivl=nextIvl(st,g);
+  if(st&&st[0]){if(g===1)ef=Math.max(130,ef-20);else if(g===2)ef=Math.max(130,ef-15);else if(g===4)ef+=15}
+  m[id]=[ivl,td+ivl,(st?st[2]:0)+(g>1?1:0),(st?st[3]:0)+(g===1?1:0),ef,(st?st[5]:0)+1,(st?st[6]:0)+(st&&st[0]&&g===1?1:0),st?st[7]:td];
+  put({kind:"qstat",id:"main",m},true)}
+const qMark=(id,ok)=>qGrade(id,ok?3:1);
+const fIvl=n=>n<1?"<10m":n<30?n+"d":n<365?Math.round(n/30)+"mo":(n/365).toFixed(1)+"y";
+function cardCounts(){const m=qst(),td=dnum(today());let due=0,nt=0;const fc=Array(7).fill(0);
+  for(const k in m){const v=qsGet(m,k);if(v[1]<=td)due++;else if(v[1]-td<7)fc[v[1]-td]++;if(v[7]===td)nt++}fc[0]=due;return {due,newToday:nt,fc}}
+/* new cards for today: from today's planned topics first, one card per note (siblings wait, like Anki) */
+function newCandidates(k){if(!QP||k<=0)return [];const m=qst(),seenN=new Set(),out=[];const t=today();
+  const add=list=>{for(const ci of list){if(out.length>=k)return;const c=QP.cards[ci];if(m[cid(c)]||seenN.has(c[0]))continue;seenN.add(c[0]);out.push(ci)}};
+  const ch=chaps();const tk=[];tasksFor(t).filter(x=>x.medPlan&&x.chap).forEach(x=>{const c=get("chap_"+x.chap);if(c&&c.plan&&c.plan.days)tk.push(...(c.plan.days[t]||[]).map(key=>[key,c]))});
+  tk.forEach(([key,c])=>add(topicCards(key,c)));
+  if(out.length<k){const later=[];ch.filter(c=>c.plan&&c.plan.days).forEach(c=>Object.keys(c.plan.days).sort().filter(d=>d>t).forEach(d=>c.plan.days[d].forEach(key=>later.push([d,key,c]))));
+    later.sort((a,b)=>a[0].localeCompare(b[0])).forEach(([d,key,c])=>{if(out.length<k)add(topicCards(key,c))})}
+  if(out.length<k){const sub=new Set(ch.map(c=>c.subj));sub.forEach(s_=>add(QP.bySubj[s_]||[]))}
+  if(out.length<k)add(QP.cards.map((_,i)=>i));return out}
+let SS=null;
+async function startCards(){const P=await medPack();if(!P){closeSheet(true);S.medTab="exam";S.tab="med";render();return toast("Load your questions first (Study tab)",3000)}
+  const m=qst(),td=dnum(today()),due=[];P.cards.forEach((c,i)=>{const st=qsGet(m,cid(c));if(st&&st[1]<=td)due.push([i,st[1]])});due.sort((a,b)=>a[1]-b[1]);
+  const nw=newCandidates(Math.max(0,mcfg().perDay-cardCounts().newToday));
+  if(!due.length&&!nw.length)return toast("All cards done for today ✓",2500);
+  SS={q:due.slice(0,400).map(x=>x[0]).concat(nw),i:0,nNew:nw.length,nRev:Math.min(400,due.length),newSet:new Set(nw),xp:0,show:false,learn:0};cardView()}
+function cardView(){const ci=SS.q[SS.i],q=qBuild(ci),st=qsGet(qst(),q.id);const left=SS.q.slice(SS.i);const nN=left.filter(x=>SS.newSet.has(x)&&!qst()[cid(QP.cards[x])]).length;
+  const nR=left.length-nN;
+  const body=`<div class="exh"><div class="cnt"><span class="cn">${nN}</span><span class="cl">${SS.learn}</span><span class="cr">${nR}</span></div><span class="muted" style="font-size:12px;margin-left:auto">${SS.i+1}/${SS.q.length}</span><button class="iconbtn" data-act="cdQuit" aria-label="Close" style="width:32px;height:32px">×</button></div>
+   <div class="exsub"><span class="sdot" style="background:${mcol(q.s)}"></span>${esc(msubj(q.s))}<span class="muted">&nbsp;·&nbsp;${st?(st[0]?"review":"learning"):"new"}</span></div>
+   <div class="exq" dir="auto">${SS.show?q.q.replace(/<span class="qb">[\s\S]*?<\/span>/g,`<span class="qa">${q.aH||esc(q.a)}</span>`):q.q}</div>
+   ${SS.show?`${!q.aH?`<div class="exans" dir="auto">${q.a}</div>`:""}${q.ex?`<details class="exex" open><summary>Explanation</summary><div dir="auto">${q.ex}</div></details>`:""}
+     <div class="grades">${[[1,"Again"],[2,"Hard"],[3,"Good"],[4,"Easy"]].map(([g,l])=>`<button class="gr g${g}" data-act="cdGrade" data-g="${g}"><small>${fIvl(nextIvl(st,g))}</small><b>${l}</b></button>`).join("")}</div>`
+    :`<button class="btn primary block" data-act="cdShow" style="margin-top:14px">Show answer</button>`}`;
+  const ov=$("#ov");if(ov&&ov.querySelector(".cards")){const x=ov.querySelector(".cards");x.innerHTML=body;hydrateQImgs(x);x.scrollTop=0;return}
+  sheet(`<div class="exam cards medp">${body}</div>`,el=>hydrateQImgs(el))}
+function cardGrade(g){const ci=SS.q[SS.i],q=qBuild(ci),st=qsGet(qst(),q.id);const wasNew=!st;qGrade(q.id,g);SS.xp+=wasNew?2:1;sfx(g===1?"soft":"tick");
+  if(g===1){SS.q.splice(Math.min(SS.q.length,SS.i+4),0,ci);SS.learn++}else if(st&&!st[0]&&SS.learn>0)SS.learn--;
+  SS.show=false;if(SS.i+1<SS.q.length){SS.i++;cardView()}else cardsEnd()}
+function cardsEnd(){const xp=SS.xp+15;const c=cardCounts();SS=null;
+  sheet(`<div class="medp" style="text-align:center"><div style="font-size:56px;margin-top:6px">🗂️</div><h2 style="margin:6px 0">Today's cards are done</h2><p class="muted">Tomorrow: ${c.fc[1]} review${c.fc[1]===1?"":"s"} + ${mcfg().perDay} new cards.</p><div class="xpbig">+${xp} XP</div><button class="btn primary block" style="margin-top:16px" data-act="exDone">Done</button></div>`);
+  confetti();sfx("success");addXP("med",xp,"Daily cards")}
 async function hydrateQImgs(root){for(const im of root.querySelectorAll("img[data-q]:not([data-ok])")){const k=im.dataset.q;im.dataset.ok=1;
   try{const b=await idbGet("qimg:"+k);if(b)im.src=URL.createObjectURL(b);else im.remove()}catch(e){im.remove()}}}
 let packBusy=false;
-async function medLoadPack(code){if(packBusy)return;const raw=String(code||localStorage.getItem("lines-code")||"").toUpperCase().replace(/[^A-Z0-9]/g,"");
+async function medLoadPack(code,notesOnly){if(packBusy)return;const raw=String(code||localStorage.getItem("lines-code")||"").toUpperCase().replace(/[^A-Z0-9]/g,"");
   if(raw.length!==12)return toast("Paste your 12-character code",2500);packBusy=true;
   try{toast("Unlocking your questions…",2500);
     const get_=async n=>{let r;try{r=await fetch("hd/"+n,{cache:"no-store"})}catch(e){throw "net"}if(!r.ok)throw "net";return r};
@@ -2339,7 +2401,9 @@ async function medLoadPack(code){if(packBusy)return;const raw=String(code||local
     await loadZip();
     const nz=await JSZip.loadAsync(await dec("q/notes.bin"));const txt=await nz.file("notes.json").async("string");
     await idbPut("qpack:notes",txt);QP=null;localStorage.setItem("lines-code",raw);
-    const info=JSON.parse(txt);setM({pack:{name:info.name,n:info.notes.length,at:today(),img:0}},true);render();toast(`${info.notes.length} notes ready ✓ — loading pictures…`,2500);
+    const info=JSON.parse(txt);const old=mcfg().pack||{};
+    if(notesOnly&&old.img){setM({pack:Object.assign({},old,{n:info.notes.length,v:info.v||1,at:today()})},true);if(mcfg().planned)medPlan();render();toast("Your questions are now sorted into topics ✓",2500);return}
+    setM({pack:{name:info.name,n:info.notes.length,v:info.v||1,at:today(),img:0}},true);render();toast(`${info.notes.length} notes ready ✓ — loading pictures…`,2500);
     const iz=await JSZip.loadAsync(await dec("q/img.bin",p=>{const b=$("#packbar");b&&(b.style.width=Math.round(p*100)+"%")}));
     const names=Object.keys(iz.files);let k=0;for(const nm of names){const blob=await iz.file(nm).async("blob");await idbPut("qimg:"+nm.replace(/\.\w+$/,""),new Blob([blob],{type:"image/webp"}));k++}
     setM({pack:Object.assign({},mcfg().pack,{img:k})},true);sfx("success");toast("Your MRCP questions are ready 🩺",2500);render()}
@@ -2372,7 +2436,9 @@ function medPlan(){const c=mcfg();const st=today();const passEnd=dkey(addDays(pa
   const todo=chaps().filter(x=>!x.studied);const D=studyDays(st,passEnd,c.off);if(!D.length){toast("Exam date is too close for a plan — check the settings",3500);return}
   const W=todo.reduce((s,x)=>s+(x.w||1),0)||1;let acc=0;
   todo.forEach(ch=>{const a=Math.min(D.length-1,Math.round(acc/W*D.length));acc+=ch.w||1;const b=Math.max(a,Math.min(D.length-1,Math.round(acc/W*D.length)-1));
-    put(Object.assign({},ch,{plan:{a:D[a],b:D[b]}}),true);
+    const days=D.slice(a,b+1),tp=chTopics(ch),pd={},tw=tp.reduce((x,t)=>x+Math.max(1,t.n),0);let cs=0;
+    tp.forEach(t=>{const ce=cs+Math.max(1,t.n);days.forEach((dd,j)=>{const lo=j*tw/days.length,hi=(j+1)*tw/days.length;if(cs<hi&&ce>lo)(pd[dd]=pd[dd]||[]).push(t.key)});cs=ce});
+    put(Object.assign({},ch,{plan:{a:D[a],b:D[b],days:pd}}),true);
     put({kind:"task",id:"mp_"+ch.id,title:"📖 "+ch.title,date:D[a],end:D[b]>D[a]?D[b]:"",color:mcol(ch.subj),med:true,medPlan:true,chap:ch.id,prio:0,done:false,created:Date.now()},true)});
   const fx=(id,title,date,end,color)=>{if(!get("task_"+id)||!get("task_"+id).done)put({kind:"task",id,title,date,end:end||"",color,med:true,medPlan:true,prio:id==="mp_exam"?3:0,done:false,created:Date.now()},true)};
   fx("mp_rev","🔁 Final revision + mock exams",dkey(addDays(parseD(passEnd),1)),dkey(addDays(parseD(c.exam),-1)),"#1e3a8a");
@@ -2484,10 +2550,12 @@ function medHero(){const c=mcfg(),d=daysTo(c.exam),ch=chaps(),dn=ch.filter(x=>x.
 function medToday(){const t=today(),c=mcfg();const plan=tasksFor(t).filter(x=>x.medPlan&&x.chap);const rv=revDue().slice(0,4);const ex=all("exam").find(e=>e.mode==="daily"&&e.date===t);const ak=get("ankid_"+t);const bh=behind();
   return `<div class="g"><div class="row between"><h3 style="margin:0">Today 🩺</h3><span class="muted" style="font-size:12px">${fmt(t,{weekday:"long",day:"numeric",month:"short"})}</span></div>
    ${bh.length?`<div class="mwarn">You're ${bh.length} chapter${bh.length>1?"s":""} behind. <button data-act="medReplan">Re-plan from today →</button></div>`:""}
-   <div class="mtl">${plan.length?plan.map(p=>{const ch=get("chap_"+p.chap);return `<div class="mti ${p.done?"done":""}"><span class="mic" style="background:${p.color}">📖</span><div class="mtt"><b${dir(ch?ch.title:p.title)}>${esc(ch?ch.title:p.title)}</b><small>${isRange(p)?`Day ${rangeDays(p).indexOf(t)+1} of ${rangeDays(p).length} · `:""}${esc(msubj(ch?ch.subj:14))}</small></div>${p.done?'<span class="mok">✓</span>':`<button class="chip on" data-act="chapDone" data-id="${p.chap}">Done</button>`}</div>`}).join("")
+   <div class="mtl">${plan.length?plan.map(p=>{const ch=get("chap_"+p.chap);const tl=ch&&ch.plan&&ch.plan.days?(ch.plan.days[t]||[]):[],nm=ch?Object.fromEntries(chTopics(ch).map(x=>[x.key,x.name])):{};
+     return `<div class="mti ${p.done?"done":""}"><span class="mic" style="background:${p.color}">📖</span><div class="mtt"><b${dir(ch?ch.title:p.title)}>${esc(ch?ch.title:p.title)}</b><small>${isRange(p)?`Day ${rangeDays(p).indexOf(t)+1} of ${rangeDays(p).length} · `:""}${esc(msubj(ch?ch.subj:14))}</small>${tl.length?`<div class="tchips">${tl.map(k=>`<span${dir(nm[k]||"")}>${esc(nm[k]||k.replace(/^m:/,""))}</span>`).join("")}</div>`:""}</div>${p.done?'<span class="mok">✓</span>':`<button class="chip on" data-act="chapDay" data-id="${p.id}">Done today</button>`}</div>`}).join("")
      :chaps().length?`<div class="mti"><span class="mic" style="background:#94a3b8">☕</span><div class="mtt"><b>No new chapter today</b><small>${c.off.includes(new Date().getDay())?"Day off — rest well":"Use it for revision or questions"}</small></div></div>`
      :`<div class="mti"><span class="mic" style="background:#14b8a6">📸</span><div class="mtt"><b>Add your chapters</b><small>Scan the contents page and get a plan</small></div><button class="chip on" data-act="chapAdd">Start</button></div>`}
    ${rv.map(({c,k})=>`<div class="mti"><span class="mic" style="background:#6366f1">🔁</span><div class="mtt"><b${dir(c.title)}>Revise: ${esc(c.title)}</b><small>Day-${k} revision</small></div><button class="chip" data-act="revDone" data-id="${c.id}" data-k="${k}">Done</button></div>`).join("")}
+   ${mcfg().pack&&mcfg().pack.n?(()=>{const cc=cardCounts(),nl=Math.max(0,c.perDay-cc.newToday),fin=!cc.due&&!nl;return `<div class="mti ${fin?"done":""}"><span class="mic" style="background:#14b8a6">🗂️</span><div class="mtt"><b>Cards · ${nl} new · ${cc.due} due</b><small>${fin?"All done for today":"Spaced repetition, like Anki"}</small></div>${fin?'<span class="mok">✓</span>':`<button class="chip on" data-act="cdStart">${cc.newToday?"Continue":"Study"}</button>`}</div>`})():""}
    <div class="mti ${ex?"done":""}"><span class="mic" style="background:#0ea5e9">📝</span><div class="mtt"><b>Daily exam · ${c.dailyN} questions</b><small>${ex?`Score ${Math.round(ex.ok/ex.n*100)}% · ${ex.ok}/${ex.n}`:"From what you studied + your weak spots"}</small></div>${ex?'<span class="mok">✓</span>':`<button class="chip on" data-act="exStart">Start</button>`}</div>
    <div class="mti ${ak?"done":""}"><span class="mic" style="background:#2563eb">🗂️</span><div class="mtt"><b>Anki</b><small>${ak?`${ak.n} cards today`:"How many cards today?"}</small></div>${ak?'<span class="mok">✓</span>':`<input id="ak-n" type="number" inputmode="numeric" placeholder="0" class="akin"><button class="chip on" data-act="ankiLog">Save</button>`}</div></div></div>`}
 function medPlanTab(){const ch=chaps(),c=mcfg();if(!ch.length)return `<div class="g mempty"><div style="font-size:44px">📸</div><h3>Add your chapters</h3><p class="muted">Take a photo of the contents page and the app turns it into a day-by-day plan until ${fmt(c.exam,{day:"numeric",month:"long"})}.</p>
@@ -2497,12 +2565,17 @@ function medPlanTab(){const ch=chaps(),c=mcfg();if(!ch.length)return `<div class
   return `<div class="g"><div class="row between"><h3 style="margin:0">Subjects</h3><button class="muted" style="font-weight:800" data-act="medSet">Plan settings</button></div><div class="srings">${rings}</div></div>
   <div class="g"><div class="row between" style="margin-bottom:6px"><h3 style="margin:0">Chapters · ${ch.filter(x=>x.studied).length}/${ch.length}</h3><button class="chip" data-act="chapAdd">+ Add</button></div>
    ${ch.map(x=>`<div class="chrow ${x.studied?"done":""}"><button class="check ${x.studied?"done":""}" style="--c:${mcol(x.subj)}" data-act="${x.studied?"chapUndo":"chapDone"}" data-id="${x.id}" aria-label="Done"></button>
-    <div class="t" data-act="chapEdit" data-id="${x.id}"><b${dir(x.title)}>${esc(x.title)}</b><small><span class="sdot" style="background:${mcol(x.subj)}"></span>${esc(msubj(x.subj))}${x.plan?` · ${fmt(x.plan.a,{day:"numeric",month:"short"})}${x.plan.b>x.plan.a?" → "+fmt(x.plan.b,{day:"numeric",month:"short"}):""}`:""}${x.studied?` · ✓ ${fmt(x.studied,{day:"numeric",month:"short"})}`:""}</small></div></div>`).join("")}
+    <div class="t" data-act="chapEdit" data-id="${x.id}"><b${dir(x.title)}>${esc(x.title)}</b><small><span class="sdot" style="background:${mcol(x.subj)}"></span>${esc(msubj(x.subj))}${x.plan?` · ${fmt(x.plan.a,{day:"numeric",month:"short"})}${x.plan.b>x.plan.a?" → "+fmt(x.plan.b,{day:"numeric",month:"short"}):""}`:""}${x.studied?` · ✓ ${fmt(x.studied,{day:"numeric",month:"short"})}`:""}${QP?` · ${chTopics(x).length} topics`:""}</small></div></div>`).join("")}
    <div class="row" style="gap:8px;margin-top:12px"><button class="btn primary" style="flex:1" data-act="medReplan">${c.planned?"↻ Re-plan from today":"✨ Make my plan"}</button></div></div>`}
 function medExamTab(){const c=mcfg();if(!c.pack||!c.pack.n)return `<div class="g mempty"><div style="font-size:44px">🔐</div><h3>Load your MRCP questions</h3><p class="muted">Your Anki notes (5,500+ notes, 8,000+ questions) are ready. Paste your private code to load them on this phone.</p>
    <div class="hdrow" style="margin-top:12px"><input id="pk-code" placeholder="Paste code" autocomplete="off" autocapitalize="characters" spellcheck="false" value="${esc((localStorage.getItem("lines-code")||"").replace(/(.{4})(?=.)/g,"$1-"))}"><button data-act="packLoad">Load</button></div></div>`;
   const ex=all("exam").sort((a,b)=>b.at-a.at),acc=subjAcc(),m=qst(),td=dnum(today());const wrongDue=Object.values(m).filter(v=>v[3]>0&&v[1]<=td).length;const last=ex.slice(0,14).reverse();
-  return `<div class="g"><div class="row between"><div><h3 style="margin:0">Daily exam</h3><small class="muted">${c.pack.n.toLocaleString()} notes · ${Object.keys(m).length.toLocaleString()} questions seen${c.pack.img?"":` · <span id="pbw" style="display:inline-block;width:60px;height:5px;border-radius:4px;background:rgba(0,0,0,.08);vertical-align:middle;overflow:hidden"><i id="packbar" style="display:block;height:100%;width:0;background:var(--v1)"></i></span> pictures`}</small></div><span class="tag">🔥 ${examStreak()} days</span></div>
+  const cc=cardCounts(),nl=Math.max(0,c.perDay-cc.newToday),fmx=Math.max(1,...cc.fc);
+  return `<div class="g"><div class="row between"><h3 style="margin:0">Cards today 🗂️</h3><span class="muted" style="font-size:12px">${c.perDay} new / day</span></div>
+   <div class="ctoday"><div><b class="cn">${nl}</b><small>new</small></div><div><b class="cr">${cc.due}</b><small>due</small></div><div><b>${cc.newToday}</b><small>learned today</small></div></div>
+   <button class="btn primary block" data-act="cdStart" ${nl||cc.due?"":"disabled"}>${nl||cc.due?"Study cards":"All done today ✓"}</button>
+   <div class="muted" style="font-size:12px;margin:14px 0 4px">Next 7 days</div><div class="fcast">${cc.fc.map((n,i)=>`<div><small>${n}</small><i style="height:${Math.max(4,n/fmx*100)}%"></i><b>${i?"SMTWTFS"[addDays(new Date(),i).getDay()]:"Today"}</b></div>`).join("")}</div></div>
+  <div class="g"><div class="row between"><div><h3 style="margin:0">Daily exam</h3><small class="muted">${c.pack.n.toLocaleString()} notes · ${Object.keys(m).length.toLocaleString()} questions seen${c.pack.img?"":` · <span id="pbw" style="display:inline-block;width:60px;height:5px;border-radius:4px;background:rgba(0,0,0,.08);vertical-align:middle;overflow:hidden"><i id="packbar" style="display:block;height:100%;width:0;background:var(--v1)"></i></span> pictures`}</small></div><span class="tag">🔥 ${examStreak()} days</span></div>
    <div class="row" style="gap:8px;margin-top:12px"><button class="btn primary" style="flex:1" data-act="exStart">Start today's exam</button><button class="btn soft" style="flex:none" data-act="exWrong" ${wrongDue?"":"disabled"}>↺ Mistakes (${wrongDue})</button></div>
    ${last.length?`<div class="exbars">${last.map(e=>{const p=Math.round(e.ok/e.n*100);return `<div><i style="height:${Math.max(6,p)}%;background:${p>=80?"#14b8a6":p>=60?"#f59e0b":"#f43f5e"}"></i><small>${parseD(e.date).getDate()}</small></div>`}).join("")}</div>`:""}</div>
   <div class="g"><h3 style="margin:0 0 8px">Practice by subject</h3>${MSUBJ.map((s,i)=>{const n=(QP&&QP.bySubj[i]||[]).length,a=acc[i],p=a&&a[1]?Math.round(a[0]/a[1]*100):null;return n||!QP?`<div class="sbrow" data-act="exSubj" data-s="${i}"><span class="sdot" style="background:${mcol(i)}"></span><b>${esc(s)}</b><span class="muted">${p==null?"—":p+"%"}</span><div class="sbbar"><i style="width:${p||0}%;background:${mcol(i)}"></i></div><span class="muted">›</span></div>`:""}).join("")}</div>`}
@@ -2520,8 +2593,9 @@ function medTodoTab(){const ts=all("task").filter(t=>t.med&&!t.medPlan).sort((a,
   return `<div class="g"><h3 style="margin:0 0 6px">Study to-do</h3>${ts.length?ts.map(taskRow).join(""):`<div class="muted">Nothing yet — add things like "Book exam centre" or "Finish Passmedicine cardio".</div>`}
    <form class="quickadd" data-form="medTask"><input type="text" id="qa-med" dir="auto" placeholder="Add a study task…" autocomplete="off"><button class="btn primary plusbtn" aria-label="Add">+</button></form>
    <button class="muted" style="margin-top:12px;font-weight:700" data-act="medTaskDet">+ With date, colour or several days</button></div>`}
-function vMed(){S.medTab=S.medTab||"today";const T=[["today","Today"],["plan","Plan"],["exam","Exams"],["anki","Anki"],["todo","To-do"]];
-  if(!QP&&mcfg().pack&&mcfg().pack.n)medPack().then(p=>{if(p&&S.tab==="med"&&(S.medTab==="exam"))render()});
+function vMed(){S.medTab=S.medTab||"today";const T=[["today","Today"],["plan","Plan"],["exam","Study"],["anki","Anki"],["todo","To-do"]];
+  const pk=mcfg().pack;if(!QP&&pk&&pk.n)medPack().then(p=>{if(p&&S.tab==="med")render()});
+  if(pk&&pk.n&&(pk.v||1)<2&&localStorage.getItem("lines-code")&&!window._pkUp){window._pkUp=1;setTimeout(()=>medLoadPack(null,true),600)}
   return `<div class="medp">${medHero()}${seg(T,S.medTab,"medTab")}${({today:medToday,plan:medPlanTab,exam:medExamTab,anki:medAnkiTab,todo:medTodoTab}[S.medTab])()}${gameStrip("med")}</div>`}
 function homeJourneys(){const c=mcfg(),L1=level("med"),L2=level("ocd");const t=tasksFor(today()).filter(x=>x.medPlan&&x.chap&&!x.done)[0];const ex=all("exam").some(e=>e.mode==="daily"&&e.date===today());
   return `<div class="jrow"><button class="jc jmed" data-act="go" data-v="med"><span class="je">🩺</span><b>MRCP · ${Math.max(0,daysTo(c.exam))}d</b><small${t?dir(t.title):""}>${t?esc(t.title.replace("📖 ","")):ex?"Exam done ✓":"Daily exam waiting"}</small><i style="width:${L1.pct}%"></i></button>
@@ -2546,22 +2620,33 @@ function medSetSheet(first){const c=mcfg();const W=["Sun","Mon","Tue","Wed","Thu
    <div class="row"><div style="flex:1;min-width:0"><label class="l">Exam date</label><input type="date" id="ms-ex" style="width:100%" value="${c.exam}"></div><div style="flex:1;min-width:0"><label class="l">Final revision</label><select id="ms-rw">${[2,3,4,5,6].map(n=>`<option value="${n}" ${n===c.revWeeks?"selected":""}>${n} weeks</option>`).join("")}</select></div></div>
    <div class="row"><div style="flex:1;min-width:0"><label class="l">Application opens</label><input type="date" id="ms-ao" style="width:100%" value="${c.appOpen}"></div><div style="flex:1;min-width:0"><label class="l">Closes</label><input type="date" id="ms-ac" style="width:100%" value="${c.appClose}"></div></div>
    <label class="l">Days off</label><div class="chips" id="ms-off" style="flex-wrap:wrap">${W.map((w,i)=>`<button type="button" class="chip ${off.includes(i)?"on":""}" data-d="${i}">${w}</button>`).join("")}</div>
-   <label class="l">Questions per daily exam</label><select id="ms-n">${[5,10,15,20,30].map(n=>`<option ${n===c.dailyN?"selected":""}>${n}</option>`).join("")}</select>
+   <div class="row"><div style="flex:1;min-width:0"><label class="l">New cards a day</label><select id="ms-pd">${[10,15,20,30,40,60].map(n=>`<option ${n===c.perDay?"selected":""}>${n}</option>`).join("")}</select></div><div style="flex:1;min-width:0"><label class="l">Exam questions</label><select id="ms-n">${[5,10,15,20,30].map(n=>`<option ${n===c.dailyN?"selected":""}>${n}</option>`).join("")}</select></div></div>
    <p class="muted" style="font-size:12px;margin-top:10px">Dates are from the MRCP(UK) site for the May 2027 sitting (2027/2). Change them if you sit a different one.</p>
    <button class="btn primary block" style="margin-top:12px" id="ms-go">${first||!c.planned?"✨ Make my plan":"Save & re-plan"}</button>`,el=>{
     el.querySelector("#ms-off").onclick=e=>{const b=e.target.closest("button");if(!b)return;const d=+b.dataset.d;off=off.includes(d)?off.filter(x=>x!==d):off.concat(d);b.classList.toggle("on")};
-    el.querySelector("#ms-go").onclick=()=>{setM({exam:el.querySelector("#ms-ex").value||c.exam,revWeeks:+el.querySelector("#ms-rw").value,appOpen:el.querySelector("#ms-ao").value,appClose:el.querySelector("#ms-ac").value,off,dailyN:+el.querySelector("#ms-n").value},true);closeSheet();if(chaps().length)medPlan();else render()}})}
+    el.querySelector("#ms-go").onclick=()=>{setM({exam:el.querySelector("#ms-ex").value||c.exam,revWeeks:+el.querySelector("#ms-rw").value,appOpen:el.querySelector("#ms-ao").value,appClose:el.querySelector("#ms-ac").value,off,dailyN:+el.querySelector("#ms-n").value,perDay:+el.querySelector("#ms-pd").value},true);closeSheet();if(chaps().length)medPlan();else render()}})}
 function chapEditSheet(ch){sheet(`<h3 style="font-size:20px">Chapter</h3><input type="text" id="ce-t" dir="auto" value="${esc(ch.title)}">
    <label class="l">Subject (used for your exams)</label><select id="ce-s">${MSUBJ.map((s,i)=>`<option value="${i}" ${i===ch.subj?"selected":""}>${esc(s)}</option>`).join("")}</select>
    <label class="l">Size (pages)</label><input type="number" id="ce-w" inputmode="numeric" value="${ch.w||1}">
+   <label class="l">Topics in this chapter — one per line ${QP?`<span class="muted" style="font-weight:600">(${chTopics(ch).reduce((a,t)=>a+t.n,0)} cards)</span>`:""}</label>
+   <textarea id="ce-tp" dir="auto" style="min-height:110px" placeholder="Leave empty to use the MRCP topics from your notes">${esc((ch.topics||[]).join("\n"))}</textarea>
+   ${!(ch.topics||[]).length&&QP?`<div class="tchips" style="margin-top:6px">${chTopics(ch).map(t=>`<span>${esc(t.name)} · ${t.n}</span>`).join("")}</div>`:""}
+   <label class="btn soft block" style="margin-top:8px">📸 Scan this chapter's topics<input type="file" id="ce-ph" accept="image/*" multiple hidden></label><div id="ce-st" class="muted" style="font-size:12px;margin-top:6px"></div>
    <label class="l">My key points</label><textarea id="ce-n" dir="auto" style="min-height:90px" placeholder="High-yield facts to remember…">${esc(ch.notes||"")}</textarea>
    <div class="row" style="margin-top:16px"><button class="btn danger" id="ce-del">Delete</button><button class="btn primary" style="flex:1" id="ce-sv">Save</button></div>`,el=>{
-    el.querySelector("#ce-sv").onclick=()=>{put(Object.assign({},ch,{title:el.querySelector("#ce-t").value.trim()||ch.title,subj:+el.querySelector("#ce-s").value,w:Math.max(1,+el.querySelector("#ce-w").value||1),notes:el.querySelector("#ce-n").value}));closeSheet()};
+    el.querySelector("#ce-ph").onchange=async e=>{const fs=[...e.target.files];if(!fs.length)return;const st=el.querySelector("#ce-st");st.textContent="Reading…";
+      try{const t=await ocrFiles(fs,p=>st.textContent=`Reading… ${Math.round(p*100)}%`);const L=parseChapters(t).map(x=>x.title);const tx=el.querySelector("#ce-tp");tx.value=(tx.value?tx.value+"\n":"")+L.join("\n");st.textContent=L.length+" topics found — check them"}catch(err){st.textContent="Couldn't read it — paste the topics instead"}};
+    el.querySelector("#ce-sv").onclick=()=>{const tp=el.querySelector("#ce-tp").value.split(/\n+/).map(x=>x.trim()).filter(Boolean);const n=Object.assign({},ch,{title:el.querySelector("#ce-t").value.trim()||ch.title,subj:+el.querySelector("#ce-s").value,w:Math.max(1,+el.querySelector("#ce-w").value||1),notes:el.querySelector("#ce-n").value,topics:tp});
+      const changed=JSON.stringify(tp)!==JSON.stringify(ch.topics||[])||n.subj!==ch.subj;put(n);closeSheet();if(changed&&mcfg().planned&&!n.studied){medPlan()}};
     el.querySelector("#ce-del").onclick=()=>{del("chap_"+ch.id);const t=get("task_mp_"+ch.id);if(t)del("task_mp_"+ch.id);closeSheet()}})}
 Object.assign(ACTX,{
   medTab:el=>{S.medTab=el.dataset.v;render()},chapAdd:()=>chapAddSheet(),medSet:()=>medSetSheet(false),medReplan:()=>{if(!chaps().length)return chapAddSheet();if(!mcfg().planned)return medSetSheet(true);medPlan()},
   chapSubj:()=>{const w=QP?MSUBJ.map((_,i)=>Math.max(1,Math.round((QP.bySubj[i]||[]).length/40))):[8,6,7,7,7,5,5,5,5,3,3,4,6,2,0];saveChapters(MSUBJ.map((s,i)=>({title:s,subj:i,w:w[i]})).filter(x=>x.w>0&&x.title!=="Mixed"));setTimeout(()=>medSetSheet(true),300)},
-  chapDone:el=>chapStudied(el.dataset.id),chapUndo:el=>{const ch=get("chap_"+el.dataset.id);if(ch){const n=Object.assign({},ch);delete n.studied;put(n)}},
+  chapDone:el=>chapStudied(el.dataset.id),
+  chapDay:el=>{const t=get("task_"+el.dataset.id);if(!t)return;const td=today();let n;
+    if(isRange(t)){const days=rangeDays(t),dd=new Set((t.doneDays||[]).filter(x=>days.includes(x)));dd.add(td);const arr=[...dd].sort();n=Object.assign({},t,{doneDays:arr,done:arr.length===days.length,doneAt:Date.now()})}
+    else n=Object.assign({},t,{done:true,doneAt:Date.now()});
+    put(n,true);burst(el,"#14b8a6");if(n.done)taskHook(n);else addXP("med",10,"Study day");render()},chapUndo:el=>{const ch=get("chap_"+el.dataset.id);if(ch){const n=Object.assign({},ch);delete n.studied;put(n)}},
   chapEdit:el=>{const ch=get("chap_"+el.dataset.id);ch&&chapEditSheet(ch)},
   revDone:el=>{const ch=get("chap_"+el.dataset.id);if(!ch)return;put(Object.assign({},ch,{revs:Object.assign({},ch.revs,{[el.dataset.k]:today()})}),true);sfx("check");addXP("med",8,"Revision");render()},
   exStart:()=>startExam("daily"),exWrong:()=>startExam("wrong"),exSubj:el=>startExam("subj",+el.dataset.s),exAgain:()=>startExam("daily"),
@@ -2571,6 +2656,8 @@ Object.assign(ACTX,{
   exQuit:()=>{if(EX&&EX.res.length){examEnd()}else{EX=null;closeSheet()}},exDone:()=>{closeSheet();render()},
   packLoad:()=>medLoadPack($("#pk-code").value),ankiLog:()=>ankiLog($("#ak-n").value),ankiLog2:()=>ankiLog($("#ak-n2").value),
   medTaskDet:()=>{taskSheet({date:today(),med:true,color:"#14b8a6"})},
+  cdStart:()=>startCards(),cdShow:()=>{SS.show=true;cardView()},cdGrade:el=>cardGrade(+el.dataset.g),
+  cdQuit:()=>{if(SS&&SS.xp)addXP("med",SS.xp,"Cards");SS=null;closeSheet();render()},
 });
 FORMX.medTask=f=>{const i=f.querySelector("input");const title=i.value.trim();if(!title)return;sfx("pop");i.value="";put({kind:"task",id:uid(),title,date:"",time:"",prio:0,done:false,med:true,color:"#14b8a6",created:Date.now()})};
 document.addEventListener("change",e=>{if(e.target&&e.target.id==="anki-f"){const f=e.target.files&&e.target.files[0];e.target.value="";if(f)ankiImport(f)}});
