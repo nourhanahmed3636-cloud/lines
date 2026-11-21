@@ -876,6 +876,74 @@ html.dark .mtile{background:rgba(255,255,255,.06)}.mtile:active{transform:scale(
 
 .bgpick button i[data-del]{position:absolute;top:4px;right:4px;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-weight:900;font-size:15px;line-height:1;color:#fff;background:rgba(20,14,40,.62);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);box-shadow:0 2px 8px rgba(0,0,0,.3);z-index:2}
 .bghid button{opacity:.55;filter:grayscale(.6)}.bghid button b{position:absolute;inset:0;display:grid;place-items:center;font-size:22px;color:#fff;text-shadow:0 2px 6px rgba(0,0,0,.5)}
+
+/* ===== exam v2: big Anki-style flip card ===== */
+.sheet.xfull{max-width:none;max-height:100dvh;height:100dvh;border-radius:0;padding:calc(env(safe-area-inset-top) + 10px) 16px 0;display:flex;flex-direction:column}
+.sheet.xfull .grab{display:none}.sheet.xfull .exam2{flex:1;display:flex;flex-direction:column;min-height:100%}
+.x2top{display:flex;align-items:center;gap:12px}.x2x{width:36px;height:36px;border-radius:12px;font-size:22px;font-weight:700;color:var(--muted);background:color-mix(in srgb,var(--v1) 9%,transparent);flex:none}
+.x2prog{flex:1;height:8px;border-radius:6px;background:color-mix(in srgb,var(--v1) 12%,transparent);overflow:hidden}.x2prog i{display:block;height:100%;border-radius:6px;background:var(--grad);transition:width .6s var(--ease)}
+.x2n{font-weight:900;font-size:16px}.x2n small{font-size:12px;color:var(--muted);font-weight:700}
+.x2meta{display:flex;align-items:center;justify-content:space-between;margin:12px 2px 10px}
+.x2chip{display:inline-flex;align-items:center;font-size:12.5px;font-weight:800;padding:6px 11px;border-radius:999px;background:color-mix(in srgb,var(--c) 13%,transparent);color:color-mix(in srgb,var(--c) 75%,#000)}
+html.dark .x2chip{color:color-mix(in srgb,var(--c) 55%,#fff)}.x2score{display:flex;gap:10px;font-size:13px}.okc{color:#0d9488}.noc{color:#e11d48}
+.x2stage{position:relative;flex:1;display:flex;flex-direction:column;perspective:1400px;padding-bottom:10px}
+.x2stack{position:absolute;left:14px;right:14px;top:14px;bottom:4px;border-radius:30px;background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.7);box-shadow:0 10px 24px -14px rgba(14,90,115,.4)}
+.x2stack.s2{left:26px;right:26px;top:26px;bottom:-6px;opacity:.6}html.dark .x2stack{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.08)}
+.fcard{position:relative;flex:1;display:grid;transform-style:preserve-3d;transition:transform .75s cubic-bezier(.3,1.25,.5,1)}
+.fcard.flip{transform:rotateY(180deg)}
+.fcard.deal{animation:deal .65s var(--spring) both}@keyframes deal{from{transform:translateY(40px) scale(.9) rotate(2deg);opacity:0}}
+.face{grid-area:1/1;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:30px;padding:22px 20px 20px;min-height:calc(100dvh - 250px);
+  background:linear-gradient(180deg,rgba(255,255,255,.97),rgba(246,252,252,.94));border:1px solid rgba(255,255,255,.95);
+  box-shadow:0 30px 60px -28px rgba(14,90,115,.55),0 2px 0 rgba(255,255,255,.9) inset;overflow:hidden;position:relative;display:flex;flex-direction:column}
+.face::before{content:"";position:absolute;left:0;right:0;top:0;height:6px;background:linear-gradient(90deg,var(--c),color-mix(in srgb,var(--c) 40%,#2dd4bf))}
+html.dark .face{background:linear-gradient(180deg,rgba(36,30,78,.97),rgba(22,18,52,.97));border-color:rgba(255,255,255,.1);box-shadow:0 30px 60px -28px rgba(0,0,0,.8)}
+.face.back{transform:rotateY(180deg)}
+.front[data-act]{cursor:pointer}
+.x2q{font-size:18.5px;line-height:1.65;font-weight:500}.x2q.x2c{font-size:22px;text-align:center;margin:auto 0;padding:10px 0}
+.x2q img,.x2ex img,.x2big img{max-width:100%;border-radius:14px;margin:10px auto;display:block}.x2q ul,.x2ex ul,.x2big ul{padding-left:20px;margin:6px 0}
+.x2q .qb{font-size:.92em;padding:2px 14px}
+.x2tap{margin-top:auto;padding-top:18px;text-align:center;font-size:13px;font-weight:700;color:var(--muted);animation:nowp 2.2s ease-in-out infinite}
+.x2opts{display:grid;gap:10px;margin-top:auto;padding-top:18px}
+.x2o{display:flex;align-items:center;gap:12px;text-align:left;padding:14px 14px;border-radius:18px;border:1.5px solid color-mix(in srgb,var(--v1) 16%,transparent);background:color-mix(in srgb,var(--v1) 5%,rgba(255,255,255,.9));font-size:15.5px;font-weight:650;color:inherit;transition:transform .25s var(--spring),background .25s,border-color .25s,opacity .25s}
+html.dark .x2o{background:rgba(255,255,255,.05)}.x2o:active{transform:scale(.97)}
+.x2o b{width:30px;height:30px;flex:none;border-radius:10px;display:grid;place-items:center;font-size:13px;background:color-mix(in srgb,var(--v1) 14%,transparent);color:var(--v1)}
+.x2o.right{background:rgba(20,184,166,.16);border-color:#14b8a6;animation:pulse .5s var(--spring)}.x2o.right b{background:#14b8a6;color:#fff}
+.x2o.wrong{background:rgba(244,63,94,.13);border-color:#f43f5e;animation:shake .4s}.x2o.wrong b{background:#f43f5e;color:#fff}.x2o.dim{opacity:.45}
+.x2verdict{align-self:flex-start;font-size:13px;font-weight:900;padding:7px 13px;border-radius:999px;margin-bottom:14px}
+.x2verdict.ok{background:rgba(20,184,166,.15);color:#0d9488}.x2verdict.no{background:rgba(244,63,94,.13);color:#e11d48}.x2verdict.neu{background:color-mix(in srgb,var(--v1) 12%,transparent);color:var(--v1)}
+.x2big{font-size:26px;font-weight:900;line-height:1.25;padding:16px 18px;border-radius:20px;margin-bottom:14px;background:linear-gradient(135deg,rgba(45,212,191,.16),rgba(14,116,144,.1));color:#0f766e;border:1px solid rgba(20,184,166,.3)}
+html.dark .x2big{color:#5eead4}.x2big.x2long{font-size:16px;font-weight:600;line-height:1.6}
+.x2q.x2sm{font-size:14.5px;color:var(--muted);line-height:1.6}.x2q.x2sm .qa{color:#0f766e}
+.x2ex{margin-top:14px;padding:14px;border-radius:18px;background:color-mix(in srgb,var(--v1) 6%,transparent);font-size:14px;line-height:1.6}.x2exh{font-size:11px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--v1);margin-bottom:6px}
+.x2src{margin-top:auto;padding-top:14px;font-size:11px;color:var(--muted);font-weight:700}
+.x2bar{position:sticky;bottom:0;padding:12px 2px calc(env(safe-area-inset-bottom) + 14px);background:linear-gradient(180deg,transparent,rgba(248,244,255,.96) 35%);z-index:3}
+html.dark .x2bar{background:linear-gradient(180deg,transparent,rgba(18,14,44,.97) 35%)}
+.x2btn{height:56px;font-size:16px!important;border-radius:18px!important}.x2hint{text-align:center;font-size:13px;font-weight:700;color:var(--muted);padding:16px 0}
+.x2grade{display:grid;grid-template-columns:1fr 1fr;gap:10px}.x2g{height:58px;border-radius:18px;font-size:15px;font-weight:800;color:#fff;display:flex;align-items:center;justify-content:center;gap:8px;transition:transform .2s var(--spring)}
+.x2g:active{transform:scale(.95)}.x2g b{font-size:18px}.x2g.no{background:linear-gradient(135deg,#fb7185,#e11d48)}.x2g.ok{background:linear-gradient(135deg,#2dd4bf,#0e7490)}
+@media (prefers-reduced-motion:reduce){.fcard{transition:none}.fcard.deal{animation:none}}
+
+html.dark .x2q.x2sm .qa,html.dark .x2q .qa{color:#5eead4;background:rgba(45,212,191,.16)}
+.face::before{background:linear-gradient(90deg,var(--c),#2dd4bf 70%,#0e7490)}
+
+/* exam always in dark mode */
+.sheet.xfull{background:radial-gradient(120% 60% at 100% 0%,rgba(45,212,191,.16),transparent 60%),radial-gradient(90% 60% at 0% 100%,rgba(99,102,241,.22),transparent 60%),linear-gradient(170deg,#0b1430,#130f36 60%,#0d0b26)!important;color:#eef2ff;--muted:#a5b0d0;--line:rgba(255,255,255,.1)}
+.sheet.xfull .medp{--v1:#2dd4bf}
+.sheet.xfull .face{background:linear-gradient(180deg,rgba(32,38,80,.96),rgba(18,20,50,.97))!important;border-color:rgba(255,255,255,.1)!important;box-shadow:0 30px 60px -26px rgba(0,0,0,.85),inset 0 1px 0 rgba(255,255,255,.08)!important;color:#eef2ff}
+.sheet.xfull .x2stack{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.08)}
+.sheet.xfull .x2x{color:#c7d2fe;background:rgba(255,255,255,.08)}.sheet.xfull .x2prog{background:rgba(255,255,255,.1)}
+.sheet.xfull .x2chip{color:color-mix(in srgb,var(--c) 55%,#fff);background:color-mix(in srgb,var(--c) 22%,transparent)}
+.sheet.xfull .x2o{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.12)}.sheet.xfull .x2o b{background:rgba(45,212,191,.16);color:#5eead4}
+.sheet.xfull .x2o.right{background:rgba(20,184,166,.22);border-color:#2dd4bf}.sheet.xfull .x2o.wrong{background:rgba(244,63,94,.2);border-color:#fb7185}
+.sheet.xfull .x2big{color:#5eead4;background:linear-gradient(135deg,rgba(45,212,191,.18),rgba(14,116,144,.14));border-color:rgba(45,212,191,.35)}
+.sheet.xfull .qa{color:#5eead4;background:rgba(45,212,191,.16)}.sheet.xfull .qb{background:rgba(45,212,191,.16);color:#5eead4;border-bottom-color:#2dd4bf}
+.sheet.xfull .x2ex{background:rgba(255,255,255,.05)}.sheet.xfull .x2exh{color:#5eead4}
+.sheet.xfull .x2verdict.ok{background:rgba(45,212,191,.16);color:#5eead4}.sheet.xfull .x2verdict.no{background:rgba(251,113,133,.16);color:#fda4af}.sheet.xfull .x2verdict.neu{background:rgba(45,212,191,.14);color:#5eead4}
+.sheet.xfull .x2bar{background:linear-gradient(180deg,transparent,rgba(13,11,38,.97) 35%)}.sheet.xfull .okc{color:#5eead4}.sheet.xfull .noc{color:#fda4af}
+.sheet.xfull .x2q b,.sheet.xfull .x2ex b{color:#fff}.sheet.xfull .x2q.x2sm{color:#a5b0d0}
+.sheet.xfull td,.sheet.xfull th{border-color:rgba(255,255,255,.15)!important}
+/* voice clips in explanations */
+.exam2 audio,.exam audio{width:100%;height:40px;margin:8px 0;border-radius:12px;display:block}
 </style>
 </head>
 <body>
@@ -2451,7 +2519,7 @@ let QP=null;
 async function medPack(){if(QP)return QP;const txt=await idbGet("qpack:notes").catch(()=>null);if(!txt)return null;
   const d=typeof txt==="string"?JSON.parse(txt):JSON.parse(await txt.text());const subj=d.subjects||MSUBJ;
   const CL=/\{\{c(\d+)::([\s\S]*?)(?:::([\s\S]*?))?\}\}/g;const cards=[],bySubj={},ans={};
-  d.notes.forEach((n,ni)=>{const si=MSUBJ.indexOf(subj[n[1]]);const s=si<0?14:si;n.s=s;n[3]=n[3].replace(/<img src="(m\d+)">/g,'<img data-q="$1" alt="">');n[4]=n[4].replace(/<img src="(m\d+)">/g,'<img data-q="$1" alt="">');
+  d.notes.forEach((n,ni)=>{const si=MSUBJ.indexOf(subj[n[1]]);const s=si<0?14:si;n.s=s;for(const f of [3,4])n[f]=n[f].replace(/<img src="(m\d+)">/g,'<img data-q="$1" alt="">');
     if(n[2]==="c"){const seen=new Set();let m;CL.lastIndex=0;while((m=CL.exec(n[3]))){if(seen.has(m[1]))continue;seen.add(m[1]);cards.push([ni,+m[1]])}
       CL.lastIndex=0;while((m=CL.exec(n[3]))){const a=plain(m[2]);if(a.length>0&&a.length<=60&&!/■|•/.test(m[2]))(ans[s]=ans[s]||new Set()).add(a)}}
     else cards.push([ni,0])});
@@ -2474,7 +2542,7 @@ const plain=h=>String(h).replace(/<br\s*\/?>|<\/div>|<\/li>/gi," ").replace(/<[^
 const cid=c=>QP.notes[c[0]][0]+":"+c[1];
 function qBuild(ci){const [ni,cn]=QP.cards[ci],n=QP.notes[ni];const CL=/\{\{c(\d+)::([\s\S]*?)(?:::([\s\S]*?))?\}\}/g;
   if(n[2]!=="c")return {ci,id:cid(QP.cards[ci]),s:n.s,q:n[3],a:n[4],ex:"",src:n[5],mcq:false};
-  let occ=0,ansH="",hint="";const q=n[3].replace(CL,(m,k,a,h)=>{if(+k===cn){occ++;ansH=ansH?ansH+" / "+a:a;hint=hint||h||"";return '<span class="qb">'+(h?esc(h):"?")+'</span>'}return a});
+  let occ=0,ansH="",hint="";const parts=[];const q=n[3].replace(CL,(m,k,a,h)=>{if(+k===cn){occ++;parts.push(a);ansH=ansH?ansH+" / "+a:a;hint=hint||h||"";return '<span class="qb" data-o="'+(parts.length-1)+'">'+(h?esc(h):"?")+'</span>'}return a});
   const at=plain(ansH);let opts=null;
   if(occ===1&&at.length&&at.length<=60&&!/■|•/.test(ansH)){const pool=(QP.ans[n.s]||[]).concat(at.length<4?[]:[]);const num=/\d/.test(at),wc=at.split(" ").length,low=at.toLowerCase(),body=plain(n[3]).toLowerCase();
     let c=pool.filter(x=>{const l=x.toLowerCase();return l!==low&&!body.includes(l)&&/\d/.test(x)===num&&x.length>=at.length*.35&&x.length<=at.length*2.8+6});
@@ -2484,7 +2552,8 @@ function qBuild(ci){const [ni,cn]=QP.cards[ci],n=QP.notes[ni];const CL=/\{\{c(\d
     c=c.map(x=>[x,sc(x)]).sort((a,b)=>b[1]-a[1]).slice(0,10).sort(()=>Math.random()-.5).map(x=>x[0]);
     const pick=[];for(const x of c){if(pick.length>=3)break;if(!pick.some(p=>p.toLowerCase()===x.toLowerCase()))pick.push(x)}
     if(pick.length===3){opts=pick.concat(at).sort(()=>Math.random()-.5)}}
-  return {ci,id:cid(QP.cards[ci]),s:n.s,q,aH:ansH,a:at,ex:n[4],src:n[5],mcq:!!opts,opts,ok:opts?opts.indexOf(at):-1}}
+  return {ci,id:cid(QP.cards[ci]),s:n.s,q,parts,aH:ansH,a:at,ex:n[4],src:n[5],mcq:!!opts,opts,ok:opts?opts.indexOf(at):-1}}
+const fillQ=q=>q.q.replace(/<span class="qb" data-o="(\d+)">[\s\S]*?<\/span>/g,(m,i)=>`<span class="qa">${(q.parts||[])[+i]??(q.aH||esc(q.a))}</span>`);
 /* spaced repetition per question: [box, dueDay, right, wrong] */
 const qst=()=>(get("qstat_main")||{m:{}}).m;
 /* state per card: [interval days, due day, right, wrong, ease×100, reps, lapses, first day] — SM-2 like Anki */
@@ -2534,7 +2603,7 @@ function cardView(){const ci=SS.q[SS.i],q=qBuild(ci),st=qsGet(qst(),q.id);const 
   const nR=left.length-nN;
   const body=`<div class="exh"><div class="cnt"><span class="cn">${nN}</span><span class="cl">${SS.learn}</span><span class="cr">${nR}</span></div><span class="muted" style="font-size:12px;margin-left:auto">${SS.i+1}/${SS.q.length}</span><button class="iconbtn" data-act="cdQuit" aria-label="Close" style="width:32px;height:32px">×</button></div>
    <div class="exsub"><span class="sdot" style="background:${mcol(q.s)}"></span>${esc(SS.label||msubj(q.s))}<span class="muted">&nbsp;·&nbsp;${st?(st[0]?"review":"learning"):"new"}</span></div>
-   <div class="exq" dir="auto">${SS.show?q.q.replace(/<span class="qb">[\s\S]*?<\/span>/g,`<span class="qa">${q.aH||esc(q.a)}</span>`):q.q}</div>
+   <div class="exq" dir="auto">${SS.show?fillQ(q):q.q}</div>
    ${SS.show?`${!q.aH?`<div class="exans" dir="auto">${q.a}</div>`:""}${q.ex?`<details class="exex" open><summary>Explanation</summary><div dir="auto">${q.ex}</div></details>`:""}
      <div class="grades">${[[1,"Again"],[2,"Hard"],[3,"Good"],[4,"Easy"]].map(([g,l])=>`<button class="gr g${g}" data-act="cdGrade" data-g="${g}"><small>${fIvl(nextIvl(st,g))}</small><b>${l}</b></button>`).join("")}</div>`
     :`<button class="btn primary block" data-act="cdShow" style="margin-top:14px">Show answer</button>`}`;
@@ -2546,7 +2615,7 @@ function cardGrade(g){const ci=SS.q[SS.i],q=qBuild(ci),st=qsGet(qst(),q.id);cons
 function cardsEnd(){const xp=SS.xp+15;const c=cardCounts();SS=null;
   sheet(`<div class="medp" style="text-align:center"><div style="font-size:56px;margin-top:6px">🗂️</div><h2 style="margin:6px 0">Today's cards are done</h2><p class="muted">Tomorrow: ${c.fc[1]} review${c.fc[1]===1?"":"s"} + ${mcfg().perDay} new cards.</p><div class="xpbig">+${xp} XP</div><button class="btn primary block" style="margin-top:16px" data-act="exDone">Done</button></div>`);
   confetti();sfx("success");addXP("med",xp,"Daily cards")}
-async function hydrateQImgs(root){for(const im of root.querySelectorAll("img[data-q]:not([data-ok])")){const k=im.dataset.q;im.dataset.ok=1;
+async function hydrateQImgs(root){for(const im of root.querySelectorAll("img[data-q]:not([data-ok]),audio[data-q]:not([data-ok])")){const k=im.dataset.q;im.dataset.ok=1;
   try{const b=await idbGet("qimg:"+k);if(b)im.src=URL.createObjectURL(b);else im.remove()}catch(e){im.remove()}}}
 let packBusy=false;
 async function medLoadPack(code,notesOnly){if(packBusy)return;const raw=String(code||localStorage.getItem("lines-code")||"").toUpperCase().replace(/[^A-Z0-9]/g,"");
@@ -2567,7 +2636,8 @@ async function medLoadPack(code,notesOnly){if(packBusy)return;const raw=String(c
     if(notesOnly&&old.img){setM({pack:Object.assign({},old,{n:info.notes.length,v:info.v||1,at:today()})},true);if(mcfg().planned)medPlan();render();toast("Your questions are now sorted into topics ✓",2500);return}
     setM({pack:{name:info.name,n:info.notes.length,v:info.v||1,at:today(),img:0}},true);render();toast(`${info.notes.length} notes ready ✓ — loading pictures…`,2500);
     const iz=await JSZip.loadAsync(await dec("q/img.bin",p=>{const b=$("#packbar");b&&(b.style.width=Math.round(p*100)+"%")}));
-    const names=Object.keys(iz.files);let k=0;for(const nm of names){const blob=await iz.file(nm).async("blob");await idbPut("qimg:"+nm.replace(/\.\w+$/,""),new Blob([blob],{type:"image/webp"}));k++}
+    const MT={webp:"image/webp",gif:"image/gif",svg:"image/svg+xml",png:"image/png",jpg:"image/jpeg",jpeg:"image/jpeg",mp3:"audio/mpeg",m4a:"audio/mp4",ogg:"audio/ogg",wav:"audio/wav",aac:"audio/aac"};
+    const names=Object.keys(iz.files);let k=0;for(const nm of names){const ext=(nm.split(".").pop()||"").toLowerCase();const blob=await iz.file(nm).async("blob");await idbPut("qimg:"+nm.replace(/\.\w+$/,""),new Blob([blob],{type:MT[ext]||"application/octet-stream"}));k++}
     setM({pack:Object.assign({},mcfg().pack,{img:k})},true);sfx("success");toast("Your MRCP questions are ready 🩺",2500);render()}
   catch(e){toast(e==="code"?"That code didn't work — check it":"Connection problem — try again",3500)}
   finally{packBusy=false}}
@@ -2638,18 +2708,26 @@ async function startExam(mode,subj){const P=await medPack();if(!P){closeSheet(tr
     fromSet(recent,4);fromSet(done.size?done:planned,N);if(picks.length<N)take(pickFrom(P.cards.map((_,i)=>i),N,used))}
   if(!picks.length)return toast(mode==="wrong"?"No wrong answers due — nice!":"No questions found",2500);
   EX={mode,subj,list:picks.map(qBuild),i:0,res:[],t0:Date.now()};examView()}
-function examView(){const q=EX.list[EX.i],n=EX.list.length,r=EX.res[EX.i];
-  const dots=EX.list.map((_,i)=>`<i class="${i<EX.res.length?(EX.res[i]?"ok":"no"):i===EX.i?"cur":""}"></i>`).join("");
-  const body=`<div class="exh"><div class="exdots">${dots}</div><button class="iconbtn" data-act="exQuit" aria-label="Close" style="width:32px;height:32px">×</button></div>
-   <div class="exsub"><span class="sdot" style="background:${mcol(q.s)}"></span>${esc(msubj(q.s))}${q.src?` · <span class="muted">${esc(q.src)}</span>`:""}<span style="margin-left:auto" class="muted">${EX.i+1}/${n}</span></div>
-   <div class="exq" dir="auto">${r===undefined?q.q:q.q.replace(/<span class="qb">[\s\S]*?<\/span>/g,`<span class="qa">${q.aH||esc(q.a)}</span>`)}</div>
-   ${q.mcq?`<div class="exopts">${q.opts.map((o,i)=>`<button class="exo ${r!==undefined?(i===q.ok?"right":(EX.pick===i?"wrong":"dim")):""}" data-act="exAns" data-i="${i}" ${r!==undefined?"disabled":""} dir="auto"><b>${"ABCD"[i]}</b><span>${esc(o)}</span></button>`).join("")}</div>`
-    :r===undefined?(EX.rev?`<div class="exans" dir="auto">${q.aH||q.a}</div><div class="row" style="gap:8px;margin-top:10px"><button class="btn soft" style="flex:1" data-act="exGrade" data-v="0">✗ Missed it</button><button class="btn primary" style="flex:1" data-act="exGrade" data-v="1">✓ I knew it</button></div>`
-      :`<p class="muted" style="font-size:13px;margin:12px 0 0">Say the answer in your head, then check.</p><button class="btn primary block" data-act="exReveal" style="margin-top:10px">Show answer</button>`)
-    :(!q.aH?`<div class="exans" dir="auto">${q.a}</div>`:"")}
-   ${r!==undefined?`${q.ex?`<details class="exex" open><summary>Explanation</summary><div dir="auto">${q.ex}</div></details>`:""}<button class="btn primary block" data-act="exNext" style="margin-top:14px">${EX.i+1<n?"Next question →":"See my score"}</button>`:""}`;
-  const ov=$("#ov");if(ov&&ov.querySelector(".exam")){const s=ov.querySelector(".exam");s.innerHTML=body;hydrateQImgs(s);s.scrollTop=0;return}
-  sheet(`<div class="exam medp">${body}</div>`,el=>hydrateQImgs(el))}
+function exBack(q,ok){const filled=fillQ(q);
+  return `<div class="x2verdict ${ok===true?"ok":ok===false?"no":"neu"}">${ok===true?"✓ Correct":ok===false?"✗ Not quite":"Answer"}</div>
+   ${q.mcq?`<div class="x2big" dir="auto">${esc(q.a)}</div>`:!q.aH?`<div class="x2big x2long" dir="auto">${q.a}</div>`:""}
+   <div class="x2q x2sm" dir="auto">${filled}</div>
+   ${q.ex?`<div class="x2ex"><div class="x2exh">Explanation</div><div dir="auto">${q.ex}</div></div>`:""}${q.src?`<div class="x2src">Source · ${esc(q.src)}</div>`:""}`}
+function examView(){const q=EX.list[EX.i],n=EX.list.length,ok=EX.res.filter(Boolean).length,no=EX.res.filter(x=>x===false).length;const short=plain(q.q).length<130;
+  const body=`<div class="x2top"><button class="x2x" data-act="exQuit" aria-label="Close">×</button><div class="x2prog"><i style="width:${EX.i/n*100}%"></i></div><span class="x2n">${EX.i+1}<small>/${n}</small></span></div>
+   <div class="x2meta"><span class="x2chip" style="--c:${mcol(q.s)}"><span class="sdot" style="background:${mcol(q.s)}"></span>${esc(msubj(q.s))}</span><span class="x2score"><b class="okc">✓ ${ok}</b><b class="noc">✗ ${no}</b></span></div>
+   <div class="x2stage"><div class="x2stack s2"></div><div class="x2stack s1"></div>
+    <div class="fcard deal" id="fcard" style="--c:${mcol(q.s)}">
+     <div class="face front" ${q.mcq?"":`data-act="exReveal"`}><div class="x2q ${short?"x2c":""}" dir="auto">${q.q}</div>
+      ${q.mcq?`<div class="x2opts">${q.opts.map((o,i)=>`<button class="x2o" data-act="exAns" data-i="${i}" dir="auto"><b>${"ABCD"[i]}</b><span>${esc(o)}</span></button>`).join("")}</div>`:`<div class="x2tap">Think of the answer, then tap the card</div>`}</div>
+     <div class="face back" id="fback"></div></div></div>
+   <div class="x2bar" id="xbar">${q.mcq?`<div class="x2hint">Choose an answer</div>`:`<button class="btn primary block x2btn" data-act="exReveal">Show answer</button>`}</div>`;
+  const ov=$("#ov");if(ov&&ov.querySelector(".exam2")){const x=ov.querySelector(".exam2");x.innerHTML=body;hydrateQImgs(x);ov.querySelector(".sheet").scrollTop=0;return}
+  sheet(`<div class="exam2 medp">${body}</div>`,el=>{const sh=el.closest?el.closest(".sheet"):document.querySelector("#ov .sheet");(sh||document.querySelector("#ov .sheet")).classList.add("xfull");hydrateQImgs(document.querySelector("#ov"))})}
+function exFlip(ok){const q=EX.list[EX.i],fb=$("#fback"),fc=$("#fcard"),bar=$("#xbar");if(!fb)return;fb.innerHTML=exBack(q,ok);hydrateQImgs(fb);
+  bar.innerHTML=q.mcq||EX.res[EX.i]!==undefined?`<button class="btn primary block x2btn" data-act="exNext">${EX.i+1<EX.list.length?"Next card →":"See my score"}</button>`
+    :`<div class="x2grade"><button class="x2g no" data-act="exGrade" data-v="0"><b>✗</b>Missed it</button><button class="x2g ok" data-act="exGrade" data-v="1"><b>✓</b>Knew it</button></div>`;
+  fc.classList.remove("deal");fc.classList.add("flip");setTimeout(()=>{const sh=$("#ov .sheet");sh&&sh.scrollTo({top:0,behavior:"smooth"})},300)}
 function exAnswer(ok){const q=EX.list[EX.i];EX.res[EX.i]=ok;qMark(q.id,ok);sfx(ok?"check":"soft");if(ok){const b=document.querySelector(".exo.right");b&&burst(b,"#14b8a6")}}
 function examEnd(){const n=EX.res.length,ok=EX.res.filter(Boolean).length,pc=Math.round(ok/Math.max(1,n)*100);const daily=EX.mode==="daily"&&!all("exam").some(e=>e.mode==="daily"&&e.date===today());
   const subj={};EX.list.slice(0,n).forEach((q,i)=>{const a=subj[q.s]=subj[q.s]||[0,0];a[1]++;if(EX.res[i])a[0]++});
@@ -2758,7 +2836,7 @@ function medTodoTab(){const ts=all("task").filter(t=>t.med&&!t.medPlan).sort((a,
    <button class="muted" style="margin-top:12px;font-weight:700" data-act="medTaskDet">+ With date, colour or several days</button></div>`}
 function vMrcp(){if(S.medTab==="anki")S.medTab="today";S.medTab=S.medTab||"today";const T=[["today","Today"],["plan","Plan"],["exam","Study"],["todo","To-do"]];
   const pk=mcfg().pack;if(!QP&&pk&&pk.n)medPack().then(p=>{if(p&&S.tab==="mrcp")render()});
-  if(pk&&pk.n&&(pk.v||1)<2&&localStorage.getItem("lines-code")&&!window._pkUp){window._pkUp=1;setTimeout(()=>medLoadPack(null,true),600)}
+  if(pk&&pk.n&&(pk.v||1)<3&&localStorage.getItem("lines-code")&&!window._pkUp){window._pkUp=1;setTimeout(()=>medLoadPack(null,false),600)}
   return `<div class="medp">${medHero()}${seg(T,S.medTab,"medTab")}${({today:medToday,plan:medPlanTab,exam:medExamTab,todo:medTodoTab}[S.medTab])()}${gameStrip("med")}</div>`}
 function homeJourneys(){const c=mcfg(),L1=level("med"),L2=level("ocd");const t=tasksFor(today()).filter(x=>x.medPlan&&x.chap&&!x.done)[0];const ex=all("exam").some(e=>e.mode==="daily"&&e.date===today());
   return `<div class="jrow"><button class="jc jmed" data-act="go" data-v="med"><span class="je">🩺</span><b>Medicine</b><small${t?dir(t.title):""}>MRCP ${Math.max(0,daysTo(c.exam))}d · ${t?esc(t.title.replace("📖 ","")):ex?"exam done ✓":"exam waiting"}</small><i style="width:${L1.pct}%"></i></button>
@@ -2813,9 +2891,12 @@ Object.assign(ACTX,{
   chapEdit:el=>{const ch=get("chap_"+el.dataset.id);ch&&chapEditSheet(ch)},
   revDone:el=>{const ch=get("chap_"+el.dataset.id);if(!ch)return;put(Object.assign({},ch,{revs:Object.assign({},ch.revs,{[el.dataset.k]:today()})}),true);sfx("check");addXP("med",8,"Revision");render()},
   exStart:()=>startExam("daily"),exWrong:()=>startExam("wrong"),exSubj:el=>startExam("subj",+el.dataset.s),exAgain:()=>startExam("daily"),
-  exAns:el=>{if(!EX||EX.res[EX.i]!==undefined)return;const i=+el.dataset.i;EX.pick=i;exAnswer(i===EX.list[EX.i].ok);examView()},
-  exReveal:()=>{EX.rev=1;examView()},exGrade:el=>{exAnswer(el.dataset.v==="1");EX.rev=0;examView()},
-  exNext:()=>{EX.pick=null;if(EX.i+1<EX.list.length){EX.i++;examView()}else examEnd()},
+  exAns:el=>{if(!EX||EX.res[EX.i]!==undefined)return;const i=+el.dataset.i,q=EX.list[EX.i],ok=i===q.ok;EX.pick=i;exAnswer(ok);
+    document.querySelectorAll(".x2o").forEach((b,j)=>{b.disabled=true;b.classList.add(j===q.ok?"right":j===i?"wrong":"dim")});const sc=$(".x2score");sc&&(sc.innerHTML=`<b class="okc">✓ ${EX.res.filter(Boolean).length}</b><b class="noc">✗ ${EX.res.filter(x=>x===false).length}</b>`);
+    setTimeout(()=>exFlip(ok),650)},
+  exReveal:()=>{if(!EX||EX.rev||EX.res[EX.i]!==undefined)return;EX.rev=1;exFlip(null)},
+  exGrade:el=>{exAnswer(el.dataset.v==="1");EX.rev=0;ACTX.exNext()},
+  exNext:()=>{EX.pick=null;EX.rev=0;if(EX.i+1<EX.list.length){EX.i++;examView()}else examEnd()},
   exQuit:()=>{if(EX&&EX.res.length){examEnd()}else{EX=null;closeSheet()}},exDone:()=>{closeSheet();render()},
   packLoad:()=>medLoadPack($("#pk-code").value),ankiLog:()=>ankiLog($("#ak-n").value),ankiLog2:()=>ankiLog($("#ak-n2").value),
   medTaskDet:()=>{taskSheet({date:today(),med:true,color:"#14b8a6"})},
