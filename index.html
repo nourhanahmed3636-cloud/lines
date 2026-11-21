@@ -873,6 +873,9 @@ html.dark .mtile{background:rgba(255,255,255,.06)}.mtile:active{transform:scale(
 .dkn i{position:absolute;left:4px;bottom:0;height:3px;border-radius:3px;opacity:.75;max-width:calc(100% - 8px)}
 .dkrow.sub{padding-left:14px}.dkrow.sub .dkn b{font-size:13px;font-weight:600}.dkl{width:12px;height:22px;flex:none;border-left:2px solid color-mix(in srgb,var(--v1) 25%,transparent);border-bottom:2px solid color-mix(in srgb,var(--v1) 25%,transparent);border-radius:0 0 0 8px;margin:-14px 2px 0 4px}
 .dksubs{animation:rvIn .45s var(--ease) both}
+
+.bgpick button i[data-del]{position:absolute;top:4px;right:4px;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-weight:900;font-size:15px;line-height:1;color:#fff;background:rgba(20,14,40,.62);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);box-shadow:0 2px 8px rgba(0,0,0,.3);z-index:2}
+.bghid button{opacity:.55;filter:grayscale(.6)}.bghid button b{position:absolute;inset:0;display:grid;place-items:center;font-size:22px;color:#fff;text-shadow:0 2px 6px rgba(0,0,0,.5)}
 </style>
 </head>
 <body>
@@ -1000,7 +1003,8 @@ const LSG=k=>{try{return localStorage.getItem(k)}catch(e){return null}},LSS=(k,v
 function bgInfo(id){if(!id)return null;if(id.startsWith("u:")){const u=get("ubg_"+id.slice(2));return u?{n:u.n||"My photo",m:u.m,ph:u.ph,acc:u.acc,fx:u.fx||"dust",src:u.assetId}:null}return BGDATA[id]||null}
 function bgList(){return Object.keys(BGDATA).concat(all("ubg").map(u=>"u:"+u.id))}
 const bgSrc=(id,thumb)=>{const b=bgInfo(id);if(!b)return "";if(b.src)return blobUrl(b.src);return `bg/${thumb?"t/":""}${id}.jpg`};
-function bgPool(dark){const l=bgList();const f=l.filter(k=>{const m=bgInfo(k).m;return dark?m!=="light":m!=="dark"});return f.length?f:l}
+const bgHid=()=>meta().bgHidden||[];
+function bgPool(dark){const h=bgHid();let l=bgList().filter(k=>!h.includes(k));if(!l.length)l=bgList();const f=l.filter(k=>{const m=bgInfo(k).m;return dark?m!=="light":m!=="dark"});return f.length?f:l}
 function pickBg(dark){
   const pin=meta().bgPin;if(pin&&bgInfo(pin))return pin;
   let hist=[];try{hist=JSON.parse(LSG("lines-bg-hist")||"[]")}catch(e){}
@@ -2977,7 +2981,9 @@ function settingsSheet(){
    <label class="l">Appearance</label><div class="sel3 themepick" id="s-th">${[["auto","🌓","Auto"],["light","☀️","Light"],["dark","🌙","Dark"]].map(([k,i,n])=>`<button data-v="${k}" class="${(m.theme||"auto")===k?"on":""}"><span style="font-size:20px">${i}</span>${n}</button>`).join("")}</div>
    <label class="l">Background</label>
    <div class="sel3" id="s-shuf"><button type="button" data-v="1" class="${m.bgPin?"":"on"}">🔀 New one every open</button><button type="button" data-v="0" class="${m.bgPin?"on":""}">📌 Keep one</button></div>
-   <div class="bgpick" id="s-bg">${bgList().map(k=>{const b=bgInfo(k);return `<button data-v="${k}" class="${(m.bgPin||CURBG)===k?"on":""}"><img alt="" loading="lazy" decoding="async" src="${bgSrc(k,true)}"${bgInfo(k).src&&String(bgInfo(k).src).startsWith("local:")?` data-lid="${bgInfo(k).src}"`:""}><span>${b.m==="dark"?"🌙":"☀️"}</span>${k.startsWith("u:")?`<i data-del="${k}">×</i>`:""}</button>`}).join("")}</div>
+   <div class="muted" style="font-size:12px;margin:6px 0 2px">Tap × on any background you don't want — it won't show again.</div>
+   <div class="bgpick" id="s-bg">${bgList().filter(k=>!bgHid().includes(k)).map(k=>{const b=bgInfo(k);return `<button data-v="${k}" class="${(m.bgPin||CURBG)===k?"on":""}"><img alt="" loading="lazy" decoding="async" src="${bgSrc(k,true)}"${bgInfo(k).src&&String(bgInfo(k).src).startsWith("local:")?` data-lid="${bgInfo(k).src}"`:""}><span>${b.m==="dark"?"🌙":"☀️"}</span><i data-del="${k}" aria-label="Remove">×</i></button>`}).join("")}</div>
+   ${bgHid().filter(k=>bgInfo(k)).length?`<label class="l">Removed · tap to bring back</label><div class="bgpick bghid" id="s-bgh">${bgHid().filter(k=>bgInfo(k)).map(k=>`<button data-v="${k}"><img alt="" loading="lazy" src="${bgSrc(k,true)}"><b>↺</b></button>`).join("")}</div>`:""}
    <label class="btn soft block" style="margin-top:12px">📷 Add from Photos or Files<input type="file" id="s-photos" accept="image/*,.zip,application/zip,.json,application/json" multiple hidden></label>
    <div class="muted" style="margin-top:8px;line-height:1.6">Your photos are sharpened, colour-boosted and sized for your screen, then saved privately on this phone. Buttons take each background's colours.</div>
    <label class="l">Sound effects</label><div class="sel3" id="s-snd"><button type="button" data-v="1" class="${m.sound!==false?"on":""}">🔊 On</button><button type="button" data-v="0" class="${m.sound===false?"on":""}">🔇 Off</button></div>
@@ -2990,7 +2996,12 @@ function settingsSheet(){
    let snd=m.sound!==false;el.querySelector("#s-snd").onclick=e=>{const b=e.target.closest("button");if(!b)return;snd=b.dataset.v==="1";el.querySelectorAll("#s-snd button").forEach(x=>x.classList.toggle("on",x===b));if(snd){const was=meta().sound;S.items.meta_main&&(S.items.meta_main.sound=true);SND.chime()}};
    el.querySelector("#s-th").onclick=ev=>{const b=ev.target.closest("button");if(!b)return;el.querySelectorAll("#s-th button").forEach(x=>x.classList.toggle("on",x===b));setMetaQ({theme:b.dataset.v},true);applyTheme();sfx("tick")};
    el.querySelector("#s-shuf").onclick=ev=>{const b=ev.target.closest("button");if(!b)return;el.querySelectorAll("#s-shuf button").forEach(x=>x.classList.toggle("on",x===b));if(b.dataset.v==="1"){setMetaQ({bgPin:null},true);toast("A new background every time you open Lines 🔀")}else{setMetaQ({bgPin:CURBG},true);el.querySelectorAll("#s-bg button").forEach(x=>x.classList.toggle("on",x.dataset.v===CURBG))}sfx("tick")};
-   el.querySelector("#s-bg").onclick=ev=>{const dl=ev.target.closest("[data-del]");if(dl){ev.stopPropagation();const k=dl.dataset.del;const u=get("ubg_"+k.slice(2));if(u&&String(u.assetId).startsWith("local:"))idbDel(u.assetId);del("ubg_"+k.slice(2));if(meta().bgPin===k)setMetaQ({bgPin:null},true);closeSheet(true);settingsSheet();return}
+   const reopenBg=()=>{closeSheet(true);settingsSheet();setTimeout(()=>{const g=document.querySelector("#s-bg");g&&g.scrollIntoView({block:"center"})},60)};
+   const hb=el.querySelector("#s-bgh");hb&&(hb.onclick=ev=>{const b=ev.target.closest("button");if(!b)return;setMetaQ({bgHidden:bgHid().filter(x=>x!==b.dataset.v)},true);sfx("pop");toast("Background is back ✓");reopenBg()});
+   el.querySelector("#s-bg").onclick=ev=>{const dl=ev.target.closest("[data-del]");if(dl){ev.stopPropagation();const k=dl.dataset.del;
+       if(k.startsWith("u:")){const u=get("ubg_"+k.slice(2));if(u&&String(u.assetId).startsWith("local:"))idbDel(u.assetId);del("ubg_"+k.slice(2));toast("Photo removed")}
+       else{setMetaQ({bgHidden:bgHid().concat(k)},true);toast("Removed — find it under “Removed” to bring it back",2600)}
+       if(meta().bgPin===k)setMetaQ({bgPin:null},true);if(CURBG===k)applyBg(pickBg(isDark()));sfx("soft");reopenBg();return}
      const b=ev.target.closest("button[data-v]");if(!b)return;const k=b.dataset.v;const info=bgInfo(k);if(!info)return;
      el.querySelectorAll("#s-bg button").forEach(x=>x.classList.toggle("on",x===b));el.querySelectorAll("#s-shuf button").forEach(x=>x.classList.toggle("on",x.dataset.v==="0"));
      setMetaQ({bgPin:k},true);if((info.m==="dark")!==isDark()&&info.m!=="both"){setMetaQ({theme:info.m==="dark"?"dark":"light"},true);applyTheme();themeIcons()}applyBg(k);render();sfx("tick")};
