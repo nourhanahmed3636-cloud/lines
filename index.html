@@ -614,6 +614,134 @@ html.dark .nav-in{background:linear-gradient(135deg,color-mix(in srgb,var(--v1) 
 .tcolors button:not(.none).on{outline-color:#16121c}
 html.dark .tcolors button:not(.none).on{outline-color:#fff}
 .wdot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px;vertical-align:1px}
+
+/* ===== game layer ===== */
+.xppop{position:fixed;left:50%;top:38%;transform:translate(-50%,0);z-index:120;font-weight:900;font-size:26px;color:#fff;background:var(--grad);padding:8px 18px;border-radius:999px;box-shadow:0 14px 30px -10px color-mix(in srgb,var(--v1) 80%,transparent);animation:xpup 1.4s var(--ease) forwards;pointer-events:none}
+@keyframes xpup{0%{opacity:0;transform:translate(-50%,20px) scale(.6)}20%{opacity:1;transform:translate(-50%,0) scale(1.08)}70%{opacity:1;transform:translate(-50%,-30px) scale(1)}100%{opacity:0;transform:translate(-50%,-70px) scale(.9)}}
+.celeb{position:fixed;inset:0;z-index:130;display:grid;place-items:center;background:rgba(20,10,40,.35);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);opacity:0;transition:opacity .35s}
+.celeb.in{opacity:1}.celeb .cb{background:#fff;color:#1a1530;border-radius:28px;padding:26px 28px;text-align:center;max-width:300px;transform:scale(.7);transition:transform .5s var(--spring);box-shadow:0 30px 60px -20px rgba(0,0,0,.5)}
+.celeb.in .cb{transform:scale(1)}.celeb .ce{font-size:64px;line-height:1;margin-bottom:10px;animation:bob 1.6s ease-in-out infinite}.celeb b{display:block;font-size:19px}.celeb small{display:block;color:#6b6585;margin-top:6px;line-height:1.4}
+@keyframes bob{50%{transform:translateY(-8px) rotate(-6deg)}}
+html.dark .celeb .cb{background:#221c4a;color:#fff}html.dark .celeb small{color:#b9b3d6}
+.lvl{margin-top:14px;background:rgba(255,255,255,.18);border-radius:16px;padding:10px 12px;border:1px solid rgba(255,255,255,.25)}
+.lvl b{font-size:14px}.lvl small{font-size:11.5px;opacity:.85}.lbar{height:7px;border-radius:6px;background:rgba(255,255,255,.25);margin-top:7px;overflow:hidden}.lbar i{display:block;height:100%;border-radius:6px;background:#fff;transition:width .8s var(--ease)}
+.gstrip{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:2px 0 14px}
+.gs{display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto;column-gap:10px;align-items:center;text-align:left;padding:12px 14px;border-radius:20px;background:color-mix(in srgb,var(--v1) 12%,rgba(255,255,255,.85));border:1px solid color-mix(in srgb,var(--v1) 20%,#fff);color:inherit}
+html.dark .gs{background:color-mix(in srgb,var(--v1) 20%,rgba(18,14,44,.85));border-color:rgba(255,255,255,.12)}
+.gs span{grid-row:1/3;font-size:26px}.gs b{font-size:15px}.gs small{font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.badges{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.bdg{text-align:center;padding:12px 6px;border-radius:18px;background:rgba(0,0,0,.04);opacity:.55}.bdg.on{opacity:1;background:color-mix(in srgb,var(--v1) 12%,transparent)}
+html.dark .bdg{background:rgba(255,255,255,.05)}.bdg span{font-size:30px;display:block}.bdg b{display:block;font-size:12px;margin-top:4px}.bdg small{display:block;font-size:10.5px;color:var(--muted);margin-top:2px;line-height:1.3}
+.giftrow{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}.giftrow .ge{font-size:30px}.giftrow.got .ge{animation:bob 1.6s ease-in-out infinite}
+.giftbox{display:grid;place-items:center;height:190px}.gb{position:relative;width:120px;height:120px}
+.gb .box{position:absolute;bottom:0;left:10px;width:100px;height:72px;border-radius:10px;background:linear-gradient(135deg,#ff7eb6,#a855f7)}
+.gb .lid{position:absolute;top:30px;left:2px;width:116px;height:26px;border-radius:8px;background:linear-gradient(135deg,#ff9cc6,#c084fc);z-index:2;transition:transform .7s var(--spring)}
+.gb .rib{position:absolute;bottom:0;left:52px;width:16px;height:98px;background:#ffd166;z-index:3;border-radius:3px;transition:opacity .4s}
+.gb .gift-e{position:absolute;left:0;right:0;top:40px;text-align:center;font-size:54px;z-index:1;transform:scale(.3);opacity:0;transition:all .8s var(--spring) .25s}
+.giftbox.open .lid{transform:translateY(-70px) rotate(-24deg)}.giftbox.open .rib{opacity:0}.giftbox.open .gift-e{transform:translateY(-60px) scale(1.2);opacity:1}
+/* ===== home journeys ===== */
+.jrow{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:4px 0 18px}
+.jc{position:relative;overflow:hidden;text-align:left;padding:14px 14px 18px;border-radius:24px;color:#fff;display:flex;flex-direction:column;gap:2px;box-shadow:0 18px 30px -16px rgba(20,20,60,.55)}
+.jc .je{font-size:26px;margin-bottom:4px}.jc b{font-size:15px}.jc small{font-size:12px;opacity:.9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.jc i{position:absolute;left:0;bottom:0;height:5px;background:rgba(255,255,255,.85);border-radius:0 4px 4px 0}
+.jmed{background:linear-gradient(135deg,#2dd4bf,#0e7490 60%,#1e3a8a)}.jocd{background:linear-gradient(135deg,#f9a8d4,#a78bfa 55%,#60a5fa)}
+/* ===== Medical page ===== */
+.medp{--v1:#0d9488;--v2:#0e7490;--grad:linear-gradient(135deg,#2dd4bf 0%,#0e7490 55%,#1e3a8a 100%)}
+html.dark .medp{--v1:#2dd4bf}
+.mhero{position:relative;overflow:hidden;border-radius:30px;padding:20px 18px 16px;margin-bottom:14px;color:#fff;background:linear-gradient(140deg,#14b8a6 0%,#0e7490 50%,#1e3a8a 100%);box-shadow:0 26px 44px -22px rgba(14,116,144,.8)}
+.mhero::after{content:"";position:absolute;right:-60px;top:-60px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.25),transparent 70%)}
+.ecg{position:absolute;left:0;right:0;top:44%;width:100%;height:60px;opacity:.28;pointer-events:none}.ecg path{fill:none;stroke:#fff;stroke-width:2.2;stroke-dasharray:700;stroke-dashoffset:700;animation:ecg 3.2s linear infinite}
+@keyframes ecg{to{stroke-dashoffset:-700}}
+.mh-k{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;opacity:.85}.mh-d{font-size:16px;margin-top:2px}.mh-d b{font-size:44px;font-weight:900;letter-spacing:-.02em;line-height:1.05}.mh-s{font-size:13px;opacity:.85}
+.mh-app{position:relative;margin-top:12px;font-size:12.5px;font-weight:700;background:rgba(255,255,255,.18);padding:8px 12px;border-radius:12px;display:inline-block}
+.mring,.ostat{position:relative;width:78px;height:78px;border-radius:50%;display:grid;place-items:center;align-content:center;background:conic-gradient(#fff calc(var(--p)*1%),rgba(255,255,255,.22) 0);flex:none}
+.mring::before{content:"";position:absolute;inset:7px;border-radius:50%;background:#0f6f86}.mring b,.mring small{position:relative;line-height:1}.mring b{font-size:18px}.mring small{font-size:10px;opacity:.85;margin-top:2px}
+.mtl{margin-top:8px}.mti{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}.mti:last-child{border-bottom:0}
+.mti.done .mtt b{text-decoration:line-through;color:var(--muted)}.mic{width:38px;height:38px;border-radius:13px;display:grid;place-items:center;font-size:18px;flex:none;box-shadow:0 8px 14px -8px rgba(0,0,0,.4)}
+.mtt{flex:1;min-width:0}.mtt b{display:block;font-size:14.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.mtt small{color:var(--muted);font-size:12px}
+.mok{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:#14b8a6;color:#fff;font-weight:900;flex:none}
+.akin{width:64px!important;height:34px;padding:0 8px!important;border-radius:10px!important;text-align:center;flex:none}
+.mwarn{margin:10px 0 2px;padding:10px 12px;border-radius:14px;background:#fff4e6;color:#9a4b00;font-size:13px;font-weight:600}.mwarn button{color:#c2410c;font-weight:800;margin-left:4px}
+html.dark .mwarn{background:rgba(251,146,60,.15);color:#fdba74}
+.mempty{text-align:center}.mempty h3{margin:8px 0 4px}
+.srings{display:flex;gap:12px;overflow-x:auto;padding:10px 2px 4px;scrollbar-width:none}.srings::-webkit-scrollbar{display:none}
+.sring{flex:none;text-align:center;width:62px}.sring small{display:block;font-size:10.5px;color:var(--muted);margin-top:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sr{width:56px;height:56px;margin:0 auto;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--c) calc(var(--p)*1%),color-mix(in srgb,var(--c) 14%,transparent) 0);position:relative}
+.sr::before{content:"";position:absolute;inset:6px;border-radius:50%;background:var(--card,#fff)}html.dark .sr::before{background:#1b1640}.sr b{position:relative;font-size:12px}
+.chrow{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}.chrow .t{flex:1;min-width:0;cursor:pointer}.chrow b{display:block;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chrow small{color:var(--muted);font-size:11.5px}.chrow.done b{text-decoration:line-through;color:var(--muted)}
+.sdot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:0}
+.chpv{display:flex;align-items:center;gap:6px;font-size:13px;padding:4px 0}.chpv span:nth-child(2){flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sbrow{display:grid;grid-template-columns:auto 1fr auto;grid-template-areas:"d n p" "b b b";column-gap:6px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line);cursor:pointer;font-size:14px}
+.sbrow:last-child{border-bottom:0}.sbrow .sdot{grid-area:d}.sbrow b{grid-area:n;font-weight:600}.sbrow>.muted:nth-of-type(1){grid-area:p}.sbrow>.muted:last-child:not(:nth-of-type(1)){display:none}
+.sbbar{grid-area:b;height:5px;border-radius:4px;background:rgba(0,0,0,.06);margin-top:6px;overflow:hidden}html.dark .sbbar{background:rgba(255,255,255,.08)}.sbbar i{display:block;height:100%;border-radius:4px}
+.exbars{display:flex;align-items:flex-end;gap:5px;height:80px;margin-top:14px}.exbars div{flex:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:3px}
+.exbars i{width:100%;border-radius:6px 6px 3px 3px;display:block}.exbars small{font-size:9.5px;color:var(--muted)}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:10px;text-align:center}.ocdp .kpis{grid-template-columns:repeat(3,1fr)}
+.kpis b{display:block;font-size:19px;font-weight:800}.kpis small{font-size:10.5px;color:var(--muted)}
+.ahm{display:grid;grid-template-columns:repeat(12,1fr);grid-auto-flow:column;grid-template-rows:repeat(7,1fr);gap:3px;margin-top:14px}.ahm i{aspect-ratio:1;border-radius:3px;background:#2563eb}
+/* exam */
+.exam{padding-bottom:6px}.exh{display:flex;align-items:center;gap:10px;margin-bottom:12px}.exdots{flex:1;display:flex;gap:4px}
+.exdots i{flex:1;height:6px;border-radius:4px;background:rgba(0,0,0,.08)}html.dark .exdots i{background:rgba(255,255,255,.12)}.exdots i.cur{background:var(--v1)}.exdots i.ok{background:#14b8a6}.exdots i.no{background:#f43f5e}
+.exsub{display:flex;align-items:center;font-size:12.5px;font-weight:700;margin-bottom:10px}
+.exq{font-size:16px;line-height:1.65;padding:16px;border-radius:20px;background:color-mix(in srgb,var(--v1) 7%,rgba(255,255,255,.7));border:1px solid color-mix(in srgb,var(--v1) 14%,transparent)}
+html.dark .exq{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.1)}
+.exq img,.exex img,.exans img{max-width:100%;border-radius:12px;margin:8px 0;display:block}.exq ul,.exex ul{padding-left:20px;margin:6px 0}.exq table{border-collapse:collapse;font-size:13px;margin:6px 0}.exq td,.exq th{border:1px solid var(--line);padding:4px 6px}
+.qb{display:inline-block;min-width:54px;padding:1px 10px;margin:0 2px;border-radius:8px;background:color-mix(in srgb,var(--v1) 18%,transparent);color:var(--v1);font-weight:800;text-align:center;border-bottom:2px dashed var(--v1)}
+.qa{padding:1px 6px;border-radius:7px;background:rgba(20,184,166,.18);color:#0f766e;font-weight:800}html.dark .qa{color:#5eead4}
+.exopts{display:grid;gap:9px;margin-top:14px}
+.exo{display:flex;align-items:center;gap:12px;text-align:left;padding:13px 14px;border-radius:16px;border:1.5px solid color-mix(in srgb,var(--v1) 18%,var(--line));background:rgba(255,255,255,.75);font-size:14.5px;font-weight:600;color:inherit;transition:transform .25s var(--spring),background .25s,border-color .25s}
+html.dark .exo{background:rgba(255,255,255,.05)}.exo:active{transform:scale(.97)}
+.exo b{width:28px;height:28px;flex:none;border-radius:9px;display:grid;place-items:center;font-size:13px;background:color-mix(in srgb,var(--v1) 14%,transparent);color:var(--v1)}
+.exo.right{background:rgba(20,184,166,.14);border-color:#14b8a6;animation:pulse .5s var(--spring)}.exo.right b{background:#14b8a6;color:#fff}
+.exo.wrong{background:rgba(244,63,94,.12);border-color:#f43f5e;animation:shake .4s}.exo.wrong b{background:#f43f5e;color:#fff}.exo.dim{opacity:.5}
+@keyframes pulse{50%{transform:scale(1.03)}}@keyframes shake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+.exans{margin-top:12px;padding:14px;border-radius:16px;background:rgba(20,184,166,.12);border:1px solid rgba(20,184,166,.35);font-size:14.5px;line-height:1.6}
+.exex{margin-top:12px;padding:12px 14px;border-radius:16px;background:rgba(0,0,0,.035);font-size:13.5px;line-height:1.6}html.dark .exex{background:rgba(255,255,255,.05)}.exex summary{font-weight:800;cursor:pointer;margin-bottom:4px}
+.scorering{width:150px;height:150px;margin:16px auto 10px;border-radius:50%;display:grid;place-items:center;align-content:center;background:conic-gradient(var(--c) calc(var(--p)*1%),color-mix(in srgb,var(--c) 15%,transparent) 0);position:relative;animation:pop .7s var(--spring)}
+.scorering::before{content:"";position:absolute;inset:12px;border-radius:50%;background:#fff}html.dark .scorering::before{background:#221c4a}.scorering b,.scorering small{position:relative;line-height:1}.scorering b{font-size:38px;font-weight:900}.scorering small{color:var(--muted);margin-top:4px}
+@keyframes pop{from{transform:scale(.4);opacity:0}}
+.xpbig{display:inline-block;margin-top:8px;font-weight:900;font-size:20px;color:#fff;background:var(--grad);padding:8px 18px;border-radius:999px}
+/* ===== OCD Journey ===== */
+.ocdp{--v1:#8b5cf6;--v2:#ec4899;--grad:linear-gradient(135deg,#f472b6 0%,#a78bfa 55%,#60a5fa 100%)}
+html.dark .ocdp{--v1:#a78bfa}
+.ohero{position:relative;overflow:hidden;border-radius:30px;padding:20px 18px 16px;margin-bottom:14px;color:#fff;background:linear-gradient(160deg,#fbcfe8 -10%,#c084fc 45%,#6366f1 110%);box-shadow:0 26px 44px -22px rgba(139,92,246,.8)}
+.osun{position:absolute;right:-40px;bottom:-70px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,#fde68a 0%,rgba(253,186,116,.6) 40%,transparent 70%);animation:sunb 6s ease-in-out infinite}
+@keyframes sunb{50%{transform:translateY(-10px) scale(1.05)}}
+.ostat{background:rgba(255,255,255,.22)}.ostat b{font-size:20px;line-height:1}.ostat small{font-size:9.5px;opacity:.9;text-align:center;line-height:1.1;margin-top:3px}
+.obtns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.obig{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;padding:16px 14px;border-radius:24px;color:#fff;box-shadow:0 18px 30px -16px rgba(60,40,140,.6);transition:transform .3s var(--spring)}
+.obig:active{transform:scale(.95)}.obig span{font-size:30px}.obig b{font-size:15px}.obig small{font-size:12px;opacity:.9;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ourge{background:linear-gradient(135deg,#38bdf8,#6366f1)}.oexp{background:linear-gradient(135deg,#f472b6,#a855f7)}
+.ladder{position:relative;margin-top:10px;padding-left:4px}.ladder::before{content:"";position:absolute;left:21px;top:16px;bottom:16px;width:3px;border-radius:3px;background:linear-gradient(#ef4444,#f59e0b,#22c55e);opacity:.35}
+.rung{position:relative;display:flex;align-items:center;gap:12px;padding:9px 0;cursor:pointer}
+.rung .node{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;flex:none;background:#fff;box-shadow:0 6px 14px -6px rgba(0,0,0,.35);font-size:16px;z-index:1}
+html.dark .rung .node{background:#2a2356}.rung.cur .node{background:var(--grad);box-shadow:0 0 0 5px color-mix(in srgb,var(--v1) 25%,transparent);animation:glow 2s ease-in-out infinite}
+@keyframes glow{50%{box-shadow:0 0 0 9px color-mix(in srgb,var(--v1) 12%,transparent)}}
+.rung.m .node{background:linear-gradient(135deg,#fde68a,#f59e0b)}.rung.lock{opacity:.55}
+.rung .rt{flex:1;min-width:0}.rung b{display:block;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.rung small{color:var(--muted);font-size:11.5px}
+.suds{min-width:36px;height:24px;padding:0 8px;border-radius:999px;color:#fff;font-weight:800;font-size:12px;display:grid;place-items:center;flex:none}
+.oempty p{color:var(--muted);font-size:14px;line-height:1.55;margin:6px 0 12px}
+.odays{display:grid;grid-template-columns:repeat(14,1fr);gap:4px;margin-top:14px}.odays i{aspect-ratio:1;border-radius:8px;background:rgba(0,0,0,.06);display:grid;place-items:center}
+html.dark .odays i{background:rgba(255,255,255,.07)}.odays i.on{background:var(--grad)}.odays i.on small{color:#fff}.odays i.td{outline:2px solid var(--v1);outline-offset:1px}.odays small{font-size:9px;color:var(--muted);font-weight:700}
+.oinfo summary{font-weight:800;cursor:pointer}.oinfo p{font-size:13.5px;line-height:1.6;margin:10px 0 0}
+.srange{width:100%;-webkit-appearance:none;appearance:none;height:10px;border-radius:8px;background:linear-gradient(90deg,#22c55e,#f59e0b,#ef4444);outline:none;margin:10px 0 4px}
+.srange::-webkit-slider-thumb{-webkit-appearance:none;width:28px;height:28px;border-radius:50%;background:#fff;box-shadow:0 4px 12px rgba(0,0,0,.3);border:3px solid var(--v1)}
+.sudsbig{text-align:center;margin-top:8px}.sudsbig b{font-size:46px;font-weight:900;line-height:1;transition:color .2s}
+.xrun{text-align:center;padding-top:6px}.breathe{position:relative;width:210px;height:210px;margin:6px auto 12px;display:grid;place-items:center;align-content:center}
+.breathe .bc{position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--v1) 40%,transparent),color-mix(in srgb,var(--v1) 10%,transparent) 70%);animation:breath 14s ease-in-out infinite}
+@keyframes breath{0%{transform:scale(.62)}28.5%{transform:scale(1)}57%{transform:scale(1)}100%{transform:scale(.62)}}
+.breathe b{position:relative;font-size:40px;font-weight:900}.breathe small{position:relative;color:var(--muted);font-weight:700}
+.xtip{font-size:14px;line-height:1.5;color:var(--muted);margin:0 6px 14px;min-height:42px}
+.dpick{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}.dpick button{padding:14px 0;border-radius:18px;background:color-mix(in srgb,var(--v1) 12%,rgba(255,255,255,.8));color:inherit}
+html.dark .dpick button{background:rgba(255,255,255,.07)}.dpick b{display:block;font-size:24px;font-weight:900;color:var(--v1)}.dpick small{font-size:11px;color:var(--muted)}
+.wave{position:relative;width:210px;height:210px;margin:6px auto 14px}.wave svg{width:100%;height:100%;transform:rotate(-90deg)}
+.wbg{fill:none;stroke:color-mix(in srgb,var(--v1) 15%,transparent);stroke-width:12}.wfg{fill:none;stroke:url(#none);stroke:var(--v1);stroke-width:12;stroke-linecap:round;transition:stroke-dashoffset .5s linear}
+.wtxt{position:absolute;inset:0;display:grid;place-items:center;align-content:center}.wtxt b{font-size:42px;font-weight:900}.wtxt small{color:var(--muted);font-weight:700}
+.uout{display:grid;gap:9px;margin-top:12px}.uout button{display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto;column-gap:12px;text-align:left;align-items:center;padding:14px;border-radius:18px;background:color-mix(in srgb,var(--v1) 9%,rgba(255,255,255,.8));color:inherit}
+html.dark .uout button{background:rgba(255,255,255,.06)}.uout span{grid-row:1/3;font-size:28px}.uout b{font-size:15px}.uout small{font-size:12px;color:var(--muted)}
+.schart{width:100%;height:110px;margin:4px 0}.schart polyline{fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}.schart .pb{stroke:#f97316;opacity:.7}.schart .pa{stroke:#8b5cf6}.schart .ca{fill:#8b5cf6}
+.lg{display:inline-block;width:12px;height:4px;border-radius:2px;margin-right:5px;vertical-align:middle}.lg.lb{background:#f97316}.lg.la{background:#8b5cf6}
+.mok2{margin-top:10px;padding:10px 12px;border-radius:14px;background:rgba(245,158,11,.14);font-size:13px;font-weight:600}
 </style>
 </head>
 <body>
@@ -1085,7 +1213,7 @@ async function upload(file){
 
 /* ---------------- render ---------------- */
 const NAV=[["home","Home"],["plan","Plan"],null,["body","Body"],["lib","Library"]];
-const VIEWS={home:()=>vHome(),lib:()=>vLib(),rev:()=>vRev(),plan:()=>vPlan(),jour:()=>vJour(),stats:()=>vStats(),body:()=>vBody(),focus:()=>vFocus()};
+const VIEWS={home:()=>vHome(),lib:()=>vLib(),rev:()=>vRev(),plan:()=>vPlan(),jour:()=>vJour(),stats:()=>vStats(),body:()=>vBody(),focus:()=>vFocus(),med:()=>vMed(),ocd:()=>vOcd()};
 let lastTab=null;
 /* theme: auto (follows the phone) · light · dark */
 const MQ=window.matchMedia?matchMedia("(prefers-color-scheme: dark)"):null;
@@ -1110,7 +1238,7 @@ function render(){applyTheme();syncBg();
   const nav=$("#nav");
   if(!nav.children.length)nav.innerHTML=NAV.map(n=>n?`<button class="tab" data-act="tab" data-v="${n[0]}">${ico(n[0])}${n[1]}<span class="dot"></span></button>`:`<button class="plus" data-act="quick" aria-label="Add">${ico("plus",2.4)}</button>`).join("");
   nav.querySelectorAll(".tab").forEach(b=>b.classList.toggle("on",b.dataset.v===S.tab));
-  document.body.classList.toggle("home",S.tab==="home");const bb=$("#backbtn");const sub=S.tab==="rev"||S.tab==="stats"||S.tab==="jour"||S.tab==="focus";
+  document.body.classList.toggle("home",S.tab==="home");const bb=$("#backbtn");const sub=["rev","stats","jour","focus","med","ocd"].includes(S.tab);
   bb.innerHTML=sub?ico("back",2.2):`<span class="dots4"><i></i><i></i><i></i><i></i></span>`;bb.dataset.act=sub?"back":"go";bb.dataset.v=sub?"":"stats";
   const v=$("#view");const fn=VIEWS[S.tab]||VIEWS.home;
   const active=document.activeElement;const keep=active&&v.contains(active)&&active.id?active.id:null;const pos=keep&&active.selectionStart;
@@ -1214,6 +1342,7 @@ function vHome(){
   <div class="g row between"><div><b style="font-size:16px">${done?"Review done today 🎉":`${Math.min(5,hls.length)} cards · about 2 min`}</b><div class="muted" style="margin-top:2px">${reading.length?`Reading · ${esc(reading[0].t)}`:"Spaced review of your highlights"}</div>
    <div class="bar" style="margin-top:8px;width:170px"><i style="width:${done?100:Math.round((meta().revCount||{})[today()]||0)*20}%"></i></div></div><button class="outline" data-act="goReview">${done?"Again":"Start"}</button></div>
   </div>
+  ${homeJourneys()}
   <h2>Explore</h2>
   <div class="tiles">${tile("goReview","","Review","rev","linear-gradient(135deg,#8b7bff,#5a5cf0)","rgba(90,92,240,.6)")}${tile("tab","jour","Journal","jour","linear-gradient(135deg,#ff9cc6,#e66aa6)","rgba(230,106,166,.6)")}${tile("calendar","","Calendar","cal","linear-gradient(135deg,#ffc58a,#ff9a5c)","rgba(255,154,92,.6)")}${tile("go","stats","Insights","stats","linear-gradient(135deg,#7fc4ff,#4f86f7)","rgba(79,134,247,.6)")}${tile("go","focus","Focus","clock","linear-gradient(135deg,#5fd3b5,#2fb38f)","rgba(47,179,143,.6)")}</div>
   <div><h2>Featured</h2>
@@ -2074,6 +2203,482 @@ async function openReader(id){
   }catch(e){R.querySelector("#r-stage").innerHTML=`<div style="color:#fff;text-align:center;padding:20px">This file couldn't be opened here.<br><br><a class="btn primary" href="${blobUrl(st.fileId)}" target="_blank" rel="noopener">Open in a new tab</a></div>`}
 }
 
+/* ---------------- shared game layer: XP, levels, badges, gifts (Medical + OCD Journey) ---------------- */
+const ACTX={},FORMX={};
+const LV_T=[0,150,400,800,1400,2200,3200,4500,6200,8500];
+const LV={med:["Intern","FY1","FY2","SHO","Registrar","Senior Reg","Consultant","Professor","Dean","Legend"],
+  ocd:["Seed","Sprout","Brave","Steady","Bold","Warrior","Free spirit","Unshakeable","Mountain","Sky"]};
+function gm(){return Object.assign({xp:{med:0,ocd:0},badges:{},log:[]},meta().game||{})}
+function xpOf(tr){return (gm().xp||{})[tr]||0}
+function level(tr){const x=xpOf(tr);let i=0;while(i<LV_T.length-1&&x>=LV_T[i+1])i++;const cur=LV_T[i],nx=LV_T[i+1]??(cur+3000);
+  return {i,name:LV[tr][i],next:LV[tr][i+1]||"Max",x,cur,nx,pct:Math.min(100,Math.round((x-cur)/(nx-cur)*100))}}
+function addXP(tr,n,why){if(!n)return;const g=gm();const before=level(tr).i;g.xp=Object.assign({med:0,ocd:0},g.xp);g.xp[tr]=(g.xp[tr]||0)+n;
+  g.log=[{t:Date.now(),tr,n,why:why||""}].concat(g.log||[]).slice(0,300);setMetaQ({game:g},true);
+  xpPop(n);const after=level(tr);
+  setTimeout(()=>{if(after.i>before){sfx("success");confetti();celebrate("⬆️",`Level up: ${after.name}`,tr==="med"?"Your MRCP rank just went up.":"You're getting braver, one step at a time.")}
+    checkGifts(tr);checkBadges(tr)},500);
+}
+function xpPop(n){const d=document.createElement("div");d.className="xppop";d.textContent=`+${n} XP`;document.body.appendChild(d);setTimeout(()=>d.remove(),1400)}
+/* gifts: rewards she picks herself, unlocked by XP in a track */
+const GIFT_DEF={med:[["☕","Coffee out",300],["📓","A new Lines notebook",1000],["🎧","Something you've wanted",2500]],ocd:[["🌸","Flowers for you",200],["🎬","Movie night",600],["💆‍♀️","A spa or treat day",1500]]};
+function gifts(tr){let g=all("gift").filter(x=>x.tr===tr);if(!g.length&&!(meta().giftsInit||{})[tr]){
+  GIFT_DEF[tr].forEach(([e,t,c],i)=>put({kind:"gift",id:tr+"g"+i,tr,emoji:e,title:t,cost:c,created:Date.now()},true));
+  setMetaQ({giftsInit:Object.assign({},meta().giftsInit,{[tr]:1})},true);g=all("gift").filter(x=>x.tr===tr)}
+  return g.sort((a,b)=>a.cost-b.cost)}
+function nextGift(tr){const x=xpOf(tr);return gifts(tr).find(g=>!g.unlocked&&g.cost>x)||null}
+function checkGifts(tr){const x=xpOf(tr);gifts(tr).filter(g=>!g.unlocked&&x>=g.cost).forEach((g,i)=>{put(Object.assign({},g,{unlocked:today()}),true);setTimeout(()=>giftOpen(g),900*(i+1))})}
+function giftOpen(g){sfx("chime");sheet(`<div class="giftbox"><div class="gb"><div class="lid"></div><div class="box"></div><div class="rib"></div><div class="gift-e">${g.emoji}</div></div></div>
+  <div style="text-align:center"><div class="eyebrow">Gift unlocked 🎉</div><h2 style="margin:6px 0 4px"${dir(g.title)}>${esc(g.title)}</h2><p class="muted">You earned this with ${g.cost} XP of real work. Go enjoy it.</p>
+  <button class="btn primary block" style="margin-top:16px" data-act="giftClaim" data-id="${g.id}">Claim it 💝</button></div>`,el=>{setTimeout(()=>el.querySelector(".giftbox").classList.add("open"),250);setTimeout(confetti,700)})}
+function giftSheet(tr){const x=xpOf(tr);
+  sheet(`<h3 style="font-size:20px">Your gifts 🎁</h3><p class="muted" style="margin:-4px 0 12px">Pick rewards that feel special. They unlock with ${tr==="med"?"study":"journey"} XP.</p>
+  ${gifts(tr).map(g=>{const p=Math.min(100,Math.round(x/g.cost*100));return `<div class="giftrow ${g.unlocked?"got":""}"><span class="ge">${g.emoji}</span><div style="flex:1;min-width:0"><b${dir(g.title)}>${esc(g.title)}</b>
+    <div class="muted" style="font-size:12px">${g.unlocked?(g.claimed?"Claimed ✓":"Unlocked — claim it!"):`${x} / ${g.cost} XP`}</div>${g.unlocked?"":`<div class="bar" style="margin-top:6px"><i style="width:${p}%"></i></div>`}</div>
+    ${g.unlocked&&!g.claimed?`<button class="chip on" data-act="giftShow" data-id="${g.id}">Open</button>`:`<button class="iconbtn" data-act="giftDel" data-id="${g.id}" data-tr="${tr}" aria-label="Delete" style="width:30px;height:30px">×</button>`}</div>`}).join("")}
+  <label class="l">Add a gift</label><div class="row" style="gap:8px"><input id="gf-e" value="🎁" style="width:56px;text-align:center;flex:none"><input id="gf-t" dir="auto" placeholder="e.g. New sneakers" style="flex:1;min-width:0"></div>
+  <div class="row" style="gap:8px;margin-top:8px"><input id="gf-c" type="number" inputmode="numeric" placeholder="XP needed" style="flex:1;min-width:0" value="${Math.max(100,Math.ceil((x+400)/100)*100)}"><button class="btn primary" data-act="giftAdd" data-tr="${tr}">Add</button></div>`)}
+/* badges */
+const BADGES={med:[
+  ["firstChap","📖","First chapter","Finish your first chapter",s=>s.chDone>=1],["chap10","📚","Ten down","Finish 10 chapters",s=>s.chDone>=10],
+  ["firstPass","🏁","First pass done","Finish every chapter in your plan",s=>s.chTotal>0&&s.chDone>=s.chTotal],
+  ["exam1","📝","First exam","Complete a daily exam",s=>s.exams>=1],["perfect","💯","Perfect score","Score 100% in an exam",s=>s.perfect>=1],
+  ["examStreak7","🔥","7-day exam streak","Daily exam 7 days in a row",s=>s.examStreak>=7],["q100","🎯","100 questions","Answer 100 questions",s=>s.qs>=100],
+  ["q1000","🧠","1,000 questions","Answer 1,000 questions",s=>s.qs>=1000],["master","🏆","Subject master","80%+ over 50 questions in one subject",s=>s.master>=1],
+  ["rev20","🔁","Revision hero","Do 20 chapter revisions",s=>s.revs>=20],["anki1k","🗂️","Anki 1,000","1,000 Anki reviews logged",s=>s.anki>=1000],
+  ["early","🌅","Early bird","Finish an exam before 9 am",s=>s.early>=1]],
+ ocd:[
+  ["firstExp","🌱","First step","Do your first exposure",s=>s.exps>=1],["exp10","🧗","Ten climbs","Do 10 exposures",s=>s.exps>=10],
+  ["urge10","🌊","Wave rider","Ride out 10 urges",s=>s.resisted>=10],["urge50","🏄‍♀️","Surf master","Ride out 50 urges",s=>s.resisted>=50],
+  ["mastered1","⭐","Step mastered","Master a ladder step",s=>s.mastered>=1],["half","⛰️","Halfway up","Master half your ladder",s=>s.steps>=2&&s.mastered>=Math.ceil(s.steps/2)],
+  ["summit","🏔️","Summit","Master your hardest step",s=>s.summit],["long30","⏳","Long stay","Stay 30+ minutes in one exposure",s=>s.long>=1],
+  ["drop40","📉","Big drop","Distress drops 40+ points in one session",s=>s.drop40>=1],["streak7","🔥","7-day streak","Practise 7 days (rest days allowed)",s=>s.streak>=7],
+  ["streak30","💎","30-day streak","Practise 30 days (rest days allowed)",s=>s.streak>=30],["honest","🤍","Honest log","Log a hard moment honestly",s=>s.honest>=1]]};
+function checkBadges(tr){const s=tr==="med"?medStats():ocdStats();const g=gm();g.badges=Object.assign({},g.badges);const got=[];
+  BADGES[tr].forEach(([id,e,n,d,test])=>{if(!g.badges[id]&&test(s)){g.badges[id]=today();got.push([e,n,d])}});
+  if(got.length){setMetaQ({game:g},true);got.forEach(([e,n,d],i)=>setTimeout(()=>{sfx("success");celebrate(e,`New badge: ${n}`,d)},1200*i))}}
+function badgeSheet(tr){const b=gm().badges||{};const L=BADGES[tr];
+  sheet(`<h3 style="font-size:20px">Badges · ${L.filter(x=>b[x[0]]).length}/${L.length}</h3><div class="badges">${L.map(([id,e,n,d])=>`<div class="bdg ${b[id]?"on":""}"><span>${b[id]?e:"🔒"}</span><b>${n}</b><small>${b[id]?fmt(b[id],{day:"numeric",month:"short"}):d}</small></div>`).join("")}</div>`)}
+function celebrate(e,title,sub){const d=document.createElement("div");d.className="celeb";d.innerHTML=`<div class="cb"><div class="ce">${e}</div><b>${esc(title)}</b><small>${esc(sub||"")}</small></div>`;
+  document.body.appendChild(d);requestAnimationFrame(()=>d.classList.add("in"));d.onclick=()=>d.remove();setTimeout(()=>{d.classList.remove("in");setTimeout(()=>d.remove(),400)},2600)}
+function gameStrip(tr){const L=level(tr),ng=nextGift(tr),b=gm().badges||{};const nb=BADGES[tr].filter(x=>b[x[0]]).length;
+  return `<div class="gstrip"><button class="gs" data-act="badges" data-tr="${tr}"><span>🏅</span><b>${nb}/${BADGES[tr].length}</b><small>Badges</small></button>
+  <button class="gs" data-act="gifts" data-tr="${tr}"><span>🎁</span><b>${ng?Math.max(0,ng.cost-L.x)+" XP":"All open"}</b><small>${ng?esc(ng.title):"Add more gifts"}</small></button></div>`}
+function lvlCard(tr){const L=level(tr);return `<div class="lvl"><div class="row between"><b>${L.name}</b><small>${L.x} XP · next: ${L.next}</small></div><div class="lbar"><i style="width:${L.pct}%"></i></div></div>`}
+Object.assign(ACTX,{
+  badges:el=>badgeSheet(el.dataset.tr),gifts:el=>giftSheet(el.dataset.tr),
+  giftShow:el=>{const g=get("gift_"+el.dataset.id);g&&giftOpen(g)},
+  giftClaim:el=>{const g=get("gift_"+el.dataset.id);if(g)put(Object.assign({},g,{claimed:today()}),true);closeSheet();toast("Enjoy it — you earned it 💝",2200)},
+  giftDel:el=>{del("gift_"+el.dataset.id);giftSheet(el.dataset.tr)},
+  giftAdd:el=>{const t=$("#gf-t").value.trim(),c=+$("#gf-c").value;if(!t||!(c>0))return toast("Add a name and the XP needed");
+    put({kind:"gift",id:uid(),tr:el.dataset.tr,emoji:$("#gf-e").value.trim()||"🎁",title:t,cost:c,created:Date.now()},true);giftSheet(el.dataset.tr)},
+});
+/* day-streak with rest days: up to `rest` missed days per Sat–Fri week don't break it */
+function graceStreak(days,rest){let n=0,d=new Date(),miss={},started=false;
+  for(let i=0;i<400;i++){const k=dkey(d);const wk=dkey(weekStart(d));
+    if(days.has(k)){n++;started=true}else if(i>0||started){miss[wk]=(miss[wk]||0)+1;if(miss[wk]>rest)break}
+    d=addDays(d,-1)}
+  return n}
+/* ---------------- Medical page: MRCP Part 1 plan, chapters, daily exams, Anki, study to-do ---------------- */
+const MSUBJ=["Cardiology","Respiratory","Gastroenterology","Endocrinology","Neurology","Nephrology","Rheumatology","Haematology","Infectious diseases","Dermatology","Psychiatry","Pharmacology & toxicology","Clinical sciences","Ophthalmology","Mixed"];
+const MCOL=["#e11d48","#0ea5e9","#f59e0b","#8b5cf6","#6366f1","#14b8a6","#ec4899","#dc2626","#16a34a","#d946ef","#0891b2","#ea580c","#2563eb","#65a30d","#64748b"];
+const MKW=[/cardi|heart|myocard|ecg|valv|aort|mitral|angina|pericard|arrhythm|hypertens/i,/respir|lung|pulmon|asthma|copd|chest|pleur|bronch/i,/gastro|git\b|liver|hepat|bowel|colon|pancrea|oesoph|gut|bili/i,/endocr|diabet|thyro|adrenal|pituit|metabol|bone|calcium/i,/neuro|brain|stroke|epilep|nerve|spinal|headache|movement/i,/nephro|renal|kidney|electrolyt|fluid|acid/i,/rheumat|arthrit|joint|connective|vasculit|lupus|musculo/i,/haemat|hemat|blood|anaem|anem|oncolog|cancer|leuk|lymph|coag/i,/infect|microb|virus|bacter|hiv|tropical|sexual|gum\b|antibio/i,/derma|skin/i,/psych|mental|mood|behavio/i,/pharma|drug|toxic|poison|therapeut/i,/basic|science|genetic|immun|statistic|epidemiol|physiol|biochem|cell|molecular|anatomy/i,/ophthal|eye|vision|retina/i];
+const MDEF={exam:"2027-05-26",appOpen:"2027-03-09",appClose:"2027-03-16",revWeeks:4,off:[5],dailyN:10};
+const mcfg=()=>Object.assign({},MDEF,meta().med||{});
+const setM=(p,q)=>setMetaQ({med:Object.assign({},meta().med||{},p)},q);
+const msubj=i=>MSUBJ[i]||"Mixed",mcol=i=>MCOL[i]||"#64748b";
+const guessSubj=t=>{const i=MKW.findIndex(r=>r.test(t));return i<0?14:i};
+const dnum=k=>Math.round(parseD(k)/864e5),daysTo=k=>dnum(k)-dnum(today());
+const chaps=()=>all("chap").sort((a,b)=>(a.order||0)-(b.order||0));
+const loadScript=src=>new Promise((res,rej)=>{if(document.querySelector(`script[src="${src}"]`)&&window._ls&&_ls[src])return res();const s=document.createElement("script");s.src=src;s.onload=()=>{(window._ls=window._ls||{})[src]=1;res()};s.onerror=rej;document.head.appendChild(s)});
+
+/* ---- question pack (her Anki notes), kept private: locked on the site, decrypted on the phone ---- */
+let QP=null;
+async function medPack(){if(QP)return QP;const txt=await idbGet("qpack:notes").catch(()=>null);if(!txt)return null;
+  const d=typeof txt==="string"?JSON.parse(txt):JSON.parse(await txt.text());const subj=d.subjects||MSUBJ;
+  const CL=/\{\{c(\d+)::([\s\S]*?)(?:::([\s\S]*?))?\}\}/g;const cards=[],bySubj={},ans={};
+  d.notes.forEach((n,ni)=>{const si=MSUBJ.indexOf(subj[n[1]]);const s=si<0?14:si;n.s=s;n[3]=n[3].replace(/<img src="(m\d+)">/g,'<img data-q="$1" alt="">');n[4]=n[4].replace(/<img src="(m\d+)">/g,'<img data-q="$1" alt="">');
+    if(n[2]==="c"){const seen=new Set();let m;CL.lastIndex=0;while((m=CL.exec(n[3]))){if(seen.has(m[1]))continue;seen.add(m[1]);cards.push([ni,+m[1]])}
+      CL.lastIndex=0;while((m=CL.exec(n[3]))){const a=plain(m[2]);if(a.length>0&&a.length<=60&&!/■|•/.test(m[2]))(ans[s]=ans[s]||new Set()).add(a)}}
+    else cards.push([ni,0])});
+  cards.forEach((c,i)=>{const s=d.notes[c[0]].s;(bySubj[s]=bySubj[s]||[]).push(i)});
+  Object.keys(ans).forEach(k=>ans[k]=[...ans[k]]);
+  QP={name:d.name||"MRCP notes",notes:d.notes,cards,bySubj,ans};return QP}
+const plain=h=>String(h).replace(/<br\s*\/?>|<\/div>|<\/li>/gi," ").replace(/<[^>]+>/g,"").replace(/&nbsp;/g," ").replace(/&amp;/g,"&").replace(/&lt;/g,"<").replace(/&gt;/g,">").replace(/\s+/g," ").trim().replace(/[.,:;]+$/,"").trim();
+const cid=c=>QP.notes[c[0]][0]+":"+c[1];
+function qBuild(ci){const [ni,cn]=QP.cards[ci],n=QP.notes[ni];const CL=/\{\{c(\d+)::([\s\S]*?)(?:::([\s\S]*?))?\}\}/g;
+  if(n[2]!=="c")return {ci,id:cid(QP.cards[ci]),s:n.s,q:n[3],a:n[4],ex:"",src:n[5],mcq:false};
+  let occ=0,ansH="",hint="";const q=n[3].replace(CL,(m,k,a,h)=>{if(+k===cn){occ++;ansH=ansH?ansH+" / "+a:a;hint=hint||h||"";return '<span class="qb">'+(h?esc(h):"?")+'</span>'}return a});
+  const at=plain(ansH);let opts=null;
+  if(occ===1&&at.length&&at.length<=60&&!/■|•/.test(ansH)){const pool=(QP.ans[n.s]||[]).concat(at.length<4?[]:[]);const num=/\d/.test(at),wc=at.split(" ").length,low=at.toLowerCase(),body=plain(n[3]).toLowerCase();
+    let c=pool.filter(x=>{const l=x.toLowerCase();return l!==low&&!body.includes(l)&&/\d/.test(x)===num&&x.length>=at.length*.35&&x.length<=at.length*2.8+6});
+    const suf=low.replace(/[^a-z]/g,"").slice(-3),cap=/^[A-Z]/.test(at);
+    const sc=x=>{const l=x.toLowerCase();let v=Math.random()*1.5;if(suf.length===3&&l.replace(/[^a-z]/g,"").endsWith(suf))v+=4;if(x.split(" ").length===wc)v+=2;else v-=Math.abs(x.split(" ").length-wc);
+      if(/^[A-Z]/.test(x)===cap)v+=.8;v-=Math.abs(x.length-at.length)/Math.max(6,at.length)*1.5;return v};
+    c=c.map(x=>[x,sc(x)]).sort((a,b)=>b[1]-a[1]).slice(0,10).sort(()=>Math.random()-.5).map(x=>x[0]);
+    const pick=[];for(const x of c){if(pick.length>=3)break;if(!pick.some(p=>p.toLowerCase()===x.toLowerCase()))pick.push(x)}
+    if(pick.length===3){opts=pick.concat(at).sort(()=>Math.random()-.5)}}
+  return {ci,id:cid(QP.cards[ci]),s:n.s,q,aH:ansH,a:at,ex:n[4],src:n[5],mcq:!!opts,opts,ok:opts?opts.indexOf(at):-1}}
+/* spaced repetition per question: [box, dueDay, right, wrong] */
+const qst=()=>(get("qstat_main")||{m:{}}).m;
+function qMark(id,ok){const m=Object.assign({},qst());const s=m[id]||[0,0,0,0];const box=ok?Math.min(5,s[0]+1):0;const gap=[1,3,7,14,30,60][box];
+  m[id]=[box,dnum(today())+(ok?gap:1),s[2]+(ok?1:0),s[3]+(ok?0:1)];put({kind:"qstat",id:"main",m},true)}
+async function hydrateQImgs(root){for(const im of root.querySelectorAll("img[data-q]:not([data-ok])")){const k=im.dataset.q;im.dataset.ok=1;
+  try{const b=await idbGet("qimg:"+k);if(b)im.src=URL.createObjectURL(b);else im.remove()}catch(e){im.remove()}}}
+let packBusy=false;
+async function medLoadPack(code){if(packBusy)return;const raw=String(code||localStorage.getItem("lines-code")||"").toUpperCase().replace(/[^A-Z0-9]/g,"");
+  if(raw.length!==12)return toast("Paste your 12-character code",2500);packBusy=true;
+  try{toast("Unlocking your questions…",2500);
+    const get_=async n=>{let r;try{r=await fetch("hd/"+n,{cache:"no-store"})}catch(e){throw "net"}if(!r.ok)throw "net";return r};
+    const m=await (await get_("meta.json")).json();
+    const base=await crypto.subtle.importKey("raw",new TextEncoder().encode(raw),"PBKDF2",false,["deriveKey"]);
+    const key=await crypto.subtle.deriveKey({name:"PBKDF2",salt:new Uint8Array(m.salt.match(/../g).map(h=>parseInt(h,16))),iterations:m.iter,hash:"SHA-256"},base,{name:"AES-GCM",length:256},false,["decrypt"]);
+    const dec=async(n,prog)=>{const r=await get_(n);let buf;
+      if(prog&&r.body&&r.headers.get("content-length")){const tot=+r.headers.get("content-length"),rd=r.body.getReader(),parts=[];let got=0;for(;;){const {done,value}=await rd.read();if(done)break;parts.push(value);got+=value.length;prog(got/tot)}buf=new Uint8Array(got);let o=0;parts.forEach(p=>{buf.set(p,o);o+=p.length})}
+      else buf=new Uint8Array(await r.arrayBuffer());
+      try{return await crypto.subtle.decrypt({name:"AES-GCM",iv:buf.subarray(0,12)},key,buf.subarray(12))}catch(e){throw "code"}};
+    await loadZip();
+    const nz=await JSZip.loadAsync(await dec("q/notes.bin"));const txt=await nz.file("notes.json").async("string");
+    await idbPut("qpack:notes",txt);QP=null;localStorage.setItem("lines-code",raw);
+    const info=JSON.parse(txt);setM({pack:{name:info.name,n:info.notes.length,at:today(),img:0}},true);render();toast(`${info.notes.length} notes ready ✓ — loading pictures…`,2500);
+    const iz=await JSZip.loadAsync(await dec("q/img.bin",p=>{const b=$("#packbar");b&&(b.style.width=Math.round(p*100)+"%")}));
+    const names=Object.keys(iz.files);let k=0;for(const nm of names){const blob=await iz.file(nm).async("blob");await idbPut("qimg:"+nm.replace(/\.\w+$/,""),new Blob([blob],{type:"image/webp"}));k++}
+    setM({pack:Object.assign({},mcfg().pack,{img:k})},true);sfx("success");toast("Your MRCP questions are ready 🩺",2500);render()}
+  catch(e){toast(e==="code"?"That code didn't work — check it":"Connection problem — try again",3500)}
+  finally{packBusy=false}}
+
+/* ---- chapters + plan ---- */
+const VOCAB="cardiology respiratory medicine gastroenterology hepatology endocrinology diabetes metabolic metabolism nephrology renal neurology rheumatology haematology hematology oncology infectious infection diseases disease dermatology psychiatry clinical pharmacology therapeutics toxicology basic sciences science statistics epidemiology genetics immunology biochemistry physiology anatomy biology molecular ophthalmology geriatrics geriatric palliative emergency critical sexual health tropical nutrition introduction cardiovascular pulmonary gastrointestinal neurological musculoskeletal haematological electrolytes poisoning".split(" ");
+function lev(a,b){const m=a.length,n=b.length,d=Array.from({length:m+1},(_,i)=>[i]);for(let j=1;j<=n;j++)d[0][j]=j;for(let i=1;i<=m;i++)for(let j=1;j<=n;j++)d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a[i-1]===b[j-1]?0:1));return d[m][n]}
+function fixWord(w,first){const core=w.replace(/[^A-Za-z]/g,"");const cap=v=>first||/^[A-Z]/.test(w)?v[0].toUpperCase()+v.slice(1):v;
+  if(core.length<4)return w;const l=core.toLowerCase();if(VOCAB.includes(l))return cap(l);
+  let best=null,bd=99;for(const v of VOCAB){if(Math.abs(v.length-l.length)>3)continue;const d=lev(l,v);if(d<bd){bd=d;best=v}}
+  if(best&&bd/Math.max(l.length,best.length)<=.38)return cap(best);
+  return /[a-z].*[A-Z]|[A-Z]{2,}.*[a-z]/.test(core)?cap(l):w}
+function parseChapters(text){const out=[];
+  text.split(/\n+/).forEach(l=>{l=l.replace(/\t/g," ").trim().replace(/[.,;:]+$/,"");if(!l)return;
+    let p=null;const pm=l.match(/[.\s·…_-]{2,}\s*(\d{1,4})\s*$/)||l.match(/\s(\d{1,4})\s*$/);if(pm){p=+pm[1];l=l.slice(0,pm.index)}
+    l=l.replace(/^(chapter|ch\.?|section|unit|part)\s*\d+[:.\-–\s]*/i,"").replace(/^[0-9IlO]{1,3}(\.\d+)*[.)\-–:\s]+/,"").replace(/[.·…_]{2,}.*$/,"").split(/\s+[.\-·…«»,:;'"`~_|][^\s]*/)[0].trim();
+    const tk=l.split(/\s+/).filter(Boolean);if(!tk.length||tk.filter(x=>x.replace(/[^A-Za-z]/g,"").length<=2).length/tk.length>.5)return;
+    l=tk.map((w,i)=>fixWord(w,i===0)).join(" ").replace(/\s+[)\]]+$|[)\]]+$/,"");
+    if(l.replace(/[^A-Za-z\u0600-\u06FF]/g,"").length<3||/^(contents|index|preface|foreword|acknowledg|abbreviation|page)/i.test(l))return;
+    out.push({title:l.slice(0,90),p})});
+  out.forEach((c,i)=>{const nx=out.slice(i+1).find(x=>x.p!=null);c.w=c.p!=null&&nx&&nx.p>c.p?Math.min(200,nx.p-c.p):null});
+  const ws=out.map(c=>c.w).filter(Boolean),avg=ws.length?ws.reduce((a,b)=>a+b,0)/ws.length:1;out.forEach(c=>{if(!c.w)c.w=Math.round(avg)||1});
+  return out}
+function saveChapters(list){let o=chaps().length;list.forEach(c=>put({kind:"chap",id:uid(),title:c.title,subj:c.subj??guessSubj(c.title),w:c.w||1,order:o++,created:Date.now()},true));render()}
+function studyDays(a,b,off){const d=[];let x=parseD(a);while(dkey(x)<=b){if(!off.includes(x.getDay()))d.push(dkey(x));x=addDays(x,1)}return d}
+function medPlan(){const c=mcfg();const st=today();const passEnd=dkey(addDays(parseD(c.exam),-(c.revWeeks*7)-1));
+  all("task").filter(t=>t.medPlan&&!t.done).forEach(t=>{delete S.items["task_"+t.id];persist("task_"+t.id,null)});
+  const todo=chaps().filter(x=>!x.studied);const D=studyDays(st,passEnd,c.off);if(!D.length){toast("Exam date is too close for a plan — check the settings",3500);return}
+  const W=todo.reduce((s,x)=>s+(x.w||1),0)||1;let acc=0;
+  todo.forEach(ch=>{const a=Math.min(D.length-1,Math.round(acc/W*D.length));acc+=ch.w||1;const b=Math.max(a,Math.min(D.length-1,Math.round(acc/W*D.length)-1));
+    put(Object.assign({},ch,{plan:{a:D[a],b:D[b]}}),true);
+    put({kind:"task",id:"mp_"+ch.id,title:"📖 "+ch.title,date:D[a],end:D[b]>D[a]?D[b]:"",color:mcol(ch.subj),med:true,medPlan:true,chap:ch.id,prio:0,done:false,created:Date.now()},true)});
+  const fx=(id,title,date,end,color)=>{if(!get("task_"+id)||!get("task_"+id).done)put({kind:"task",id,title,date,end:end||"",color,med:true,medPlan:true,prio:id==="mp_exam"?3:0,done:false,created:Date.now()},true)};
+  fx("mp_rev","🔁 Final revision + mock exams",dkey(addDays(parseD(passEnd),1)),dkey(addDays(parseD(c.exam),-1)),"#1e3a8a");
+  fx("mp_exam","🎓 MRCP Part 1 exam",c.exam,"","#e11d48");
+  if(c.appOpen>=today())fx("mp_app","📝 Apply for MRCP Part 1 (closes 8am UK on "+fmt(c.appClose,{day:"numeric",month:"short"})+")",c.appOpen,dkey(addDays(parseD(c.appClose),-1)),"#f97316");
+  setM({planned:today()},true);render();sfx("success");toast(`Plan ready: ${todo.length} chapters until ${fmt(passEnd,{day:"numeric",month:"short"})} ✓`,3000)}
+const REV=[1,3,7,21];
+function revDue(){const t=today(),o=[];chaps().filter(c=>c.studied).forEach(c=>{const r=c.revs||{};const k=REV.find(d=>!r[d]&&dkey(addDays(parseD(c.studied),d))<=t);if(k)o.push({c,k})});return o}
+function chapStudied(id,silent){const ch=get("chap_"+id);if(!ch||ch.studied)return;put(Object.assign({},ch,{studied:today()}),true);
+  const t=get("task_mp_"+id);if(t&&!t.done){const n=Object.assign({},t,{done:true,doneAt:Date.now()});if(isRange(t))n.doneDays=rangeDays(t);put(n,true)}
+  if(!silent){sfx("success");addXP("med",30,"Chapter: "+ch.title)}render()}
+function taskHook(n){if(n&&n.medPlan&&n.chap&&n.done){const ch=get("chap_"+n.chap);if(ch&&!ch.studied){put(Object.assign({},ch,{studied:today()}),true);addXP("med",30,"Chapter: "+ch.title)}}}
+function behind(){return chaps().filter(c=>!c.studied&&c.plan&&c.plan.b<today())}
+
+/* ---- stats for badges ---- */
+function examStreak(){const s=new Set(all("exam").filter(e=>e.mode==="daily").map(e=>e.date));let n=0,d=new Date();if(!s.has(today()))d=addDays(d,-1);while(s.has(dkey(d))){n++;d=addDays(d,-1)}return n}
+function subjAcc(){const m=qst(),acc={};if(!QP)return acc;const idx={};QP.cards.forEach((c,i)=>idx[cid(c)]=QP.notes[c[0]].s);
+  Object.entries(m).forEach(([id,v])=>{const s=idx[id];if(s==null)return;const a=acc[s]=acc[s]||[0,0];a[0]+=v[2];a[1]+=v[2]+v[3]});return acc}
+function ankiTotal(){const st=get("ankistat_main");let n=st?st.total:0;all("ankid").forEach(a=>{if(!st||a.date>st.at)n+=a.n||0});return n}
+function medStats(){const ch=chaps(),ex=all("exam"),m=qst();let qs=0;Object.values(m).forEach(v=>qs+=v[2]+v[3]);const acc=subjAcc();
+  return {chDone:ch.filter(c=>c.studied).length,chTotal:ch.length,exams:ex.length,perfect:ex.filter(e=>e.n>=5&&e.ok===e.n).length,examStreak:examStreak(),qs,
+    master:Object.values(acc).filter(a=>a[1]>=50&&a[0]/a[1]>=.8).length,revs:ch.reduce((s,c)=>s+Object.keys(c.revs||{}).length,0),anki:ankiTotal(),early:ex.filter(e=>new Date(e.at).getHours()<9).length}}
+
+/* ---- daily exam ---- */
+let EX=null;
+async function startExam(mode,subj){const P=await medPack();if(!P){closeSheet(true);S.medTab="exam";S.tab="med";render();return toast("Load your questions first (Exams tab)",3000)}
+  const c=mcfg(),N=c.dailyN||10,m=qst(),td=dnum(today());const pickFrom=(arr,k,used)=>{const a=arr.filter(i=>!used.has(i));const un=a.filter(i=>!m[cid(P.cards[i])]);const src=(un.length>=k?un:a).slice();src.sort(()=>Math.random()-.5);return src.slice(0,k)};
+  const used=new Set();let picks=[];const take=l=>l.forEach(i=>{if(picks.length<N&&!used.has(i)){used.add(i);picks.push(i)}});
+  if(mode==="subj"){take(pickFrom(P.bySubj[subj]||[],N,used))}
+  else if(mode==="wrong"){const ids=Object.entries(m).filter(([id,v])=>v[3]>0&&v[1]<=td).map(x=>x[0]);const set=new Set(ids);take(P.cards.map((c,i)=>set.has(cid(c))?i:-1).filter(i=>i>=0).sort(()=>Math.random()-.5))}
+  else{const ch=chaps();const recent=new Set(ch.filter(x=>x.studied&&daysTo(x.studied)>=-1).map(x=>x.subj));const done=new Set(ch.filter(x=>x.studied).map(x=>x.subj));
+    const planned=new Set(ch.filter(x=>x.plan&&x.plan.a<=today()).map(x=>x.subj));
+    const due=new Set(Object.entries(m).filter(([id,v])=>v[1]<=td).map(x=>x[0]));take(P.cards.map((cc,i)=>due.has(cid(cc))?i:-1).filter(i=>i>=0).sort(()=>Math.random()-.5).slice(0,3));
+    const fromSet=(set,k)=>{const arr=[];set.forEach(s=>arr.push(...(P.bySubj[s]||[])));take(pickFrom(arr,k,used))};
+    fromSet(recent,4);fromSet(done.size?done:planned,N);if(picks.length<N)take(pickFrom(P.cards.map((_,i)=>i),N,used))}
+  if(!picks.length)return toast(mode==="wrong"?"No wrong answers due — nice!":"No questions found",2500);
+  EX={mode,subj,list:picks.map(qBuild),i:0,res:[],t0:Date.now()};examView()}
+function examView(){const q=EX.list[EX.i],n=EX.list.length,r=EX.res[EX.i];
+  const dots=EX.list.map((_,i)=>`<i class="${i<EX.res.length?(EX.res[i]?"ok":"no"):i===EX.i?"cur":""}"></i>`).join("");
+  const body=`<div class="exh"><div class="exdots">${dots}</div><button class="iconbtn" data-act="exQuit" aria-label="Close" style="width:32px;height:32px">×</button></div>
+   <div class="exsub"><span class="sdot" style="background:${mcol(q.s)}"></span>${esc(msubj(q.s))}${q.src?` · <span class="muted">${esc(q.src)}</span>`:""}<span style="margin-left:auto" class="muted">${EX.i+1}/${n}</span></div>
+   <div class="exq" dir="auto">${r===undefined?q.q:q.q.replace(/<span class="qb">[\s\S]*?<\/span>/g,`<span class="qa">${q.aH||esc(q.a)}</span>`)}</div>
+   ${q.mcq?`<div class="exopts">${q.opts.map((o,i)=>`<button class="exo ${r!==undefined?(i===q.ok?"right":(EX.pick===i?"wrong":"dim")):""}" data-act="exAns" data-i="${i}" ${r!==undefined?"disabled":""} dir="auto"><b>${"ABCD"[i]}</b><span>${esc(o)}</span></button>`).join("")}</div>`
+    :r===undefined?(EX.rev?`<div class="exans" dir="auto">${q.aH||q.a}</div><div class="row" style="gap:8px;margin-top:10px"><button class="btn soft" style="flex:1" data-act="exGrade" data-v="0">✗ Missed it</button><button class="btn primary" style="flex:1" data-act="exGrade" data-v="1">✓ I knew it</button></div>`
+      :`<p class="muted" style="font-size:13px;margin:12px 0 0">Say the answer in your head, then check.</p><button class="btn primary block" data-act="exReveal" style="margin-top:10px">Show answer</button>`)
+    :(!q.aH?`<div class="exans" dir="auto">${q.a}</div>`:"")}
+   ${r!==undefined?`${q.ex?`<details class="exex" open><summary>Explanation</summary><div dir="auto">${q.ex}</div></details>`:""}<button class="btn primary block" data-act="exNext" style="margin-top:14px">${EX.i+1<n?"Next question →":"See my score"}</button>`:""}`;
+  const ov=$("#ov");if(ov&&ov.querySelector(".exam")){const s=ov.querySelector(".exam");s.innerHTML=body;hydrateQImgs(s);s.scrollTop=0;return}
+  sheet(`<div class="exam medp">${body}</div>`,el=>hydrateQImgs(el))}
+function exAnswer(ok){const q=EX.list[EX.i];EX.res[EX.i]=ok;qMark(q.id,ok);sfx(ok?"check":"soft");if(ok){const b=document.querySelector(".exo.right");b&&burst(b,"#14b8a6")}}
+function examEnd(){const n=EX.res.length,ok=EX.res.filter(Boolean).length,pc=Math.round(ok/Math.max(1,n)*100);const daily=EX.mode==="daily"&&!all("exam").some(e=>e.mode==="daily"&&e.date===today());
+  const subj={};EX.list.slice(0,n).forEach((q,i)=>{const a=subj[q.s]=subj[q.s]||[0,0];a[1]++;if(EX.res[i])a[0]++});
+  let xp=ok*5+(n-ok)+(n>=5?15:0)+(pc>=80?10:0)+(n>=5&&ok===n?20:0)+(daily?15:0);
+  put({kind:"exam",id:uid(),date:today(),at:Date.now(),mode:daily?"daily":EX.mode,n,ok,subj,xp},true);
+  sheet(`<div class="medp" style="text-align:center"><div class="eyebrow">${daily?"Daily exam":"Practice"} complete</div>
+   <div class="scorering" style="--p:${pc};--c:${pc>=80?"#14b8a6":pc>=60?"#f59e0b":"#e11d48"}"><b>${pc}%</b><small>${ok}/${n}</small></div>
+   <h2 style="margin:4px 0">${pc===100?"Perfect! 💯":pc>=80?"Excellent work 🩺":pc>=60?"Good — keep going 💪":"Every mistake is a lesson 📚"}</h2>
+   <p class="muted">${n-ok?`${n-ok} question${n-ok>1?"s":""} will come back in your next exams.`:"All correct — they'll come back later to lock them in."}</p>
+   <div class="xpbig">+${xp} XP</div>
+   <div class="row" style="gap:8px;margin-top:16px"><button class="btn soft" style="flex:1" data-act="exAgain">Another 10</button><button class="btn primary" style="flex:1" data-act="exDone">Done</button></div></div>`);
+  if(pc>=80)confetti();sfx("success");const s=EX;EX=null;addXP("med",xp,(s.mode==="daily"?"Daily exam ":"Practice ")+pc+"%")}
+
+/* ---- Anki: import a collection (.colpkg/.apkg) for full history, or log today's count ---- */
+async function zipDir(file){const L=file.size,tail=new DataView(await file.slice(Math.max(0,L-66000)).arrayBuffer());let e=-1;
+  for(let i=tail.byteLength-22;i>=0;i--)if(tail.getUint32(i,true)===0x06054b50){e=i;break}if(e<0)throw "zip";
+  const cnt=tail.getUint16(e+10,true),sz=tail.getUint32(e+12,true),off=tail.getUint32(e+16,true);const cd=new DataView(await file.slice(off,off+sz).arrayBuffer());const td=new TextDecoder(),o=[];let p=0;
+  for(let k=0;k<cnt;k++){const meth=cd.getUint16(p+10,true),csz=cd.getUint32(p+20,true),nl=cd.getUint16(p+28,true),xl=cd.getUint16(p+30,true),cl=cd.getUint16(p+32,true),lo=cd.getUint32(p+42,true);
+    o.push({name:td.decode(new Uint8Array(cd.buffer,p+46,nl)),meth,csz,lo});p+=46+nl+xl+cl}return o}
+async function zipGet(file,en){const h=new DataView(await file.slice(en.lo,en.lo+30).arrayBuffer());const ds=en.lo+30+h.getUint16(26,true)+h.getUint16(28,true);let b=file.slice(ds,ds+en.csz);
+  if(en.meth===8){if(!window.DecompressionStream)throw "old";b=await new Response(b.stream().pipeThrough(new DecompressionStream("deflate-raw"))).blob()}return new Uint8Array(await b.arrayBuffer())}
+async function ankiImport(file){try{toast("Reading your Anki file…",3000);const ents=await zipDir(file);
+  const en=ents.find(x=>x.name==="collection.anki21b")||ents.find(x=>x.name==="collection.anki21")||ents.find(x=>x.name==="collection.anki2");if(!en)throw "nocol";
+  let bytes=await zipGet(file,en);if(en.name.endsWith("21b")){await loadScript("lib/fzstd.js");bytes=fzstd.decompress(bytes)}
+  await loadScript("lib/sql-wasm.js");const SQL=await initSqlJs({locateFile:f=>"lib/"+f});const db=new SQL.Database(bytes);
+  const q=s=>{try{const r=db.exec(s);return r.length?r[0].values:[]}catch(e){return []}};
+  const days={},time={};let r30=0,p30=0;const cut=Date.now()-30*864e5;
+  q("select id,ease,type,time from revlog").forEach(([id,ease,type,t])=>{const k=dkey(new Date(id));days[k]=(days[k]||0)+1;time[k]=(time[k]||0)+Math.min(t,60000);if(id>=cut&&type===1){r30++;if(ease>1)p30++}});
+  let dn={};const dk=q("select id,name from decks");if(dk.length)dk.forEach(([id,nm])=>dn[id]=String(nm).split("\x1f").join("::"));else{const c=q("select decks from col");if(c.length)Object.values(JSON.parse(c[0][0])).forEach(d=>dn[d.id]=d.name)}
+  const decks=q("select did,count(*),sum(case when ivl>=21 then 1 else 0 end),sum(case when queue=0 then 1 else 0 end) from cards group by did").map(([did,n,mat,nw])=>({name:dn[did]||"Deck",n,mat,nw})).sort((a,b)=>b.n-a.n).slice(0,12);
+  const tot=q("select count(*),sum(case when ivl>=21 then 1 else 0 end),sum(case when queue=0 then 1 else 0 end) from cards")[0]||[0,0,0];
+  const total=Object.values(days).reduce((a,b)=>a+b,0);db.close();
+  put({kind:"ankistat",id:"main",at:today(),days,time,total,cards:tot[0],mature:tot[1],fresh:tot[2],ret:r30?Math.round(p30/r30*100):null,decks},true);
+  sfx("success");toast(`Anki imported: ${total.toLocaleString()} reviews ✓`,3000);addXP("med",10,"Anki import");render()}
+ catch(e){toast(e==="nocol"?"That file isn't an Anki collection":e==="old"?"Please update iOS to read this file":"Couldn't read that Anki file",3500)}}
+function ankiLog(n){n=Math.max(0,Math.round(+n||0));if(!n)return toast("Type how many cards you did");const had=get("ankid_"+today());put({kind:"ankid",id:today(),date:today(),n},true);
+  if(!had)addXP("med",5+Math.min(15,Math.floor(n/50)),"Anki "+n+" cards");else render();sfx("check");toast(`Anki: ${n} cards today ✓`)}
+function ankiDays(){const st=get("ankistat_main"),d=Object.assign({},st?st.days:{});all("ankid").forEach(a=>{if(!st||a.date>st.at)d[a.date]=Math.max(d[a.date]||0,a.n)});return d}
+
+/* ---- OCR for chapter photos (runs on the phone) ---- */
+let OCRW=null;
+async function ocrFiles(files,onp){await loadScript("lib/ocr/tesseract.min.js");const base=new URL("lib/ocr/",location.href).href;
+  if(!OCRW)OCRW=await Tesseract.createWorker("eng",1,{workerPath:base+"worker.min.js",corePath:base+"core/",langPath:base+"lang",logger:m=>{if(m.status==="recognizing text")onp&&onp(m.progress)}});
+  try{await OCRW.setParameters({preserve_interword_spaces:"1"})}catch(e){}
+  let out="";for(const f of files){const {data}=await OCRW.recognize(await ocrPrep(f));out+=data.text+"\n"}return out}
+async function ocrPrep(f){try{const u=URL.createObjectURL(f);const im=await new Promise((r,j)=>{const i=new Image();i.onload=()=>r(i);i.onerror=j;i.src=u});
+  const tw=Math.max(1400,Math.min(2000,im.naturalWidth<1200?im.naturalWidth*2:im.naturalWidth)),sc=tw/im.naturalWidth;const cv=document.createElement("canvas");cv.width=tw;cv.height=Math.round(im.naturalHeight*sc);
+  const x=cv.getContext("2d",{willReadFrequently:true});x.drawImage(im,0,0,cv.width,cv.height);URL.revokeObjectURL(u);const d=x.getImageData(0,0,cv.width,cv.height),p=d.data;
+  const h=new Uint32Array(256);for(let i=0;i<p.length;i+=4){const g=(p[i]*.3+p[i+1]*.59+p[i+2]*.11)|0;p[i]=g;h[g]++}
+  const n=p.length/4;let lo=0,hi=255,c=0;while(c<n*.02&&lo<255)c+=h[lo++];c=0;while(c<n*.02&&hi>0)c+=h[hi--];const k=255/Math.max(1,hi-lo);
+  for(let i=0;i<p.length;i+=4){const v=Math.max(0,Math.min(255,(p[i]-lo)*k));p[i]=p[i+1]=p[i+2]=v}x.putImageData(d,0,0);return cv}catch(e){return f}}
+
+/* ---- view ---- */
+function medHero(){const c=mcfg(),d=daysTo(c.exam),ch=chaps(),dn=ch.filter(x=>x.studied).length,pc=ch.length?Math.round(dn/ch.length*100):0;
+  const ao=daysTo(c.appOpen),ac=daysTo(c.appClose);const app=ao>0?`📝 Application opens in ${ao} days (${fmt(c.appOpen,{day:"numeric",month:"short"})})`:ac>=0?`⚠️ Apply now — closes ${fmt(c.appClose,{day:"numeric",month:"short"})}, 8am UK`:"";
+  return `<div class="mhero"><svg class="ecg" viewBox="0 0 400 60" preserveAspectRatio="none"><path d="M0 34 H120 l8 -4 l6 4 H160 l6 -26 l8 50 l7 -32 l5 8 H260 l8 -5 l6 5 H400"/></svg>
+   <div class="row between" style="align-items:flex-start"><div><div class="mh-k">MRCP(UK) · Part 1</div><div class="mh-d"><b>${Math.max(0,d)}</b> days</div><div class="mh-s">to ${fmt(c.exam,{weekday:"short",day:"numeric",month:"long",year:"numeric"})}</div></div>
+   <div class="mring" style="--p:${pc}"><b>${pc}%</b><small>plan</small></div></div>
+   ${app?`<div class="mh-app">${app}</div>`:""}${lvlCard("med")}</div>`}
+function medToday(){const t=today(),c=mcfg();const plan=tasksFor(t).filter(x=>x.medPlan&&x.chap);const rv=revDue().slice(0,4);const ex=all("exam").find(e=>e.mode==="daily"&&e.date===t);const ak=get("ankid_"+t);const bh=behind();
+  return `<div class="g"><div class="row between"><h3 style="margin:0">Today 🩺</h3><span class="muted" style="font-size:12px">${fmt(t,{weekday:"long",day:"numeric",month:"short"})}</span></div>
+   ${bh.length?`<div class="mwarn">You're ${bh.length} chapter${bh.length>1?"s":""} behind. <button data-act="medReplan">Re-plan from today →</button></div>`:""}
+   <div class="mtl">${plan.length?plan.map(p=>{const ch=get("chap_"+p.chap);return `<div class="mti ${p.done?"done":""}"><span class="mic" style="background:${p.color}">📖</span><div class="mtt"><b${dir(ch?ch.title:p.title)}>${esc(ch?ch.title:p.title)}</b><small>${isRange(p)?`Day ${rangeDays(p).indexOf(t)+1} of ${rangeDays(p).length} · `:""}${esc(msubj(ch?ch.subj:14))}</small></div>${p.done?'<span class="mok">✓</span>':`<button class="chip on" data-act="chapDone" data-id="${p.chap}">Done</button>`}</div>`}).join("")
+     :chaps().length?`<div class="mti"><span class="mic" style="background:#94a3b8">☕</span><div class="mtt"><b>No new chapter today</b><small>${c.off.includes(new Date().getDay())?"Day off — rest well":"Use it for revision or questions"}</small></div></div>`
+     :`<div class="mti"><span class="mic" style="background:#14b8a6">📸</span><div class="mtt"><b>Add your chapters</b><small>Scan the contents page and get a plan</small></div><button class="chip on" data-act="chapAdd">Start</button></div>`}
+   ${rv.map(({c,k})=>`<div class="mti"><span class="mic" style="background:#6366f1">🔁</span><div class="mtt"><b${dir(c.title)}>Revise: ${esc(c.title)}</b><small>Day-${k} revision</small></div><button class="chip" data-act="revDone" data-id="${c.id}" data-k="${k}">Done</button></div>`).join("")}
+   <div class="mti ${ex?"done":""}"><span class="mic" style="background:#0ea5e9">📝</span><div class="mtt"><b>Daily exam · ${c.dailyN} questions</b><small>${ex?`Score ${Math.round(ex.ok/ex.n*100)}% · ${ex.ok}/${ex.n}`:"From what you studied + your weak spots"}</small></div>${ex?'<span class="mok">✓</span>':`<button class="chip on" data-act="exStart">Start</button>`}</div>
+   <div class="mti ${ak?"done":""}"><span class="mic" style="background:#2563eb">🗂️</span><div class="mtt"><b>Anki</b><small>${ak?`${ak.n} cards today`:"How many cards today?"}</small></div>${ak?'<span class="mok">✓</span>':`<input id="ak-n" type="number" inputmode="numeric" placeholder="0" class="akin"><button class="chip on" data-act="ankiLog">Save</button>`}</div></div></div>`}
+function medPlanTab(){const ch=chaps(),c=mcfg();if(!ch.length)return `<div class="g mempty"><div style="font-size:44px">📸</div><h3>Add your chapters</h3><p class="muted">Take a photo of the contents page and the app turns it into a day-by-day plan until ${fmt(c.exam,{day:"numeric",month:"long"})}.</p>
+   <button class="btn primary block" data-act="chapAdd">📸 Scan or paste chapters</button><button class="btn soft block" style="margin-top:8px" data-act="chapSubj">⚡ Use the MRCP Part 1 subjects</button></div>`;
+  const by={};ch.forEach(x=>(by[x.subj]=by[x.subj]||[]).push(x));
+  const rings=Object.entries(by).map(([s,l])=>{const p=Math.round(l.filter(x=>x.studied).length/l.length*100);return `<div class="sring"><div class="sr" style="--p:${p};--c:${mcol(+s)}"><b>${p}%</b></div><small>${esc(msubj(+s).split(" ")[0])}</small></div>`}).join("");
+  return `<div class="g"><div class="row between"><h3 style="margin:0">Subjects</h3><button class="muted" style="font-weight:800" data-act="medSet">Plan settings</button></div><div class="srings">${rings}</div></div>
+  <div class="g"><div class="row between" style="margin-bottom:6px"><h3 style="margin:0">Chapters · ${ch.filter(x=>x.studied).length}/${ch.length}</h3><button class="chip" data-act="chapAdd">+ Add</button></div>
+   ${ch.map(x=>`<div class="chrow ${x.studied?"done":""}"><button class="check ${x.studied?"done":""}" style="--c:${mcol(x.subj)}" data-act="${x.studied?"chapUndo":"chapDone"}" data-id="${x.id}" aria-label="Done"></button>
+    <div class="t" data-act="chapEdit" data-id="${x.id}"><b${dir(x.title)}>${esc(x.title)}</b><small><span class="sdot" style="background:${mcol(x.subj)}"></span>${esc(msubj(x.subj))}${x.plan?` · ${fmt(x.plan.a,{day:"numeric",month:"short"})}${x.plan.b>x.plan.a?" → "+fmt(x.plan.b,{day:"numeric",month:"short"}):""}`:""}${x.studied?` · ✓ ${fmt(x.studied,{day:"numeric",month:"short"})}`:""}</small></div></div>`).join("")}
+   <div class="row" style="gap:8px;margin-top:12px"><button class="btn primary" style="flex:1" data-act="medReplan">${c.planned?"↻ Re-plan from today":"✨ Make my plan"}</button></div></div>`}
+function medExamTab(){const c=mcfg();if(!c.pack||!c.pack.n)return `<div class="g mempty"><div style="font-size:44px">🔐</div><h3>Load your MRCP questions</h3><p class="muted">Your Anki notes (5,500+ notes, 8,000+ questions) are ready. Paste your private code to load them on this phone.</p>
+   <div class="hdrow" style="margin-top:12px"><input id="pk-code" placeholder="Paste code" autocomplete="off" autocapitalize="characters" spellcheck="false" value="${esc((localStorage.getItem("lines-code")||"").replace(/(.{4})(?=.)/g,"$1-"))}"><button data-act="packLoad">Load</button></div></div>`;
+  const ex=all("exam").sort((a,b)=>b.at-a.at),acc=subjAcc(),m=qst(),td=dnum(today());const wrongDue=Object.values(m).filter(v=>v[3]>0&&v[1]<=td).length;const last=ex.slice(0,14).reverse();
+  return `<div class="g"><div class="row between"><div><h3 style="margin:0">Daily exam</h3><small class="muted">${c.pack.n.toLocaleString()} notes · ${Object.keys(m).length.toLocaleString()} questions seen${c.pack.img?"":` · <span id="pbw" style="display:inline-block;width:60px;height:5px;border-radius:4px;background:rgba(0,0,0,.08);vertical-align:middle;overflow:hidden"><i id="packbar" style="display:block;height:100%;width:0;background:var(--v1)"></i></span> pictures`}</small></div><span class="tag">🔥 ${examStreak()} days</span></div>
+   <div class="row" style="gap:8px;margin-top:12px"><button class="btn primary" style="flex:1" data-act="exStart">Start today's exam</button><button class="btn soft" style="flex:none" data-act="exWrong" ${wrongDue?"":"disabled"}>↺ Mistakes (${wrongDue})</button></div>
+   ${last.length?`<div class="exbars">${last.map(e=>{const p=Math.round(e.ok/e.n*100);return `<div><i style="height:${Math.max(6,p)}%;background:${p>=80?"#14b8a6":p>=60?"#f59e0b":"#f43f5e"}"></i><small>${parseD(e.date).getDate()}</small></div>`}).join("")}</div>`:""}</div>
+  <div class="g"><h3 style="margin:0 0 8px">Practice by subject</h3>${MSUBJ.map((s,i)=>{const n=(QP&&QP.bySubj[i]||[]).length,a=acc[i],p=a&&a[1]?Math.round(a[0]/a[1]*100):null;return n||!QP?`<div class="sbrow" data-act="exSubj" data-s="${i}"><span class="sdot" style="background:${mcol(i)}"></span><b>${esc(s)}</b><span class="muted">${p==null?"—":p+"%"}</span><div class="sbbar"><i style="width:${p||0}%;background:${mcol(i)}"></i></div><span class="muted">›</span></div>`:""}).join("")}</div>`}
+function medAnkiTab(){const st=get("ankistat_main"),d=ankiDays();const days=[...Array(84)].map((_,i)=>dkey(addDays(new Date(),i-83)));const mx=Math.max(1,...days.map(k=>d[k]||0));
+  let streak=0;{let x=new Date();if(!d[today()])x=addDays(x,-1);while(d[dkey(x)]){streak++;x=addDays(x,-1)}}
+  const wk=days.slice(-7).reduce((s,k)=>s+(d[k]||0),0);
+  return `<div class="g"><div class="row between"><h3 style="margin:0">Anki 🗂️</h3><span class="tag">🔥 ${streak} days</span></div>
+   <div class="kpis"><div><b>${wk.toLocaleString()}</b><small>this week</small></div><div><b>${st&&st.ret!=null?st.ret+"%":"—"}</b><small>retention</small></div><div><b>${st?st.mature.toLocaleString():"—"}</b><small>mature</small></div><div><b>${ankiTotal().toLocaleString()}</b><small>reviews</small></div></div>
+   <div class="ahm">${days.map(k=>`<i title="${k}" style="opacity:${d[k]?.25+.75*(d[k]/mx):.08}"></i>`).join("")}</div>
+   <div class="row" style="gap:8px;margin-top:12px"><input id="ak-n2" type="number" inputmode="numeric" placeholder="Cards today" style="flex:1;min-width:0" value="${(get("ankid_"+today())||{}).n||""}"><button class="btn primary" data-act="ankiLog2">Save</button></div></div>
+  <div class="g"><h3 style="margin:0 0 4px">Import full history</h3><p class="muted" style="font-size:13px;line-height:1.55">In AnkiMobile: deck list → <b>Add/Export</b> (bottom left) → <b>Export to Share</b> → <b>Save to Files</b>. Then pick that file here.${st?` Last import: ${fmt(st.at,{day:"numeric",month:"short"})}.`:""}</p>
+   <label class="btn soft block" style="margin-top:8px">📥 Import Anki file<input type="file" id="anki-f" accept=".colpkg,.apkg,application/zip,application/octet-stream" hidden></label>
+   ${st&&st.decks?`<div style="margin-top:12px">${st.decks.slice(0,6).map(x=>`<div class="sbrow"><b${dir(x.name)}>${esc(x.name.split("::").pop())}</b><span class="muted">${x.n.toLocaleString()} cards · ${Math.round(x.mat/Math.max(1,x.n)*100)}% mature</span></div>`).join("")}</div>`:""}</div>`}
+function medTodoTab(){const ts=all("task").filter(t=>t.med&&!t.medPlan).sort((a,b)=>(a.done-b.done)||(a.date||"9").localeCompare(b.date||"9"));
+  return `<div class="g"><h3 style="margin:0 0 6px">Study to-do</h3>${ts.length?ts.map(taskRow).join(""):`<div class="muted">Nothing yet — add things like "Book exam centre" or "Finish Passmedicine cardio".</div>`}
+   <form class="quickadd" data-form="medTask"><input type="text" id="qa-med" dir="auto" placeholder="Add a study task…" autocomplete="off"><button class="btn primary plusbtn" aria-label="Add">+</button></form>
+   <button class="muted" style="margin-top:12px;font-weight:700" data-act="medTaskDet">+ With date, colour or several days</button></div>`}
+function vMed(){S.medTab=S.medTab||"today";const T=[["today","Today"],["plan","Plan"],["exam","Exams"],["anki","Anki"],["todo","To-do"]];
+  if(!QP&&mcfg().pack&&mcfg().pack.n)medPack().then(p=>{if(p&&S.tab==="med"&&(S.medTab==="exam"))render()});
+  return `<div class="medp">${medHero()}${seg(T,S.medTab,"medTab")}${({today:medToday,plan:medPlanTab,exam:medExamTab,anki:medAnkiTab,todo:medTodoTab}[S.medTab])()}${gameStrip("med")}</div>`}
+function homeJourneys(){const c=mcfg(),L1=level("med"),L2=level("ocd");const t=tasksFor(today()).filter(x=>x.medPlan&&x.chap&&!x.done)[0];const ex=all("exam").some(e=>e.mode==="daily"&&e.date===today());
+  return `<div class="jrow"><button class="jc jmed" data-act="go" data-v="med"><span class="je">🩺</span><b>MRCP · ${Math.max(0,daysTo(c.exam))}d</b><small${t?dir(t.title):""}>${t?esc(t.title.replace("📖 ","")):ex?"Exam done ✓":"Daily exam waiting"}</small><i style="width:${L1.pct}%"></i></button>
+   <button class="jc jocd" data-act="go" data-v="ocd"><span class="je">🌱</span><b>OCD Journey</b><small>${L2.name} · ${L2.x} XP</small><i style="width:${L2.pct}%"></i></button></div>`}
+
+/* ---- sheets ---- */
+function chapAddSheet(){let parsed=[];
+  sheet(`<h3 style="font-size:20px">Add chapters</h3><p class="muted" style="margin:-4px 0 12px">Photo of the contents page, or paste the list (on iPhone you can copy text straight from a photo).</p>
+   <label class="btn primary block">📸 Take or choose photos<input type="file" id="ch-ph" accept="image/*" multiple hidden></label>
+   <div id="ch-st" class="muted" style="margin:10px 0;font-size:13px"></div>
+   <label class="l">Chapters — one per line (page numbers help size them)</label><textarea id="ch-tx" dir="auto" style="min-height:150px" placeholder="1. Cardiology ........ 1&#10;2. Respiratory ....... 58&#10;3. Gastroenterology .. 103"></textarea>
+   <div id="ch-pv"></div><button class="btn primary block" style="margin-top:12px" id="ch-save">Save chapters</button>`,el=>{
+    const tx=el.querySelector("#ch-tx"),pv=el.querySelector("#ch-pv"),st=el.querySelector("#ch-st");
+    const prev=()=>{parsed=parseChapters(tx.value);pv.innerHTML=parsed.length?`<div class="muted" style="margin-top:10px;font-size:13px">${parsed.length} chapters found:</div>`+parsed.slice(0,40).map((c,i)=>`<div class="chpv"><span class="sdot" style="background:${mcol(guessSubj(c.title))}"></span><span${dir(c.title)}>${esc(c.title)}</span><small class="muted">${c.w>1?c.w+" p":""}</small></div>`).join(""):""};
+    tx.oninput=prev;
+    el.querySelector("#ch-ph").onchange=async e=>{const fs=[...e.target.files];if(!fs.length)return;st.textContent="Getting the reader ready (first time takes a moment)…";
+      try{const t=await ocrFiles(fs,p=>st.textContent=`Reading… ${Math.round(p*100)}%`);tx.value=(tx.value?tx.value+"\n":"")+t.trim();st.textContent="Done — check the list and fix anything that looks off.";prev()}
+      catch(err){st.textContent="Couldn't read the photo here — paste the list instead (press and hold the text in Photos → Copy)."}};
+    el.querySelector("#ch-save").onclick=()=>{if(!parsed.length)return toast("No chapters found yet");saveChapters(parsed);closeSheet();sfx("success");toast(`${parsed.length} chapters added`);setTimeout(()=>medSetSheet(true),450)}})}
+function medSetSheet(first){const c=mcfg();const W=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];let off=c.off.slice();
+  sheet(`<h3 style="font-size:20px">${first?"Make your plan ✨":"Plan settings"}</h3>
+   <div class="row"><div style="flex:1;min-width:0"><label class="l">Exam date</label><input type="date" id="ms-ex" style="width:100%" value="${c.exam}"></div><div style="flex:1;min-width:0"><label class="l">Final revision</label><select id="ms-rw">${[2,3,4,5,6].map(n=>`<option value="${n}" ${n===c.revWeeks?"selected":""}>${n} weeks</option>`).join("")}</select></div></div>
+   <div class="row"><div style="flex:1;min-width:0"><label class="l">Application opens</label><input type="date" id="ms-ao" style="width:100%" value="${c.appOpen}"></div><div style="flex:1;min-width:0"><label class="l">Closes</label><input type="date" id="ms-ac" style="width:100%" value="${c.appClose}"></div></div>
+   <label class="l">Days off</label><div class="chips" id="ms-off" style="flex-wrap:wrap">${W.map((w,i)=>`<button type="button" class="chip ${off.includes(i)?"on":""}" data-d="${i}">${w}</button>`).join("")}</div>
+   <label class="l">Questions per daily exam</label><select id="ms-n">${[5,10,15,20,30].map(n=>`<option ${n===c.dailyN?"selected":""}>${n}</option>`).join("")}</select>
+   <p class="muted" style="font-size:12px;margin-top:10px">Dates are from the MRCP(UK) site for the May 2027 sitting (2027/2). Change them if you sit a different one.</p>
+   <button class="btn primary block" style="margin-top:12px" id="ms-go">${first||!c.planned?"✨ Make my plan":"Save & re-plan"}</button>`,el=>{
+    el.querySelector("#ms-off").onclick=e=>{const b=e.target.closest("button");if(!b)return;const d=+b.dataset.d;off=off.includes(d)?off.filter(x=>x!==d):off.concat(d);b.classList.toggle("on")};
+    el.querySelector("#ms-go").onclick=()=>{setM({exam:el.querySelector("#ms-ex").value||c.exam,revWeeks:+el.querySelector("#ms-rw").value,appOpen:el.querySelector("#ms-ao").value,appClose:el.querySelector("#ms-ac").value,off,dailyN:+el.querySelector("#ms-n").value},true);closeSheet();if(chaps().length)medPlan();else render()}})}
+function chapEditSheet(ch){sheet(`<h3 style="font-size:20px">Chapter</h3><input type="text" id="ce-t" dir="auto" value="${esc(ch.title)}">
+   <label class="l">Subject (used for your exams)</label><select id="ce-s">${MSUBJ.map((s,i)=>`<option value="${i}" ${i===ch.subj?"selected":""}>${esc(s)}</option>`).join("")}</select>
+   <label class="l">Size (pages)</label><input type="number" id="ce-w" inputmode="numeric" value="${ch.w||1}">
+   <label class="l">My key points</label><textarea id="ce-n" dir="auto" style="min-height:90px" placeholder="High-yield facts to remember…">${esc(ch.notes||"")}</textarea>
+   <div class="row" style="margin-top:16px"><button class="btn danger" id="ce-del">Delete</button><button class="btn primary" style="flex:1" id="ce-sv">Save</button></div>`,el=>{
+    el.querySelector("#ce-sv").onclick=()=>{put(Object.assign({},ch,{title:el.querySelector("#ce-t").value.trim()||ch.title,subj:+el.querySelector("#ce-s").value,w:Math.max(1,+el.querySelector("#ce-w").value||1),notes:el.querySelector("#ce-n").value}));closeSheet()};
+    el.querySelector("#ce-del").onclick=()=>{del("chap_"+ch.id);const t=get("task_mp_"+ch.id);if(t)del("task_mp_"+ch.id);closeSheet()}})}
+Object.assign(ACTX,{
+  medTab:el=>{S.medTab=el.dataset.v;render()},chapAdd:()=>chapAddSheet(),medSet:()=>medSetSheet(false),medReplan:()=>{if(!chaps().length)return chapAddSheet();if(!mcfg().planned)return medSetSheet(true);medPlan()},
+  chapSubj:()=>{const w=QP?MSUBJ.map((_,i)=>Math.max(1,Math.round((QP.bySubj[i]||[]).length/40))):[8,6,7,7,7,5,5,5,5,3,3,4,6,2,0];saveChapters(MSUBJ.map((s,i)=>({title:s,subj:i,w:w[i]})).filter(x=>x.w>0&&x.title!=="Mixed"));setTimeout(()=>medSetSheet(true),300)},
+  chapDone:el=>chapStudied(el.dataset.id),chapUndo:el=>{const ch=get("chap_"+el.dataset.id);if(ch){const n=Object.assign({},ch);delete n.studied;put(n)}},
+  chapEdit:el=>{const ch=get("chap_"+el.dataset.id);ch&&chapEditSheet(ch)},
+  revDone:el=>{const ch=get("chap_"+el.dataset.id);if(!ch)return;put(Object.assign({},ch,{revs:Object.assign({},ch.revs,{[el.dataset.k]:today()})}),true);sfx("check");addXP("med",8,"Revision");render()},
+  exStart:()=>startExam("daily"),exWrong:()=>startExam("wrong"),exSubj:el=>startExam("subj",+el.dataset.s),exAgain:()=>startExam("daily"),
+  exAns:el=>{if(!EX||EX.res[EX.i]!==undefined)return;const i=+el.dataset.i;EX.pick=i;exAnswer(i===EX.list[EX.i].ok);examView()},
+  exReveal:()=>{EX.rev=1;examView()},exGrade:el=>{exAnswer(el.dataset.v==="1");EX.rev=0;examView()},
+  exNext:()=>{EX.pick=null;if(EX.i+1<EX.list.length){EX.i++;examView()}else examEnd()},
+  exQuit:()=>{if(EX&&EX.res.length){examEnd()}else{EX=null;closeSheet()}},exDone:()=>{closeSheet();render()},
+  packLoad:()=>medLoadPack($("#pk-code").value),ankiLog:()=>ankiLog($("#ak-n").value),ankiLog2:()=>ankiLog($("#ak-n2").value),
+  medTaskDet:()=>{taskSheet({date:today(),med:true,color:"#14b8a6"})},
+});
+FORMX.medTask=f=>{const i=f.querySelector("input");const title=i.value.trim();if(!title)return;sfx("pop");i.value="";put({kind:"task",id:uid(),title,date:"",time:"",prio:0,done:false,med:true,color:"#14b8a6",created:Date.now()})};
+document.addEventListener("change",e=>{if(e.target&&e.target.id==="anki-f"){const f=e.target.files&&e.target.files[0];e.target.value="";if(f)ankiImport(f)}});
+/* ---------------- OCD Journey: ERP fear ladder, exposures, urge surfing — as a gentle game ---------------- */
+const ocfg=()=>Object.assign({rest:2,goal:10},meta().ocd||{});
+const steps=()=>all("ostep").sort((a,b)=>(a.suds||0)-(b.suds||0));
+const urges=()=>all("urge");
+const sessOf=s=>s.sessions||[];
+const sudsCol=v=>v<30?"#22c55e":v<50?"#84cc16":v<70?"#f59e0b":v<85?"#f97316":"#ef4444";
+const isMastered=s=>!!s.mastered;
+function curStep(){return steps().find(s=>!isMastered(s))}
+function ocdDays(){const d=new Set();all("ostep").forEach(s=>sessOf(s).forEach(x=>d.add(x.date)));urges().forEach(u=>{if(u.out!=="did")d.add(u.date)});return d}
+function ocdStats(){const st=steps(),ss=st.flatMap(sessOf),u=urges();const top=st[st.length-1];
+  return {exps:ss.length,resisted:u.filter(x=>x.out==="resisted").length,mastered:st.filter(isMastered).length,steps:st.length,summit:!!(top&&isMastered(top)&&st.length>=3),
+    long:ss.filter(x=>x.mins>=30).length,drop40:ss.filter(x=>x.before-x.after>=40).length,streak:graceStreak(ocdDays(),ocfg().rest),honest:u.filter(x=>x.out==="did").length+ss.filter(x=>x.res==="no").length}}
+function vOcd(){const st=steps(),cs=curStep(),S_=ocdStats(),u=urges(),wk=dkey(addDays(new Date(),-6));
+  const wkRes=u.filter(x=>x.date>=wk&&x.out==="resisted").length,wkExp=st.flatMap(sessOf).filter(x=>x.date>=wk).length;
+  const drops=st.flatMap(sessOf).filter(x=>x.before!=null&&x.after!=null);const avgDrop=drops.length?Math.round(drops.reduce((s,x)=>s+(x.before-x.after),0)/drops.length):null;
+  const days=[...Array(14)].map((_,i)=>dkey(addDays(new Date(),i-13)));const dset=ocdDays();
+  return `<div class="ocdp"><div class="ohero"><div class="osun"></div><div class="row between" style="align-items:flex-start;position:relative"><div><div class="mh-k">OCD Journey</div><div class="mh-d"><b>${S_.streak}</b> day streak</div><div class="mh-s">${ocfg().rest} rest days a week never break it</div></div><div class="ostat"><b>${S_.mastered}/${st.length||0}</b><small>steps mastered</small></div></div>${lvlCard("ocd")}</div>
+   <div class="obtns"><button class="obig ourge" data-act="urgeStart"><span>🌊</span><b>Urge right now?</b><small>Ride the wave</small></button><button class="obig oexp" data-act="expStart" data-id="${cs?cs.id:""}"><span>🧗‍♀️</span><b>Practise exposure</b><small>${cs?esc(cs.title).slice(0,26):"Build your ladder first"}</small></button></div>
+   <div class="g"><div class="row between"><h3 style="margin:0">Your ladder</h3><button class="chip" data-act="stepAdd">+ Step</button></div>
+    ${st.length?`<div class="ladder">${st.slice().reverse().map(s=>{const m=isMastered(s),cur=cs&&cs.id===s.id,ss=sessOf(s),last=ss[ss.length-1];return `<div class="rung ${m?"m":""} ${cur?"cur":""} ${!m&&!cur&&cs&&s.suds>cs.suds?"lock":""}" data-act="stepOpen" data-id="${s.id}">
+      <span class="node">${m?"⭐":cur?"🧗‍♀️":s.suds>(cs?cs.suds:0)?"🔒":"•"}</span><div class="rt"><b${dir(s.title)}>${esc(s.title)}</b><small>${ss.length?`${ss.length} session${ss.length>1?"s":""} · last ${last.before}→${last.after}`:"Not tried yet"}${m?" · mastered ✓":""}</small></div><span class="suds" style="background:${sudsCol(s.suds)}">${s.suds}</span></div>`}).join("")}</div>`
+     :`<div class="oempty"><p>List situations that trigger your OCD, from easier to harder. Rate each 0–100 for how distressing it feels. You'll climb one step at a time.</p><button class="btn primary block" data-act="stepAdd">+ Add your first step</button></div>`}</div>
+   <div class="g"><h3 style="margin:0 0 10px">This week</h3><div class="kpis"><div><b>${wkRes}</b><small>urges ridden</small></div><div><b>${wkExp}</b><small>exposures</small></div><div><b>${avgDrop==null?"—":"−"+avgDrop}</b><small>avg distress drop</small></div></div>
+    <div class="odays">${days.map(k=>`<i class="${dset.has(k)?"on":""} ${k===today()?"td":""}"><small>${"SMTWTFS"[parseD(k).getDay()]}</small></i>`).join("")}</div></div>
+   ${gameStrip("ocd")}
+   <details class="g oinfo"><summary>How this works 💜</summary><p>This is based on <b>ERP</b> (exposure and response prevention), the most proven therapy for OCD. You face a trigger on purpose and <b>don't do the compulsion</b>. The anxiety rises, then falls on its own. Each time it falls faster.</p><p>A step is mastered when your distress ends at 30 or below (or drops by half) in 3 sessions. Then the next step opens.</p><p class="muted">It works best alongside a therapist who can help you build the ladder. A hard day isn't failure — logging it honestly is progress too.</p></details></div>`}
+/* ---- sheets ---- */
+function stepSheet(s){const isNew=!s.id;s=Object.assign({title:"",suds:40},s);
+  sheet(`<h3 style="font-size:20px">${isNew?"New ladder step":"Edit step"}</h3><input type="text" id="os-t" dir="auto" placeholder="e.g. Touch the door handle and don't wash for 10 min" value="${esc(s.title)}">
+   <label class="l">How distressing does it feel? <b id="os-v">${s.suds}</b></label><input type="range" id="os-s" min="0" max="100" step="5" value="${s.suds}" class="srange">
+   <div class="row between muted" style="font-size:11px"><span>0 calm</span><span>50</span><span>100 extreme</span></div>
+   <div class="row" style="margin-top:18px">${isNew?"":`<button class="btn danger" id="os-del">Delete</button>`}<button class="btn primary" style="flex:1" id="os-sv">Save</button></div>`,el=>{
+    const r=el.querySelector("#os-s"),v=el.querySelector("#os-v");const col=()=>{v.textContent=r.value;v.style.color=sudsCol(+r.value)};r.oninput=col;col();
+    el.querySelector("#os-sv").onclick=()=>{const t=el.querySelector("#os-t").value.trim();if(!t)return toast("Describe the situation");put(Object.assign({},s,{kind:"ostep",id:s.id||uid(),title:t,suds:+r.value,created:s.created||Date.now()}));closeSheet()};
+    const d=el.querySelector("#os-del");d&&(d.onclick=()=>{del("ostep_"+s.id);closeSheet()})})}
+function stepOpen(s){const ss=sessOf(s);const W=300,H=90;const pts=k=>ss.map((x,i)=>`${ss.length>1?i/(ss.length-1)*W:W/2},${H-(x[k]??0)/100*H}`).join(" ");
+  sheet(`<div class="ocdp"><div class="eyebrow">Ladder step · distress ${s.suds}</div><h3 style="font-size:20px;margin:4px 0 10px"${dir(s.title)}>${esc(s.title)}</h3>
+   ${ss.length?`<svg viewBox="-6 -6 ${W+12} ${H+12}" class="schart"><polyline points="${pts("before")}" class="pb"/><polyline points="${pts("after")}" class="pa"/>${ss.map((x,i)=>`<circle cx="${ss.length>1?i/(ss.length-1)*W:W/2}" cy="${H-x.after/100*H}" r="3.5" class="ca"/>`).join("")}</svg>
+    <div class="row muted" style="gap:14px;font-size:12px"><span><i class="lg lb"></i>Before</span><span><i class="lg la"></i>After</span><span style="margin-left:auto">${ss.length} sessions</span></div>`:`<p class="muted">No sessions yet. Your first one is the bravest.</p>`}
+   ${s.mastered?`<div class="mok2">⭐ Mastered on ${fmt(s.mastered,{day:"numeric",month:"short"})} — you can still practise to keep it easy.</div>`:`<p class="muted" style="font-size:13px">Mastery: end at 30 or below (or half your starting distress) in 3 sessions · ${ss.filter(okSess).length}/3</p>`}
+   <button class="btn primary block" style="margin-top:12px" data-act="expStart" data-id="${s.id}">🧗‍♀️ Start exposure</button><button class="btn soft block" style="margin-top:8px" data-act="stepEdit" data-id="${s.id}">Edit step</button></div>`)}
+const okSess=x=>x.res!=="no"&&(x.after<=30||x.after<=x.before/2);
+/* exposure session: before → timer with check-ins → after */
+let XS=null;
+function expStart(id){const st=steps();const s=get("ostep_"+id)||curStep();if(!s){stepSheet({});return}
+  XS={id:s.id,phase:"before",before:s.suds,t0:0,checks:[],goal:ocfg().goal};expView()}
+function expView(){const s=get("ostep_"+XS.id);let body="";
+  if(XS.phase==="before")body=`<div class="eyebrow">Exposure</div><h3 style="font-size:20px;margin:4px 0"${dir(s.title)}>${esc(s.title)}</h3>
+    <p class="muted">Before you start: how distressed do you feel right now?</p>${sudsPick("xb",XS.before)}
+    <label class="l">Stay with it for</label><div class="chips" id="xg" style="flex-wrap:wrap">${[5,10,15,20,30,45].map(m=>`<button type="button" class="chip ${m===XS.goal?"on":""}" data-m="${m}">${m} min</button>`).join("")}</div>
+    <button class="btn primary block" style="margin-top:16px" data-act="expGo">Start — I can do hard things</button>`;
+  else if(XS.phase==="run")body=`<div class="xrun"><div class="breathe"><div class="bc"></div><b id="xt">0:00</b><small id="xbl">Breathe in</small></div>
+    <p class="xtip" id="xtip">Let the anxiety be there. It will rise, peak, and fall.</p>
+    <div class="row" style="gap:8px"><button class="btn soft" style="flex:1" data-act="expCheck">Distress check</button><button class="btn primary" style="flex:1" data-act="expEnd">Finish</button></div>
+    <div class="muted" id="xchk" style="font-size:12px;margin-top:10px;text-align:center">${XS.checks.length?"Check-ins: "+XS.checks.map(c=>c.v).join(" → "):`Goal: ${XS.goal} min · don't do the compulsion`}</div></div>`;
+  else if(XS.phase==="check")body=`<h3 style="font-size:19px">How strong is it now?</h3>${sudsPick("xc",XS.checks.length?XS.checks[XS.checks.length-1].v:XS.before)}<button class="btn primary block" style="margin-top:14px" data-act="expCheckSave">Back to the timer</button>`;
+  else if(XS.phase==="after")body=`<h3 style="font-size:20px">Well done for facing it 💜</h3><p class="muted">You stayed ${XS.mins} min. How distressed do you feel now?</p>${sudsPick("xa",Math.max(0,XS.before-20))}
+    <label class="l">Did you resist the compulsion?</label><div class="sel3" id="xr"><button type="button" data-v="yes" class="on">Yes ✓</button><button type="button" data-v="part">Partly</button><button type="button" data-v="no">No</button></div>
+    <button class="btn primary block" style="margin-top:16px" data-act="expSave">Save session</button>`;
+  const ov=$("#ov");if(ov&&ov.querySelector(".xsess")){ov.querySelector(".xsess").innerHTML=body;bindExp(ov);return}
+  sheet(`<div class="xsess ocdp">${body}</div>`,el=>bindExp(el))}
+function sudsPick(id,v){return `<div class="sudsbig" id="${id}w"><b id="${id}v" style="color:${sudsCol(v)}">${v}</b><input type="range" id="${id}" min="0" max="100" step="5" value="${v}" class="srange"></div>`}
+function bindExp(el){el.querySelectorAll(".srange").forEach(r=>r.oninput=()=>{const b=el.querySelector("#"+r.id+"v");b.textContent=r.value;b.style.color=sudsCol(+r.value)});
+  const g=el.querySelector("#xg");g&&(g.onclick=e=>{const b=e.target.closest("button");if(!b)return;XS.goal=+b.dataset.m;g.querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b))});
+  const r=el.querySelector("#xr");r&&(r.onclick=e=>{const b=e.target.closest("button");if(!b)return;r.querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b))});
+  if(XS.phase==="run")runTimer()}
+const TIPS=["Let the anxiety be there. It will rise, peak, and fall.","You don't have to be sure. Uncertainty is allowed.","Notice the urge. You don't have to obey it.","Anxiety is uncomfortable, not dangerous.","Every minute you stay, your brain learns something new.","If a 'what if' comes, answer: 'maybe, maybe not'.","You're doing the brave thing right now."];
+let XT=null;
+function runTimer(){clearInterval(XT);let last=-1;XT=setInterval(()=>{const t=$("#xt");if(!t||!XS||XS.phase!=="run"){clearInterval(XT);return}const sec=Math.floor((Date.now()-XS.t0)/1000);
+  t.textContent=Math.floor(sec/60)+":"+String(sec%60).padStart(2,"0");const ph=sec%14;const bl=$("#xbl");bl&&(bl.textContent=ph<4?"Breathe in":ph<8?"Hold":"Breathe out");
+  const m=Math.floor(sec/60);if(m!==last){last=m;const tip=$("#xtip");tip&&(tip.textContent=TIPS[m%TIPS.length]);if(m===XS.goal&&m>0){sfx("chime");toast("Goal reached 🎉 Stay longer if you can",2500)}if(m>0&&m%5===0&&m!==XS.goal)sfx("soft")}},500)}
+function expSave(){const s=get("ostep_"+XS.id);const after=+$("#xa").value,res=($("#xr .on")||{}).dataset?.v||"yes";
+  const se={date:today(),at:Date.now(),before:XS.before,after,peak:Math.max(XS.before,...XS.checks.map(c=>c.v)),mins:XS.mins,res,checks:XS.checks.map(c=>c.v)};
+  const ss=sessOf(s).concat(se);let n=Object.assign({},s,{sessions:ss});let xp=res==="no"?5:20+(res==="yes"?10:3)+Math.min(20,Math.floor(XS.mins/5)*2);let msg="";
+  if(!s.mastered&&ss.filter(okSess).length>=3){n.mastered=today();xp+=50;msg="⭐ Step mastered! The next one is open."}
+  put(n,true);closeSheet();XS=null;clearInterval(XT);
+  setTimeout(()=>{if(res==="no")toast("That's data, not failure. Try a shorter stay or an easier step next time 💜",4000);else if(msg){confetti();celebrate("⭐","Step mastered!","The next step on your ladder is open.")}else toast(after<se.before?`Distress fell ${se.before-after} points — your brain is learning ✓`:"You stayed with it — that's the work 💜",3500);
+    addXP("ocd",xp,"Exposure");render()},350)}
+/* urge surfing */
+let UR=null,UT=null;
+function urgeView(){let body;
+  if(!UR)body=`<div class="eyebrow">Urge surfing 🌊</div><h3 style="font-size:20px;margin:4px 0 6px">You don't have to act on it.</h3><p class="muted">Urges rise and fall like a wave. Choose a wait — just delay, don't decide yet.</p>
+    <div class="dpick">${[5,10,15,20].map(m=>`<button data-act="urgeGo" data-m="${m}"><b>${m}</b><small>min</small></button>`).join("")}</div>
+    <input type="text" id="ur-n" dir="auto" placeholder="What triggered it? (optional)" style="margin-top:14px">`;
+  else if(UR.phase==="run")body=`<div class="xrun"><div class="wave"><svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="88" class="wbg"/><circle cx="100" cy="100" r="88" class="wfg" id="urc" style="stroke-dasharray:553;stroke-dashoffset:0"/></svg><div class="wtxt"><b id="urt">${UR.m}:00</b><small id="urb">Breathe in</small></div></div>
+    <p class="xtip">Notice where you feel it in your body. Let it be there. Watch it change.</p><button class="btn soft block" data-act="urgeEnd">I'm done waiting</button></div>`;
+  else body=`<h3 style="font-size:20px">How did it go?</h3><p class="muted">Every answer is useful. Be honest with yourself.</p>
+    <div class="uout"><button data-act="urgeOut" data-v="resisted"><span>🌊</span><b>I rode it out</b><small>didn't do the compulsion</small></button><button data-act="urgeOut" data-v="delayed"><span>⏳</span><b>I delayed, then did it</b><small>delay is still progress</small></button><button data-act="urgeOut" data-v="did"><span>🤍</span><b>I did the compulsion</b><small>logging it honestly counts</small></button></div>`;
+  const ov=$("#ov");if(ov&&ov.querySelector(".usess")){ov.querySelector(".usess").innerHTML=body;if(UR&&UR.phase==="run")runUrge();return}
+  sheet(`<div class="usess ocdp">${body}</div>`,()=>{if(UR&&UR.phase==="run")runUrge()})}
+function runUrge(){clearInterval(UT);UT=setInterval(()=>{if(!UR||UR.phase!=="run"||!$("#urt")){clearInterval(UT);return}const left=Math.max(0,UR.m*60-Math.floor((Date.now()-UR.t0)/1000));
+  $("#urt").textContent=Math.floor(left/60)+":"+String(left%60).padStart(2,"0");$("#urc").style.strokeDashoffset=553*(1-left/(UR.m*60));const ph=Math.floor((Date.now()-UR.t0)/1000)%14;$("#urb").textContent=ph<4?"Breathe in":ph<8?"Hold":"Breathe out";
+  if(!left){clearInterval(UT);sfx("chime");UR.phase="out";UR.full=1;urgeView()}},500)}
+Object.assign(ACTX,{
+  stepAdd:()=>stepSheet({}),stepOpen:el=>{const s=get("ostep_"+el.dataset.id);s&&stepOpen(s)},stepEdit:el=>{const s=get("ostep_"+el.dataset.id);s&&stepSheet(s)},
+  expStart:el=>{if(!steps().length)return stepSheet({});expStart(el.dataset.id)},
+  expGo:()=>{XS.before=+$("#xb").value;XS.t0=Date.now();XS.phase="run";sfx("tap");expView()},
+  expCheck:()=>{XS.phase="check";expView()},expCheckSave:()=>{XS.checks.push({t:Date.now(),v:+$("#xc").value});XS.phase="run";expView()},
+  expEnd:()=>{XS.mins=Math.max(1,Math.round((Date.now()-XS.t0)/60000));XS.phase="after";clearInterval(XT);expView()},expSave:()=>expSave(),
+  urgeStart:()=>{UR=null;urgeView()},urgeGo:el=>{UR={m:+el.dataset.m,t0:Date.now(),phase:"run",note:($("#ur-n")||{}).value||""};sfx("tap");urgeView()},
+  urgeEnd:()=>{UR.phase="out";clearInterval(UT);urgeView()},
+  urgeOut:el=>{const v=el.dataset.v,mins=Math.max(1,Math.round((Date.now()-UR.t0)/60000));put({kind:"urge",id:uid(),date:today(),at:Date.now(),wait:UR.m,mins,out:v,note:UR.note},true);
+    const xp=v==="resisted"?15+(UR.full?5:0):v==="delayed"?6:2;UR=null;closeSheet();
+    setTimeout(()=>{toast(v==="resisted"?"You rode the wave 🌊 Your brain just learned it can":v==="delayed"?"Delaying weakens the urge over time ⏳":"Thank you for being honest 🤍 Tomorrow is a new wave",3500);addXP("ocd",xp,"Urge");render()},300)},
+});
 function settingsSheet(){
   const m=meta();const canN="Notification" in window;let scene=m.scene||"auto";
   sheet(`<h3 style="font-size:20px">Settings</h3>
@@ -2127,7 +2732,7 @@ function importSheet(){sheet(`<h3 style="font-size:20px">Import backup</h3><div 
     let n=0;Object.entries(j.items).forEach(([k,v])=>{if(!v||typeof v!=="object"||!v.kind)return;const cur=S.items[k];if(cur&&(cur.upd||0)>=(v.upd||0))return;S.items[k]=v;persist(k,v);n++});
     closeSheet();lastTab=null;render();toast(`Imported ${n} item${n===1?"":"s"} ✓`)}})}
 function quickSheet(){
-  const Q=[["newTask","✅","Task","linear-gradient(135deg,#8b7bff,#5a5cf0)","rgba(90,92,240,.6)"],["newRange","🗓️","Multi-day","linear-gradient(135deg,#ff9f6b,#ff5c9a)","rgba(255,92,154,.6)"],["newHl","✨","Highlight","linear-gradient(135deg,#ff9cc6,#e66aa6)","rgba(230,106,166,.6)"],["newEntry","📓","Journal","linear-gradient(135deg,#7fc4ff,#4f86f7)","rgba(79,134,247,.6)"],["newGoal","🎯","Goal","linear-gradient(135deg,#ffc58a,#ff9a5c)","rgba(255,154,92,.6)"],["snapQuick","📸","Snap meal","linear-gradient(135deg,#5fd3b5,#2fb38f)","rgba(47,179,143,.6)"],["foodLib","🍽️","Add food","linear-gradient(135deg,#ffb27a,#ff7eb6)","rgba(255,126,182,.6)"],["goFocus","🍅","Focus","linear-gradient(135deg,#5fd3b5,#2fb38f)","rgba(47,179,143,.6)"],["wAdd","⚖️","Weight","linear-gradient(135deg,#b6a6ff,#8a6bff)","rgba(138,107,255,.6)"]];
+  const Q=[["newTask","✅","Task","linear-gradient(135deg,#8b7bff,#5a5cf0)","rgba(90,92,240,.6)"],["newRange","🗓️","Multi-day","linear-gradient(135deg,#ff9f6b,#ff5c9a)","rgba(255,92,154,.6)"],["newHl","✨","Highlight","linear-gradient(135deg,#ff9cc6,#e66aa6)","rgba(230,106,166,.6)"],["newEntry","📓","Journal","linear-gradient(135deg,#7fc4ff,#4f86f7)","rgba(79,134,247,.6)"],["newGoal","🎯","Goal","linear-gradient(135deg,#ffc58a,#ff9a5c)","rgba(255,154,92,.6)"],["snapQuick","📸","Snap meal","linear-gradient(135deg,#5fd3b5,#2fb38f)","rgba(47,179,143,.6)"],["foodLib","🍽️","Add food","linear-gradient(135deg,#ffb27a,#ff7eb6)","rgba(255,126,182,.6)"],["goFocus","🍅","Focus","linear-gradient(135deg,#5fd3b5,#2fb38f)","rgba(47,179,143,.6)"],["exStart","📝","Daily exam","linear-gradient(135deg,#2dd4bf,#0e7490)","rgba(14,116,144,.6)"],["urgeStart","🌊","Urge timer","linear-gradient(135deg,#c4b5fd,#8b5cf6)","rgba(139,92,246,.6)"],["wAdd","⚖️","Weight","linear-gradient(135deg,#b6a6ff,#8a6bff)","rgba(138,107,255,.6)"]];
   sheet(`<h3 style="font-size:20px">Add something</h3><div class="quick" style="grid-template-columns:repeat(3,1fr)">${Q.map(([a,e,n,g,sh])=>`<button class="g" data-act="${a}"><span class="ic" style="background:${g};--sh:${sh}">${e}</span>${n}</button>`).join("")}</div>`);
 }
 
@@ -2148,10 +2753,10 @@ const ACT={
      if(day){dd.has(day)?dd.delete(day):dd.add(day);on=dd.has(day)}else{const full=dd.size===days.length;dd=full?new Set():new Set(days);on=!full}
      const arr=[...dd].sort(),n=Object.assign({},t,{doneDays:arr,done:arr.length===days.length,doneAt:on?Date.now():(t.doneAt||null)});
      el.classList.toggle("done",on);el.closest(".task")&&el.closest(".task").classList.toggle("done",on);if(on)burst(el,tColor(t));
-     setTimeout(()=>{put(n);if(on&&(day||today())===today()&&!tasksFor(today()).some(x=>!x.done))confetti()},420);return}
+     setTimeout(()=>{put(n);taskHook(n);if(on&&(day||today())===today()&&!tasksFor(today()).some(x=>!x.done))confetti()},420);return}
    const n=Object.assign({},t,{done:!t.done,doneAt:!t.done?Date.now():null});
    el.classList.toggle("done",n.done);el.closest(".task")&&el.closest(".task").classList.toggle("done",n.done);if(n.done)burst(el,t.prio?PRIO[t.prio].c:"#5a5cf0");
-   setTimeout(()=>{put(n);if(n.done&&n.date===today()&&!tasksFor(today()).some(x=>!x.done))confetti()},420)},
+   setTimeout(()=>{put(n);taskHook(n);if(n.done&&n.date===today()&&!tasksFor(today()).some(x=>!x.done))confetti()},420)},
  editTask:el=>taskSheet(Object.assign({},get("task_"+el.dataset.id))),
  newTask:el=>{closeSheet(true);taskSheet({date:el.dataset.v||today()})},
  newRange:el=>{closeSheet(true);const d=el.dataset.v||today();taskSheet({date:d,end:dkey(addDays(parseD(d),6))})},
@@ -2211,10 +2816,11 @@ const ACT={
 };
 document.addEventListener("click",e=>{
   const b=e.target.closest(".btn,.chip,.outline");if(b){const r=b.getBoundingClientRect();const s=Math.max(r.width,r.height);const rp=document.createElement("span");rp.className="ripple";rp.style.cssText=`width:${s}px;height:${s}px;left:${e.clientX-r.left-s/2}px;top:${e.clientY-r.top-s/2}px`;b.appendChild(rp);setTimeout(()=>rp.remove(),700)}
-  const el=e.target.closest("[data-act]");if(!el)return;const f=ACT[el.dataset.act];
+  const el=e.target.closest("[data-act]");if(!el)return;const f=ACT[el.dataset.act]||ACTX[el.dataset.act];
   if(["tab","go","back","planTab","libTab","heatM","libFilter","taskFilter","hlBook","selDay","dNav","wNav","mNav","heat","fav","fplan","calendar","goGoals","book","openDay","editTask","editHl","editEntry","editGoal","foodEdit"].includes(el.dataset.act))sfx("tick");
   if(f){e.preventDefault();f(el,e)}});
 document.addEventListener("submit",e=>{const f=e.target;e.preventDefault();
+  if(FORMX[f.dataset.form]){FORMX[f.dataset.form](f);return}
   if(f.dataset.form==="quickTask"){const i=f.querySelector("input");const title=i.value.trim();if(!title)return;sfx("pop");i.value="";put({kind:"task",id:uid(),title,date:f.dataset.date||"",time:"",prio:0,done:false,created:Date.now()});setTimeout(()=>{const x=document.getElementById(i.id);x&&x.focus()},30)}
   if(f.dataset.form==="gstepAdd"){const i=f.querySelector("input");const t=i.value.trim();if(!t)return;const g=JSON.parse(JSON.stringify(get("goal_"+f.dataset.id)));g.steps=(g.steps||[]).concat({t,done:false});i.value="";put(g)}
 });
