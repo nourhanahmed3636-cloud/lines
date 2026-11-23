@@ -1043,6 +1043,21 @@ body.desk .nav,body.desk nav.nav{display:none!important}
  body.desk .sheet{max-height:calc(88vh - var(--tb))}
  body.desk .sheet.xfull{height:calc(92vh - var(--tb));max-height:calc(92vh - var(--tb))}
 }
+
+/* focus sounds mixer */
+.sndgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:8px;margin-top:12px}
+.sndt{display:flex;flex-direction:column;align-items:center;gap:5px;padding:12px 6px 10px;border-radius:16px;background:rgba(79,86,232,.07);font-size:12px;font-weight:700;color:var(--ink);position:relative;transition:transform .35s var(--spring),background .3s,box-shadow .3s}
+html.dark .sndt{background:rgba(255,255,255,.08)}
+.sndt i{font-style:normal;font-size:24px;line-height:1}
+.sndt span{line-height:1.15;text-align:center}
+.sndt.on{background:var(--grad);color:#fff;box-shadow:0 10px 22px -12px var(--v1)}
+.sndt.on i{animation:sndb 2.6s ease-in-out infinite}
+@keyframes sndb{50%{transform:translateY(-2px) scale(1.08)}}
+.sndt:active{transform:scale(.94)}
+.sndt.ld::after{content:"";position:absolute;top:7px;right:7px;width:9px;height:9px;border-radius:50%;border:2px solid currentColor;border-right-color:transparent;animation:spin .8s linear infinite}
+.sndvols{margin-top:14px;display:grid;gap:10px}
+.sndv{display:grid;grid-template-columns:minmax(110px,40%) 1fr;align-items:center;gap:12px;font-size:13px;font-weight:700;color:var(--ink)}
+.sndr{width:100%;accent-color:var(--v1)}
 </style>
 </head>
 <body>
@@ -1364,23 +1379,43 @@ const SND={
  soft:()=>tone(300,0,.18,"sine",.07,200),
 };
 function sfx(n){if(meta().sound===false)return;try{SND[n]&&SND[n]()}catch(e){}}
-/* ambient focus sounds */
-let AMB=null;
-function ambient(kind){
-  if(AMB){try{const a=ac();AMB.g.gain.setTargetAtTime(0,a.currentTime,.4);const old=AMB;setTimeout(()=>{try{old.src.stop();old.lfo&&old.lfo.stop()}catch(e){}},1500)}catch(e){}AMB=null}
-  if(!kind||kind==="off")return;const a=ac();if(!a)return;
-  const len=a.sampleRate*6,b=a.createBuffer(2,len,a.sampleRate);
-  for(let ch=0;ch<2;ch++){const d=b.getChannelData(ch);let last=0,b0=0,b1=0,b2=0;
+/* ambient focus sounds — real recordings (seamless loops in snd/) + generated noise; up to 4 play together */
+const SNDS=[["rain","🌧️","Rain"],["window","🪟","Rain on window"],["storm","⛈️","Thunderstorm"],["waves","🌊","Ocean waves"],
+ ["river","🏞️","River"],["fall","💧","Waterfall"],["fire","🔥","Fireplace"],["birds","🐦","Birds"],
+ ["trees","🍃","Wind in trees"],["jungle","🌴","Rainforest"],["night","🦗","Summer night"],["cafe","☕","Café"],
+ ["library","📚","Library"],["train","🚆","Train ride"],["brown","🌫️","Brown noise"],["pink","☁️","Pink noise"],
+ ["white","⚪","White noise"],["beats","🎧","Focus beats"]];
+const SLOOP={"rain":[0.25,70.0],"window":[0.25,29.1427],"storm":[0.25,63.5453],"waves":[0.25,70.0],"river":[0.25,70.0],"fall":[0.25,19.4859],"fire":[0.25,70.0],"birds":[0.25,70.0],"trees":[0.25,52.0],"jungle":[0.25,70.0],"night":[0.25,70.0],"cafe":[0.25,70.0],"library":[0.25,70.0],"train":[0.25,59.504]};
+const SBASE={brown:.45,pink:.5,white:.2,beats:.55};
+const SBUF={},SLOAD={};let MIXN={},SPREV=0;
+function sndBuf(id){if(SBUF[id])return Promise.resolve(SBUF[id]);if(SLOAD[id])return SLOAD[id];const a=ac();
+  SLOAD[id]=fetch("snd/"+id+".mp3").then(r=>{if(!r.ok)throw 0;return r.arrayBuffer()}).then(b=>new Promise((ok,no)=>a.decodeAudioData(b,ok,no)))
+   .then(buf=>{SBUF[id]=buf;delete SLOAD[id];return buf}).catch(e=>{delete SLOAD[id];throw e});return SLOAD[id]}
+const NBUF={};
+function noiseBuf(kind){if(NBUF[kind])return NBUF[kind];const a=ac(),len=a.sampleRate*8,b=a.createBuffer(2,len,a.sampleRate),X=Math.floor(a.sampleRate*.5);
+  for(let ch=0;ch<2;ch++){const d=b.getChannelData(ch);let last=0,b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;
     for(let i=0;i<len;i++){const w=Math.random()*2-1;
-      if(kind==="rain"){b0=.99765*b0+w*.099;b1=.963*b1+w*.2965;b2=.57*b2+w*1.0526;d[i]=(b0+b1+b2+w*.1848)*.12;if(Math.random()<.0006)d[i]+=(Math.random()-.5)*.9}
-      else{last=(last+.02*w)/1.02;d[i]=last*3.2}}}
-  const src=a.createBufferSource();src.buffer=b;src.loop=true;const f=a.createBiquadFilter();
-  f.type=kind==="rain"?"highpass":"lowpass";f.frequency.value=kind==="rain"?400:kind==="waves"?700:450;
-  const g=a.createGain();g.gain.value=0;src.connect(f).connect(g).connect(a.destination);src.start();
-  const vol=kind==="rain"?.5:kind==="waves"?.55:.45;g.gain.setTargetAtTime(vol,a.currentTime,.8);
-  let lfo=null;if(kind==="waves"){lfo=a.createOscillator();lfo.frequency.value=.085;const lg=a.createGain();lg.gain.value=.35;lfo.connect(lg).connect(g.gain);lfo.start()}
-  AMB={src,g,lfo};
-}
+      if(kind==="pink"){b0=.99886*b0+w*.0555179;b1=.99332*b1+w*.0750759;b2=.969*b2+w*.153852;b3=.8665*b3+w*.3104856;b4=.55*b4+w*.5329522;b5=-.7616*b5-w*.016898;d[i]=(b0+b1+b2+b3+b4+b5+b6+w*.5362)*.11;b6=w*.115926}
+      else if(kind==="white")d[i]=w*.35;else{last=(last+.02*w)/1.02;d[i]=last*3.2}}
+    for(let i=0;i<X;i++){const t=i/X;d[len-X+i]=d[len-X+i]*Math.sqrt(1-t)+d[i]*Math.sqrt(t)}}
+  return NBUF[kind]=b}
+function sndStart(id,vol){const a=ac();if(!a)return;const g=a.createGain();g.gain.value=0;g.connect(a.destination);const n={g,srcs:[],id};MIXN[id]=n;
+  const go=srcs=>{if(MIXN[id]!==n){srcs.forEach(x=>{try{x.stop()}catch(e){}});return}n.srcs=srcs;g.gain.setTargetAtTime(vol*(SBASE[id]||1),a.currentTime,.6)};
+  const X=Math.floor(a.sampleRate*.5);
+  if(id==="beats"){const m=a.createChannelMerger(2),l=a.createOscillator(),r=a.createOscillator();l.frequency.value=200;r.frequency.value=214;l.connect(m,0,0);r.connect(m,0,1);
+    const og=a.createGain();og.gain.value=.12;m.connect(og).connect(g);const nb=a.createBufferSource();nb.buffer=noiseBuf("pink");nb.loop=true;nb.loopStart=0;nb.loopEnd=nb.buffer.duration;
+    const lp=a.createBiquadFilter();lp.type="lowpass";lp.frequency.value=900;const ng=a.createGain();ng.gain.value=.25;nb.connect(lp).connect(ng).connect(g);l.start();r.start();nb.start(0,.5);go([l,r,nb]);return}
+  if(SBASE[id]!==undefined){const x=a.createBufferSource();x.buffer=noiseBuf(id);x.loop=true;x.loopStart=.5;x.loopEnd=x.buffer.duration;let node=x;
+    if(id!=="pink"){const f=a.createBiquadFilter();f.type="lowpass";f.frequency.value=id==="brown"?450:7000;x.connect(f);node=f}node.connect(g);x.start(0,.5);go([x]);return}
+  n.loading=true;sndUI();
+  sndBuf(id).then(buf=>{n.loading=false;const x=a.createBufferSource();x.buffer=buf;x.loop=true;const lp=SLOOP[id];if(lp){x.loopStart=lp[0];x.loopEnd=lp[0]+lp[1]}x.connect(g);x.start(0,lp?lp[0]:0);go([x]);sndUI()})
+   .catch(()=>{n.loading=false;if(MIXN[id]===n)delete MIXN[id];toast("Couldn't load that sound — check your internet");sndUI()})}
+function sndStop(id){const n=MIXN[id];if(!n)return;delete MIXN[id];const a=ac();try{n.g.gain.setTargetAtTime(0,a.currentTime,.4)}catch(e){}
+  setTimeout(()=>{n.srcs.forEach(x=>{try{x.stop()}catch(e){}});try{n.g.disconnect()}catch(e){}},1600)}
+function mixApply(mix){Object.keys(MIXN).forEach(id=>{if(!(id in mix))sndStop(id)});const a=ac();if(!a)return;
+  Object.entries(mix).forEach(([id,v])=>{const n=MIXN[id];if(!n)sndStart(id,v);else n.g.gain.setTargetAtTime(v*(SBASE[id]||1),a.currentTime,.15)})}
+function ambient(kind){clearTimeout(SPREV);mixApply(!kind||kind==="off"?{}:pmix())}
+function sndUI(){document.querySelectorAll(".sndt").forEach(b=>{const n=MIXN[b.dataset.v];b.classList.toggle("ld",!!(n&&n.loading))})}
 const BUILTIN={};IDEAS.forEach(([b,t],i)=>{const id="i"+i;BUILTIN["hl_"+id]={_k:"hl_"+id,kind:"hl",id,type:"text",text:t,bookId:b,note:"",idea:true,created:1700000000000+i,seen:0}});
 const PALETTES=[["#6d5dfc","#c084fc"],["#8b5cf6","#ec84c8"],["#5b8cff","#a46bff"],["#e98bd8","#ffb27a"],["#7c5cff","#6aa8ff"],["#b07cff","#ff8fb8"],["#4f7bff","#5fd3b5"]];
 const PROMPTS=["What moment today made you feel you're on the right track?","If you could keep only one line from today, what would it be?","What's one idea from a book you actually put into practice?","Who are you grateful for today, and why?","What is draining your energy that you need to say no to?","A year from now, what will you thank yourself for?","What small step tomorrow brings you closer to your goal?"];
@@ -2274,9 +2309,11 @@ const focusOn=k=>all("focus").filter(f=>f.date===k);
 const focusMin=k=>focusOn(k).reduce((a,f)=>a+(f.min||0),0);
 function setPomo(patch,quiet){setMetaQ({pomo:Object.assign(pomo(),patch)},quiet)}
 function setMetaQ(patch,quiet){put(Object.assign({},meta(),patch),quiet)}
+function pmix(){const c=pcfg();if(c.mix)return c.mix;return c.snd&&c.snd!=="off"&&c.snd!=="mix"?{[c.snd]:.7}:{}}
+function setMix(mix,quiet){setMetaQ({pomoCfg:Object.assign(pcfg(),{mix,snd:Object.keys(mix).length?"mix":"off"})},quiet)}
 
 function vFocus(){
-  const c=pcfg(),p=pomo(),left=pLeft(p),tot=phaseLen(p.phase,c),pct=1-left/tot;const R=112,C=2*Math.PI*R;
+  const smx=pmix();const c=pcfg(),p=pomo(),left=pLeft(p),tot=phaseLen(p.phase,c),pct=1-left/tot;const R=112,C=2*Math.PI*R;
   const t=p.taskId&&get("task_"+p.taskId);const days=[...Array(7)].map((_,i)=>dkey(addDays(new Date(),i-6)));const fm=days.map(focusMin);const mx=Math.max(25,...fm);
   const todayMin=focusMin(today()),todaySes=focusOn(today()).length;
   return `<div><div class="eyebrow">Deep work</div><h1>Focus</h1><p class="sub">${PH[p.phase][1]}</p></div>
@@ -2294,8 +2331,10 @@ function vFocus(){
     <button class="btn indigo" style="width:150px;height:60px;border-radius:22px;font-size:17px" data-act="pToggle">${p.running?"❚❚ Pause":"▶ Start"}</button>
     <button class="iconbtn" style="width:52px;height:52px;border-radius:18px" data-act="pSkip" aria-label="Skip">⏭</button></div>
   </div>
-  <div class="g"><div class="row between"><h3 style="margin:0">Focus sounds</h3><span class="muted">plays while focusing</span></div>
-   <div class="sel3" style="margin-top:10px">${[["off","🔇 Off"],["rain","🌧️ Rain"],["brown","🌫️ Brown noise"],["waves","🌊 Waves"]].map(([k,n])=>`<button data-act="pSnd" data-v="${k}" class="${c.snd===k?"on":""}">${n}</button>`).join("")}</div></div>
+  <div class="g"><div class="row between"><h3 style="margin:0">Focus sounds</h3>${Object.keys(smx).length?`<button class="link" style="color:var(--v1);font-weight:800" data-act="sndOff">Stop all</button>`:`<span class="muted">mix up to 4</span>`}</div>
+   <div class="sndgrid">${SNDS.map(([k,e,n])=>`<button class="sndt ${k in smx?"on":""} ${MIXN[k]&&MIXN[k].loading?"ld":""}" data-act="sndT" data-v="${k}"><i>${e}</i><span>${n}</span></button>`).join("")}</div>
+   ${Object.keys(smx).length?`<div class="sndvols">${Object.entries(smx).map(([k,v])=>{const d=SNDS.find(x=>x[0]===k)||[k,"🎵",k];return `<label class="sndv"><span>${d[1]} ${d[2]}</span><input type="range" class="sndr" data-snd="${k}" min="0" max="100" value="${Math.round(v*100)}" aria-label="${d[2]} volume"></label>`}).join("")}</div>`:""}
+   ${"beats" in smx?`<div class="muted" style="margin-top:8px;font-size:12px">🎧 Focus beats work best with headphones</div>`:""}</div>
   <div class="stats3"><div class="g stat"><b class="gt" data-count="${todayMin}">${todayMin}</b><span>⏱ min today</span></div><div class="g stat"><b data-count="${todaySes}">${todaySes}</b><span>🍅 sessions</span></div><div class="g stat"><b data-count="${fm.reduce((a,b)=>a+b,0)}">${fm.reduce((a,b)=>a+b,0)}</b><span>📅 min · 7 days</span></div></div>
   <div class="g"><h3>Focus this week</h3><div class="bars">${days.map((k,i)=>`<div><span style="color:var(--ink);font-size:11px">${fm[i]||""}</span><span class="b ${fm[i]?"":"z"}" style="height:${Math.max(4,fm[i]/mx*100)}%;animation-delay:${i*.07}s"></span>${parseD(k).toLocaleDateString("en-GB",{weekday:"narrow"})}</div>`).join("")}</div></div>
   <div class="g"><div class="row between"><h3 style="margin:0">Timer settings</h3><button class="link" style="color:var(--v1);font-weight:800" data-act="pCfg">Edit</button></div>
@@ -2349,6 +2388,11 @@ function pTaskSheet(){
    <button class="btn soft block" style="margin-top:14px" data-tid="">No specific task</button>`,el=>{
     el.addEventListener("click",e=>{const b=e.target.closest("[data-tid]");if(!b)return;setPomo({taskId:b.dataset.tid});closeSheet()})});
 }
+
+/* focus sounds: tap to add/remove (preview plays a few seconds when the timer isn't running), sliders set each volume */
+document.addEventListener("input",e=>{const t=e.target;if(!t.classList||!t.classList.contains("sndr"))return;const id=t.dataset.snd,v=t.value/100,n=MIXN[id];
+  if(n){const a=ac();n.g.gain.setTargetAtTime(v*(SBASE[id]||1),a.currentTime,.08)}});
+document.addEventListener("change",e=>{const t=e.target;if(!t.classList||!t.classList.contains("sndr"))return;const mix=Object.assign({},pmix());mix[t.dataset.snd]=t.value/100;setMix(mix,true)});
 function taskSheet(t){
   const isNew=!t.id;t=Object.assign({title:"",date:S.selDay||today(),end:"",time:"",prio:0,goalId:"",color:""},t);let prio=t.prio||0,color=t.color||"";
   const SP=[[1,"1 day"],[3,"3 days"],[7,"1 week"],[14,"2 weeks"],[30,"30 days"]];
@@ -2608,6 +2652,13 @@ function graceStreak(days,rest){let n=0,d=new Date(),miss={},started=false;
 function calSwipe(dir){const a={month:"mNav",week:"wNav",day:"dNav"}[S.planTab];if(!a||!ACT[a])return;ACT[a]({dataset:{v:String(dir)}});sfx("swipe");
   requestAnimationFrame(()=>{const sel=S.planTab==="month"?".calw,.calg .navbtns h3,.calg ~ .g":"#view .navbtns ~ *,#view .navbtns h3";
     document.querySelectorAll(sel).forEach(el=>{el.classList.remove("swl","swr");void el.offsetWidth;el.classList.add(dir>0?"swl":"swr")})})}
+
+/* focus sounds actions (defined here because ACTX lives in this file) */
+ACTX.sndT=el=>{const id=el.dataset.v;const mix=Object.assign({},pmix());
+  if(id in mix)delete mix[id];else{if(Object.keys(mix).length>=4){toast("Up to 4 sounds at once");return}mix[id]=.6}
+  setMix(mix);const p=pomo();clearTimeout(SPREV);mixApply(mix);
+  if(!(p.running&&p.phase==="focus")&&Object.keys(mix).length)SPREV=setTimeout(()=>{if(!(pomo().running&&pomo().phase==="focus"))mixApply({})},6000)};
+ACTX.sndOff=()=>{setMix({});clearTimeout(SPREV);mixApply({})};
 /* ---------------- Medical page: MRCP Part 1 plan, chapters, daily exams, Anki, study to-do ---------------- */
 const MSUBJ=["Cardiology","Respiratory","Gastroenterology","Endocrinology","Neurology","Nephrology","Rheumatology","Haematology","Infectious diseases","Dermatology","Psychiatry","Pharmacology & toxicology","Clinical sciences","Ophthalmology","Mixed"];
 const MCOL=["#e11d48","#0ea5e9","#f59e0b","#8b5cf6","#6366f1","#14b8a6","#ec4899","#dc2626","#16a34a","#d946ef","#0891b2","#ea580c","#2563eb","#65a30d","#64748b"];
