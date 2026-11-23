@@ -1024,6 +1024,10 @@ body.desk .nav,body.desk nav.nav{display:none!important}
 @media (min-width:1024px),(min-width:820px) and (hover:hover) and (pointer:fine){nav.nav{display:none!important}}
 
 @media (min-width:760px){#bgimg.wide::before{display:none}#bgimg.wide img{width:100%;margin:0;-webkit-mask-image:none;mask-image:none;animation:kb 60s ease-in-out infinite alternate}}
+
+.dinst{display:flex;align-items:center;justify-content:center;gap:6px;height:40px;margin:8px 0 10px;border-radius:14px;font-size:13.5px;font-weight:800;color:var(--v1);background:color-mix(in srgb,var(--v1) 12%,transparent);border:1.5px dashed color-mix(in srgb,var(--v1) 40%,transparent)}
+.dinst:hover{background:color-mix(in srgb,var(--v1) 18%,transparent)}
+.isteps{padding-left:20px;line-height:1.7;font-size:14.5px}.isteps li{margin-bottom:6px}
 </style>
 </head>
 <body>
@@ -3177,7 +3181,7 @@ function deskRender(){if(!document.body.classList.contains("desk"))return;const 
    <button class="dnew" data-act="quick">${ico("plus",2.4)}<span>New</span></button>
    <nav class="dnav">${items.map(n=>`<button class="${cur===n[0]?"on":""}" data-act="tab" data-v="${n[0]}">${ico(n[0])}<span>${n[1]}</span></button>`).join("")}
     <div class="dsep"></div>${[["rev","Review","rev"],["jour","Journal","jour"],["focus","Focus","clock"],["stats","Insights","stats"]].map(([v,l,i])=>`<button class="${S.tab===v?"on":""}" data-act="go" data-v="${v}">${ico(i)}<span>${l}</span></button>`).join("")}</nav>
-   <div class="dfoot"><button class="iconbtn themebtn" data-act="theme" aria-label="Light or dark"></button><button class="iconbtn" data-act="settings" aria-label="Settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></button><span class="dme"><b>N</b>Nourhan</span></div>`;
+   ${isApp()?"":`<button class="dinst" data-act="installApp">⤓ Install Lines app</button>`}<div class="dfoot"><button class="iconbtn themebtn" data-act="theme" aria-label="Light or dark"></button><button class="iconbtn" data-act="settings" aria-label="Settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></button><span class="dme"><b>N</b>Nourhan</span></div>`;
   rp.innerHTML=deskRight();themeIcons()}
 function miniCal(){const mk=S.rpMonth||today().slice(0,7);const [y,m]=mk.split("-").map(Number);const first=new Date(y,m-1,1),start=weekStart(first),dim=new Date(y,m,0).getDate();
   const off=Math.round((first-start)/864e5),cnt=Math.ceil((off+dim)/7)*7;const tasks=all("task");
@@ -3198,6 +3202,17 @@ function deskRight(){const t=today(),tt=tasksFor(t);const c=mcfg(),cc=c.pack&&c.
     <div class="row" style="gap:6px;margin-top:10px"><button class="btn soft" style="flex:1;height:38px" data-act="urgeStart">🌊 Urge</button><button class="btn soft" style="flex:1;height:38px" data-act="go" data-v="ocd">Open</button></div></div>`}
 Object.assign(ACTX,{rpNav:el=>{const mk=S.rpMonth||today().slice(0,7);const [y,m]=mk.split("-").map(Number);const d=new Date(y,m-1+(+el.dataset.v),1);S.rpMonth=dkey(d).slice(0,7);deskRender()},
   rpDay:el=>{S.tab="plan";S.planTab="day";S.selDay=el.dataset.v;history.replaceState(null,"","#plan");render()}});
+
+/* install as a real app on the laptop (own window, Start menu / Dock icon) */
+let DEFER=null;const isApp=()=>matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;
+addEventListener("beforeinstallprompt",e=>{e.preventDefault();DEFER=e;deskRender()});
+addEventListener("appinstalled",()=>{DEFER=null;toast("Lines is installed on this computer ✓",3000);deskRender()});
+Object.assign(ACTX,{installApp:async()=>{if(DEFER){DEFER.prompt();const r=await DEFER.userChoice.catch(()=>null);DEFER=null;if(r&&r.outcome==="accepted")toast("Installing Lines…");deskRender();return}
+  const ua=navigator.userAgent,saf=/^((?!chrome|chromium|edg|android).)*safari/i.test(ua),mac=/Mac/.test(navigator.platform||ua);
+  sheet(`<h3 style="font-size:20px">Install Lines on this ${mac?"Mac":"laptop"}</h3><p class="muted" style="margin:-4px 0 14px">It opens in its own window with its own icon, like any app.</p>
+   ${saf?`<ol class="isteps"><li>In the Safari menu at the top, click <b>File</b>.</li><li>Click <b>Add to Dock…</b></li><li>Click <b>Add</b>. Lines appears in your Dock.</li></ol>`
+   :`<ol class="isteps"><li>Look at the right end of the address bar for the <b>install icon</b> (a little screen with an arrow ⤓).</li><li>Click it, then <b>Install</b>.</li><li>Or open the browser menu <b>⋮</b> → <b>Cast, save and share</b> → <b>Install page as app</b> (in Edge: <b>Apps → Install this site as an app</b>).</li></ol>`}
+   <p class="muted" style="font-size:12.5px;margin-top:12px">Same link, same app — it just gets its own window.</p>`)}});
 function settingsSheet(){
   const m=meta();const canN="Notification" in window;let scene=m.scene||"auto";
   sheet(`<h3 style="font-size:20px">Settings</h3>

@@ -1,5 +1,5 @@
 {
- "name": "Lines \u2014 Make them Real",
+ "name": "Lines — Make them Real",
  "short_name": "Lines",
  "start_url": "./",
  "scope": "./",
@@ -18,5 +18,11 @@
    "type": "image/png",
    "purpose": "any maskable"
   }
+ ],
+ "id": "./",
+ "description": "Your planner, reading, Medicine (MRCP) and OCD Journey — on phone and laptop.",
+ "display_override": [
+  "standalone",
+  "minimal-ui"
  ]
 }
