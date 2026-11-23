@@ -1,10 +1,10 @@
-const C="lines-v1795464208";
+const C="lines-v1795464228";
 const CORE=["./","./index.html","./manifest.json","./icon-180.png","./icon-192.png","./icon-512.png","./jszip.min.js"];
 const THUMBS=["./bg/t/aurora.jpg", "./bg/t/cotton.jpg", "./bg/t/darkglass.jpg", "./bg/t/dawn.jpg", "./bg/t/dusk.jpg", "./bg/t/glass.jpg", "./bg/t/glowtide.jpg", "./bg/t/midsilk.jpg", "./bg/t/mistlake.jpg", "./bg/t/moonlake.jpg", "./bg/t/night.jpg", "./bg/t/nightbokeh.jpg", "./bg/t/northern.jpg", "./bg/t/peachsilk.jpg", "./bg/t/ribbons.jpg", "./bg/t/rosecloud.jpg", "./bg/t/sea.jpg", "./bg/t/silk.jpg", "./bg/t/swirl.jpg"];
 self.addEventListener("install",e=>{e.waitUntil(caches.open(C).then(c=>c.addAll(CORE.map(u=>new Request(u,{cache:"reload"}))).then(()=>c.addAll(THUMBS).catch(()=>{}))));self.skipWaiting()});
 const LIB="lines-lib-1";
 self.addEventListener("activate",e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==C&&x!==LIB).map(x=>caches.delete(x)))));self.clients.claim()});
-self.addEventListener("fetch",e=>{const r=e.request;if(r.method!=="GET")return;const u=new URL(r.url);if(u.pathname.includes("/hd/"))return;
+self.addEventListener("fetch",e=>{const r=e.request;if(r.method!=="GET")return;const u=new URL(r.url);if(u.pathname.includes("/hd/")||u.pathname.includes("/download/"))return;
   const sameOrigin=u.origin===location.origin;
   if(sameOrigin&&u.pathname.includes("/lib/")){e.respondWith(caches.open(LIB).then(c=>c.match(r).then(hit=>hit||fetch(r).then(res=>{if(res.ok)c.put(r,res.clone());return res}))));return}
   // pages: always try the newest version first (2.5 s), fall back to the saved copy when offline or slow
