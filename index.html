@@ -1055,6 +1055,8 @@ html.dark .sndt{background:rgba(255,255,255,.08)}
 @keyframes sndb{50%{transform:translateY(-2px) scale(1.08)}}
 .sndt:active{transform:scale(.94)}
 .sndt.ld::after{content:"";position:absolute;top:7px;right:7px;width:9px;height:9px;border-radius:50%;border:2px solid currentColor;border-right-color:transparent;animation:spin .8s linear infinite}
+.sndt.ld i{animation:sndl 1s ease-in-out infinite}
+@keyframes sndl{50%{opacity:.45;transform:scale(.9)}}
 .sndvols{margin-top:14px;display:grid;gap:10px}
 .sndv{display:grid;grid-template-columns:minmax(110px,40%) 1fr;align-items:center;gap:12px;font-size:13px;font-weight:700;color:var(--ink)}
 .sndr{width:100%;accent-color:var(--v1)}
@@ -1385,11 +1387,11 @@ const SNDS=[["rain","🌧️","Rain"],["window","🪟","Rain on window"],["storm
  ["trees","🍃","Wind in trees"],["jungle","🌴","Rainforest"],["night","🦗","Summer night"],["cafe","☕","Café"],
  ["library","📚","Library"],["train","🚆","Train ride"],["brown","🌫️","Brown noise"],["pink","☁️","Pink noise"],
  ["white","⚪","White noise"],["beats","🎧","Focus beats"]];
-const SLOOP={"rain":[0.25,70.0],"window":[0.25,29.1427],"storm":[0.25,63.5453],"waves":[0.25,70.0],"river":[0.25,70.0],"fall":[0.25,19.4859],"fire":[0.25,70.0],"birds":[0.25,70.0],"trees":[0.25,52.0],"jungle":[0.25,70.0],"night":[0.25,70.0],"cafe":[0.25,70.0],"library":[0.25,70.0],"train":[0.25,59.504]};
+const SLOOP={"rain":[0.2,40.0],"window":[0.2,29.6427],"storm":[0.2,40.0],"waves":[0.2,40.0],"river":[0.2,40.0],"fall":[0.2,19.9859],"fire":[0.2,40.0],"birds":[0.2,40.0],"trees":[0.2,40.0],"jungle":[0.2,40.0],"night":[0.2,40.0],"cafe":[0.2,40.0],"library":[0.2,40.0],"train":[0.2,40.0]};
 const SBASE={brown:.45,pink:.5,white:.2,beats:.55};
-const SBUF={},SLOAD={};let MIXN={},SPREV=0;
+const SURL=id=>"snd/v2/"+id+".mp3";const SBUF={},SLOAD={};let MIXN={},SPREV=0;
 function sndBuf(id){if(SBUF[id])return Promise.resolve(SBUF[id]);if(SLOAD[id])return SLOAD[id];const a=ac();
-  SLOAD[id]=fetch("snd/"+id+".mp3").then(r=>{if(!r.ok)throw 0;return r.arrayBuffer()}).then(b=>new Promise((ok,no)=>a.decodeAudioData(b,ok,no)))
+  SLOAD[id]=fetch(SURL(id)).then(r=>{if(!r.ok)throw 0;return r.arrayBuffer()}).then(b=>new Promise((ok,no)=>a.decodeAudioData(b,ok,no)))
    .then(buf=>{SBUF[id]=buf;delete SLOAD[id];return buf}).catch(e=>{delete SLOAD[id];throw e});return SLOAD[id]}
 const NBUF={};
 function noiseBuf(kind){if(NBUF[kind])return NBUF[kind];const a=ac(),len=a.sampleRate*8,b=a.createBuffer(2,len,a.sampleRate),X=Math.floor(a.sampleRate*.5);
@@ -1416,7 +1418,14 @@ function mixApply(mix){Object.keys(MIXN).forEach(id=>{if(!(id in mix))sndStop(id
   Object.entries(mix).forEach(([id,v])=>{const n=MIXN[id];if(!n)sndStart(id,v);else n.g.gain.setTargetAtTime(v*(SBASE[id]||1),a.currentTime,.15)})}
 function ambient(kind){clearTimeout(SPREV);mixApply(!kind||kind==="off"?{}:pmix())}
 function sndUI(){document.querySelectorAll(".sndt").forEach(b=>{const n=MIXN[b.dataset.v];b.classList.toggle("ld",!!(n&&n.loading))})}
-const BUILTIN={};IDEAS.forEach(([b,t],i)=>{const id="i"+i;BUILTIN["hl_"+id]={_k:"hl_"+id,kind:"hl",id,type:"text",text:t,bookId:b,note:"",idea:true,created:1700000000000+i,seen:0}});
+
+/* make sounds start fast: decode the saved mix ahead of time, and quietly download the rest (one by one) so later taps come from the offline cache */
+let SWARM=0;
+function sndWarm(mix){Object.keys(mix||{}).forEach(id=>{if(SBASE[id]===undefined&&SLOOP[id])sndBuf(id).catch(()=>{})});
+  if(SWARM)return;SWARM=1;const nc=navigator.connection;if(nc&&(nc.saveData||/2g/.test(nc.effectiveType||"")))return;
+  const ids=Object.keys(SLOOP);let i=0;const next=()=>{if(i>=ids.length)return;const id=ids[i++];
+    (window.caches?caches.match(SURL(id)):Promise.resolve(null)).then(hit=>hit||SBUF[id]||SLOAD[id]?null:fetch(SURL(id)).then(r=>r.ok&&r.arrayBuffer())).catch(()=>{}).then(()=>setTimeout(next,250))};
+  setTimeout(next,2500)}const BUILTIN={};IDEAS.forEach(([b,t],i)=>{const id="i"+i;BUILTIN["hl_"+id]={_k:"hl_"+id,kind:"hl",id,type:"text",text:t,bookId:b,note:"",idea:true,created:1700000000000+i,seen:0}});
 const PALETTES=[["#6d5dfc","#c084fc"],["#8b5cf6","#ec84c8"],["#5b8cff","#a46bff"],["#e98bd8","#ffb27a"],["#7c5cff","#6aa8ff"],["#b07cff","#ff8fb8"],["#4f7bff","#5fd3b5"]];
 const PROMPTS=["What moment today made you feel you're on the right track?","If you could keep only one line from today, what would it be?","What's one idea from a book you actually put into practice?","Who are you grateful for today, and why?","What is draining your energy that you need to say no to?","A year from now, what will you thank yourself for?","What small step tomorrow brings you closer to your goal?"];
 const MOODS=["😞","😕","😐","🙂","🤩"];
@@ -2313,7 +2322,7 @@ function pmix(){const c=pcfg();if(c.mix)return c.mix;return c.snd&&c.snd!=="off"
 function setMix(mix,quiet){setMetaQ({pomoCfg:Object.assign(pcfg(),{mix,snd:Object.keys(mix).length?"mix":"off"})},quiet)}
 
 function vFocus(){
-  const smx=pmix();const c=pcfg(),p=pomo(),left=pLeft(p),tot=phaseLen(p.phase,c),pct=1-left/tot;const R=112,C=2*Math.PI*R;
+  const smx=pmix();sndWarm(smx);const c=pcfg(),p=pomo(),left=pLeft(p),tot=phaseLen(p.phase,c),pct=1-left/tot;const R=112,C=2*Math.PI*R;
   const t=p.taskId&&get("task_"+p.taskId);const days=[...Array(7)].map((_,i)=>dkey(addDays(new Date(),i-6)));const fm=days.map(focusMin);const mx=Math.max(25,...fm);
   const todayMin=focusMin(today()),todaySes=focusOn(today()).length;
   return `<div><div class="eyebrow">Deep work</div><h1>Focus</h1><p class="sub">${PH[p.phase][1]}</p></div>
