@@ -1381,6 +1381,16 @@ const SND={
  soft:()=>tone(300,0,.18,"sine",.07,200),
 };
 function sfx(n){if(meta().sound===false)return;try{SND[n]&&SND[n]()}catch(e){}}
+/* focus sounds get their own audio engine with bigger buffers (no stutter), and it keeps itself alive
+   through screen locks, app switching and reloads while a focus session is running */
+let AAC=null;
+function aac(){if(!AAC){try{const C=window.AudioContext||window.webkitAudioContext;try{AAC=new C({latencyHint:"playback"})}catch(e){AAC=new C()}
+    AAC.onstatechange=()=>{if(AAC.state!=="running"&&sndShould())setTimeout(sndKeep,400)}}catch(e){AAC=null}}
+  if(AAC&&AAC.state!=="running")AAC.resume().catch(()=>{});return AAC}
+function sndShould(){const p=meta().pomo;return !!(p&&p.running&&p.phase==="focus"&&Object.keys(pmix()).length)}
+function sndSess(on){try{if(navigator.audioSession)navigator.audioSession.type=on?"playback":"auto"}catch(e){}}
+function sndKeep(){if(!sndShould())return;sndSess(1);const a=aac();if(a)mixApply(pmix())}
+[[document,"visibilitychange"],[window,"focus"],[window,"pageshow"],[document,"pointerdown"],[document,"keydown"],[document,"touchend"]].forEach(([t,ev])=>t.addEventListener(ev,()=>{if(!document.hidden)try{sndKeep()}catch(e){}},{passive:true}));
 /* ambient focus sounds — real recordings (seamless loops in snd/) + generated noise; up to 4 play together */
 const SNDS=[["rain","🌧️","Rain"],["window","🪟","Rain on window"],["storm","⛈️","Thunderstorm"],["waves","🌊","Ocean waves"],
  ["river","🏞️","River"],["fall","💧","Waterfall"],["fire","🔥","Fireplace"],["birds","🐦","Birds"],
@@ -1390,18 +1400,18 @@ const SNDS=[["rain","🌧️","Rain"],["window","🪟","Rain on window"],["storm
 const SLOOP={"rain":[0.2,40.0],"window":[0.2,29.6427],"storm":[0.2,40.0],"waves":[0.2,40.0],"river":[0.2,40.0],"fall":[0.2,19.9859],"fire":[0.2,40.0],"birds":[0.2,40.0],"trees":[0.2,40.0],"jungle":[0.2,40.0],"night":[0.2,40.0],"cafe":[0.2,40.0],"library":[0.2,40.0],"train":[0.2,40.0]};
 const SBASE={brown:.45,pink:.5,white:.2,beats:.55};
 const SURL=id=>"snd/v2/"+id+".mp3";const SBUF={},SLOAD={};let MIXN={},SPREV=0;
-function sndBuf(id){if(SBUF[id])return Promise.resolve(SBUF[id]);if(SLOAD[id])return SLOAD[id];const a=ac();
+function sndBuf(id){if(SBUF[id])return Promise.resolve(SBUF[id]);if(SLOAD[id])return SLOAD[id];const a=aac();
   SLOAD[id]=fetch(SURL(id)).then(r=>{if(!r.ok)throw 0;return r.arrayBuffer()}).then(b=>new Promise((ok,no)=>a.decodeAudioData(b,ok,no)))
    .then(buf=>{SBUF[id]=buf;delete SLOAD[id];return buf}).catch(e=>{delete SLOAD[id];throw e});return SLOAD[id]}
 const NBUF={};
-function noiseBuf(kind){if(NBUF[kind])return NBUF[kind];const a=ac(),len=a.sampleRate*8,b=a.createBuffer(2,len,a.sampleRate),X=Math.floor(a.sampleRate*.5);
+function noiseBuf(kind){if(NBUF[kind])return NBUF[kind];const a=aac(),len=a.sampleRate*8,b=a.createBuffer(2,len,a.sampleRate),X=Math.floor(a.sampleRate*.5);
   for(let ch=0;ch<2;ch++){const d=b.getChannelData(ch);let last=0,b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;
     for(let i=0;i<len;i++){const w=Math.random()*2-1;
       if(kind==="pink"){b0=.99886*b0+w*.0555179;b1=.99332*b1+w*.0750759;b2=.969*b2+w*.153852;b3=.8665*b3+w*.3104856;b4=.55*b4+w*.5329522;b5=-.7616*b5-w*.016898;d[i]=(b0+b1+b2+b3+b4+b5+b6+w*.5362)*.11;b6=w*.115926}
       else if(kind==="white")d[i]=w*.35;else{last=(last+.02*w)/1.02;d[i]=last*3.2}}
     for(let i=0;i<X;i++){const t=i/X;d[len-X+i]=d[len-X+i]*Math.sqrt(1-t)+d[i]*Math.sqrt(t)}}
   return NBUF[kind]=b}
-function sndStart(id,vol){const a=ac();if(!a)return;const g=a.createGain();g.gain.value=0;g.connect(a.destination);const n={g,srcs:[],id};MIXN[id]=n;
+function sndStart(id,vol){const a=aac();if(!a)return;const g=a.createGain();g.gain.value=0;g.connect(a.destination);const n={g,srcs:[],id};MIXN[id]=n;
   const go=srcs=>{if(MIXN[id]!==n){srcs.forEach(x=>{try{x.stop()}catch(e){}});return}n.srcs=srcs;g.gain.setTargetAtTime(vol*(SBASE[id]||1),a.currentTime,.6)};
   const X=Math.floor(a.sampleRate*.5);
   if(id==="beats"){const m=a.createChannelMerger(2),l=a.createOscillator(),r=a.createOscillator();l.frequency.value=200;r.frequency.value=214;l.connect(m,0,0);r.connect(m,0,1);
@@ -1412,9 +1422,9 @@ function sndStart(id,vol){const a=ac();if(!a)return;const g=a.createGain();g.gai
   n.loading=true;sndUI();
   sndBuf(id).then(buf=>{n.loading=false;const x=a.createBufferSource();x.buffer=buf;x.loop=true;const lp=SLOOP[id];if(lp){x.loopStart=lp[0];x.loopEnd=lp[0]+lp[1]}x.connect(g);x.start(0,lp?lp[0]:0);go([x]);sndUI()})
    .catch(()=>{n.loading=false;if(MIXN[id]===n)delete MIXN[id];toast("Couldn't load that sound — check your internet");sndUI()})}
-function sndStop(id){const n=MIXN[id];if(!n)return;delete MIXN[id];const a=ac();try{n.g.gain.setTargetAtTime(0,a.currentTime,.4)}catch(e){}
+function sndStop(id){const n=MIXN[id];if(!n)return;delete MIXN[id];const a=aac();try{n.g.gain.setTargetAtTime(0,a.currentTime,.4)}catch(e){}
   setTimeout(()=>{n.srcs.forEach(x=>{try{x.stop()}catch(e){}});try{n.g.disconnect()}catch(e){}},1600)}
-function mixApply(mix){Object.keys(MIXN).forEach(id=>{if(!(id in mix))sndStop(id)});const a=ac();if(!a)return;
+function mixApply(mix){sndSess(Object.keys(mix).length>0);Object.keys(MIXN).forEach(id=>{if(!(id in mix))sndStop(id)});const a=aac();if(!a)return;
   Object.entries(mix).forEach(([id,v])=>{const n=MIXN[id];if(!n)sndStart(id,v);else n.g.gain.setTargetAtTime(v*(SBASE[id]||1),a.currentTime,.15)})}
 function ambient(kind){clearTimeout(SPREV);mixApply(!kind||kind==="off"?{}:pmix())}
 function sndUI(){document.querySelectorAll(".sndt").forEach(b=>{const n=MIXN[b.dataset.v];b.classList.toggle("ld",!!(n&&n.loading))})}
@@ -2400,7 +2410,7 @@ function pTaskSheet(){
 
 /* focus sounds: tap to add/remove (preview plays a few seconds when the timer isn't running), sliders set each volume */
 document.addEventListener("input",e=>{const t=e.target;if(!t.classList||!t.classList.contains("sndr"))return;const id=t.dataset.snd,v=t.value/100,n=MIXN[id];
-  if(n){const a=ac();n.g.gain.setTargetAtTime(v*(SBASE[id]||1),a.currentTime,.08)}});
+  if(n){const a=aac();n.g.gain.setTargetAtTime(v*(SBASE[id]||1),a.currentTime,.08)}});
 document.addEventListener("change",e=>{const t=e.target;if(!t.classList||!t.classList.contains("sndr"))return;const mix=Object.assign({},pmix());mix[t.dataset.snd]=t.value/100;setMix(mix,true)});
 function taskSheet(t){
   const isNew=!t.id;t=Object.assign({title:"",date:S.selDay||today(),end:"",time:"",prio:0,goalId:"",color:""},t);let prio=t.prio||0,color=t.color||"";
@@ -2668,6 +2678,9 @@ ACTX.sndT=el=>{const id=el.dataset.v;const mix=Object.assign({},pmix());
   setMix(mix);const p=pomo();clearTimeout(SPREV);mixApply(mix);
   if(!(p.running&&p.phase==="focus")&&Object.keys(mix).length)SPREV=setTimeout(()=>{if(!(pomo().running&&pomo().phase==="focus"))mixApply({})},6000)};
 ACTX.sndOff=()=>{setMix({});clearTimeout(SPREV);mixApply({})};
+
+/* after a reload or reopening mid-session, bring the focus sounds back */
+setTimeout(()=>{try{sndKeep()}catch(e){}},1200);
 /* ---------------- Medical page: MRCP Part 1 plan, chapters, daily exams, Anki, study to-do ---------------- */
 const MSUBJ=["Cardiology","Respiratory","Gastroenterology","Endocrinology","Neurology","Nephrology","Rheumatology","Haematology","Infectious diseases","Dermatology","Psychiatry","Pharmacology & toxicology","Clinical sciences","Ophthalmology","Mixed"];
 const MCOL=["#e11d48","#0ea5e9","#f59e0b","#8b5cf6","#6366f1","#14b8a6","#ec4899","#dc2626","#16a34a","#d946ef","#0891b2","#ea580c","#2563eb","#65a30d","#64748b"];
@@ -3472,7 +3485,7 @@ loadLocal();
     history.replaceState(null,"",location.pathname);S.tab="home";setTimeout(()=>toast(`Your data is here ✓ (${n} items added)`,3500),600);
   }catch(e){history.replaceState(null,"",location.pathname);setTimeout(()=>toast("That import link didn't work"),600)}})();
 render();setSync();initCloud();
-if("serviceWorker" in navigator&&location.protocol==="https:"){const hadSW=!!navigator.serviceWorker.controller;let rl=0;navigator.serviceWorker.addEventListener("controllerchange",()=>{if(hadSW&&!rl){rl=1;location.reload()}});navigator.serviceWorker.register("sw.js").then(r=>{document.addEventListener("visibilitychange",()=>{if(!document.hidden)r.update().catch(()=>{})})}).catch(()=>{})}
+if("serviceWorker" in navigator&&location.protocol==="https:"){const hadSW=!!navigator.serviceWorker.controller;let rl=0;navigator.serviceWorker.addEventListener("controllerchange",()=>{if(!hadSW||rl)return;rl=1;const go=()=>{const p=meta().pomo;if(p&&p.running)setTimeout(go,4000);else location.reload()};go()});navigator.serviceWorker.register("sw.js").then(r=>{document.addEventListener("visibilitychange",()=>{if(!document.hidden)r.update().catch(()=>{})})}).catch(()=>{})}
 </script>
 </body>
 </html>
