@@ -22,6 +22,7 @@
  "id": "./",
  "description": "Your planner, reading, Medicine (MRCP) and OCD Journey — on phone and laptop.",
  "display_override": [
+  "window-controls-overlay",
   "standalone",
   "minimal-ui"
  ]

@@ -1028,10 +1028,25 @@ body.desk .nav,body.desk nav.nav{display:none!important}
 .dinst{display:flex;align-items:center;justify-content:center;gap:6px;height:40px;margin:8px 0 10px;border-radius:14px;font-size:13.5px;font-weight:800;color:var(--v1);background:color-mix(in srgb,var(--v1) 12%,transparent);border:1.5px dashed color-mix(in srgb,var(--v1) 40%,transparent)}
 .dinst:hover{background:color-mix(in srgb,var(--v1) 18%,transparent)}
 .isteps{padding-left:20px;line-height:1.7;font-size:14.5px}.isteps li{margin-bottom:6px}
+
+/* installed laptop app: no title bar — the background runs to the top, window buttons float over it */
+.wco{display:none}
+@media (display-mode: window-controls-overlay){
+ :root{--tb:env(titlebar-area-height,32px)}
+ body{padding-top:var(--tb)}
+ .wco{display:block;position:fixed;left:env(titlebar-area-x,0);top:env(titlebar-area-y,0);width:env(titlebar-area-width,100%);height:var(--tb);-webkit-app-region:drag;app-region:drag;z-index:15}
+ body.desk .dside,body.desk .dright{top:calc(var(--tb) + 6px)}
+ .ov{padding-top:var(--tb)}
+ .reader{top:var(--tb)}
+ .toast{top:calc(var(--tb) + 14px)}
+ .sheet.xfull{height:calc(100dvh - var(--tb));max-height:calc(100dvh - var(--tb))}
+ body.desk .sheet{max-height:calc(88vh - var(--tb))}
+ body.desk .sheet.xfull{height:calc(92vh - var(--tb));max-height:calc(92vh - var(--tb))}
+}
 </style>
 </head>
 <body>
-<div class="bg"><i></i><i></i><i></i></div><div id="bgimg"></div><canvas id="fx" aria-hidden="true"></canvas>
+<div class="bg"><i></i><i></i><i></i></div><div id="bgimg"></div><canvas id="fx" aria-hidden="true"></canvas><div class="wco" aria-hidden="true"></div>
 <div class="app">
   <div class="top">
     <div class="brandrow"><button class="iconbtn" id="backbtn" data-act="back" aria-label="Menu"><span class="dots4"><i></i><i></i><i></i><i></i></span></button><div class="brand"><span>Lines</span></div></div>
@@ -1174,7 +1189,7 @@ function applyBg(id){
   const b=bgInfo(id);if(!b)return;CURBG=id;
   const ph=b.ph||["#e3d6ff","#f6d9ee","#ffe3cf"];const bg=$(".bg");if(bg)bg.style.background=`linear-gradient(180deg,${ph[0]},${ph[1]} 55%,${ph[2]})`;
   const holder=$("#bgimg");if(holder){const img=new Image();img.alt="";img.decoding="async";
-    img.onload=()=>{holder.querySelectorAll("img").forEach(o=>{o.classList.remove("on");setTimeout(()=>o.remove(),900)});holder.appendChild(img);holder.style.setProperty("--bgurl",`url("${img.src}")`);requestAnimationFrame(()=>requestAnimationFrame(()=>img.classList.add("on")))};
+    img.onload=()=>{holder.querySelectorAll("img").forEach(o=>{o.classList.remove("on");setTimeout(()=>o.remove(),900)});holder.appendChild(img);holder.style.setProperty("--bgurl",`url("${img.src}")`);requestAnimationFrame(()=>requestAnimationFrame(()=>img.classList.add("on")));tbTint(img)};
     if(b.src&&String(b.src).startsWith("local:")&&!LOCALURL[b.src])idbGet(b.src).then(bl=>{if(bl){LOCALURL[b.src]=URL.createObjectURL(bl);img.src=LOCALURL[b.src]}}).catch(()=>{});
     else{const wide=!String(id).startsWith("u:")&&window.matchMedia("(min-width:1024px), (min-width:820px) and (hover:hover) and (pointer:fine)").matches;holder.classList.toggle("wide",wide);img.src=wide?`bg/w/${id}.jpg`:bgSrc(id)}
     if(String(b.src||"").startsWith("local:")||String(id).startsWith("u:"))holder.classList.remove("wide")}
@@ -1321,6 +1336,13 @@ async function hdUnlock(code){if(hdBusy)return;const raw=String(code||"").toUppe
   if(!files.length)throw "net";await addPhotos(files)}
   catch(e){toast(e==="code"?"That code didn't work — check it and try again":"No connection — try again in a moment",3500)}
   finally{hdBusy=false}}
+
+/* laptop app without a title bar: tint the window buttons with the colour at the top of the background */
+const WCO=()=>!!(window.matchMedia&&matchMedia("(display-mode: window-controls-overlay)").matches);
+function tbTint(img){if(!WCO())return;try{const c=document.createElement("canvas");c.width=40;c.height=4;const x=c.getContext("2d");
+  const w=img.naturalWidth,h=img.naturalHeight;x.drawImage(img,w*.72,0,w*.28,Math.max(2,h*.05),0,0,40,4);const d=x.getImageData(0,0,40,4).data;let r=0,g=0,b=0,n=0;
+  for(let i=0;i<d.length;i+=4){r+=d[i];g+=d[i+1];b+=d[i+2];n++}window.TBC=`rgb(${r/n|0},${g/n|0},${b/n|0})`;
+  const m=document.querySelector('meta[name=theme-color]');if(m)m.content=window.TBC}catch(e){}}
 /* ---------------- sound effects (synthesised with Web Audio, no files) ---------------- */
 let AC=null;
 function ac(){if(!AC){try{AC=new (window.AudioContext||window.webkitAudioContext)()}catch(e){AC=null}}if(AC&&AC.state==="suspended")AC.resume().catch(()=>{});return AC}
@@ -1508,7 +1530,7 @@ let lastTab=null;
 /* theme: auto (follows the phone) · light · dark */
 const MQ=window.matchMedia?matchMedia("(prefers-color-scheme: dark)"):null;
 function applyTheme(){const t=meta().theme||"auto";const dark=t==="dark"||(t==="auto"&&MQ&&MQ.matches);
-  document.documentElement.classList.toggle("dark",dark);const m=document.querySelector('meta[name=theme-color]');if(m)m.content=dark?"#0d0a24":"#efe3f7"}
+  document.documentElement.classList.toggle("dark",dark);const m=document.querySelector('meta[name=theme-color]');if(m)m.content=(window.TBC&&typeof WCO=="function"&&WCO())?window.TBC:(dark?"#0d0a24":"#efe3f7")}
 MQ&&MQ.addEventListener&&MQ.addEventListener("change",()=>{applyTheme();syncBg()});
 const ICON_SUN='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.2 5.2l1.6 1.6M17.2 17.2l1.6 1.6M5.2 18.8l1.6-1.6M17.2 6.8l1.6-1.6"/></svg>';
 const ICON_MOON='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11z"/></svg>';
@@ -3204,7 +3226,7 @@ Object.assign(ACTX,{rpNav:el=>{const mk=S.rpMonth||today().slice(0,7);const [y,m
   rpDay:el=>{S.tab="plan";S.planTab="day";S.selDay=el.dataset.v;history.replaceState(null,"","#plan");render()}});
 
 /* install as a real app on the laptop (own window, Start menu / Dock icon) */
-let DEFER=null;const isApp=()=>matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;
+let DEFER=null;const isApp=()=>matchMedia("(display-mode: standalone), (display-mode: window-controls-overlay), (display-mode: minimal-ui)").matches||navigator.standalone===true;
 addEventListener("beforeinstallprompt",e=>{e.preventDefault();DEFER=e;deskRender()});
 addEventListener("appinstalled",()=>{DEFER=null;toast("Lines is installed on this computer ✓",3000);deskRender()});
 Object.assign(ACTX,{installApp:async()=>{if(DEFER){DEFER.prompt();const r=await DEFER.userChoice.catch(()=>null);DEFER=null;if(r&&r.outcome==="accepted")toast("Installing Lines…");deskRender();return}
