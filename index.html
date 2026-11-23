@@ -1022,6 +1022,8 @@ body.desk .greet h1{font-size:40px}
 body.desk .nav,body.desk nav.nav{display:none!important}
 
 @media (min-width:1024px),(min-width:820px) and (hover:hover) and (pointer:fine){nav.nav{display:none!important}}
+
+@media (min-width:760px){#bgimg.wide::before{display:none}#bgimg.wide img{width:100%;margin:0;-webkit-mask-image:none;mask-image:none;animation:kb 60s ease-in-out infinite alternate}}
 </style>
 </head>
 <body>
@@ -1170,7 +1172,8 @@ function applyBg(id){
   const holder=$("#bgimg");if(holder){const img=new Image();img.alt="";img.decoding="async";
     img.onload=()=>{holder.querySelectorAll("img").forEach(o=>{o.classList.remove("on");setTimeout(()=>o.remove(),900)});holder.appendChild(img);holder.style.setProperty("--bgurl",`url("${img.src}")`);requestAnimationFrame(()=>requestAnimationFrame(()=>img.classList.add("on")))};
     if(b.src&&String(b.src).startsWith("local:")&&!LOCALURL[b.src])idbGet(b.src).then(bl=>{if(bl){LOCALURL[b.src]=URL.createObjectURL(bl);img.src=LOCALURL[b.src]}}).catch(()=>{});
-    else img.src=bgSrc(id)}
+    else{const wide=!String(id).startsWith("u:")&&window.matchMedia("(min-width:1024px), (min-width:820px) and (hover:hover) and (pointer:fine)").matches;holder.classList.toggle("wide",wide);img.src=wide?`bg/w/${id}.jpg`:bgSrc(id)}
+    if(String(b.src||"").startsWith("local:")||String(id).startsWith("u:"))holder.classList.remove("wide")}
   applyAccent(b.acc);startFx(b.fx);
   const m=document.querySelector('meta[name=theme-color]');if(m)m.content=ph[0];
 }
@@ -3167,7 +3170,7 @@ function deskSetup(){const on=DESK.matches;document.body.classList.toggle("desk"
   if(on&&!$("#dside")){const a=document.createElement("aside");a.id="dside";a.className="dside";document.body.appendChild(a);
     const r=document.createElement("aside");r.id="dright";r.className="dright";document.body.appendChild(r)}
   if(on)deskRender()}
-DESK.addEventListener?DESK.addEventListener("change",()=>{deskSetup();render()}):DESK.addListener(()=>{deskSetup();render()});
+const _dch=()=>{deskSetup();if(typeof CURBG!=="undefined"&&CURBG)applyBg(CURBG);render()};DESK.addEventListener?DESK.addEventListener("change",_dch):DESK.addListener(_dch);
 function deskRender(){if(!document.body.classList.contains("desk"))return;const sd=$("#dside"),rp=$("#dright");if(!sd||!rp)return;
   const cur=S.tab==="mrcp"?"med":S.tab;const items=NAV.filter(Boolean);
   sd.innerHTML=`<div class="dbrand"><span class="dlogo">L</span><b>Lines</b><small>Make them real</small></div>
