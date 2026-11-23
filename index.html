@@ -1018,6 +1018,10 @@ body.desk .jrow .jc,body.desk .g,body.desk .tile{transition:transform .3s var(--
 body.desk .jrow .jc:hover,body.desk .obig:hover,body.desk .mtile:hover{transform:translateY(-3px)}
 body.desk .greet h1{font-size:40px}
 @media (max-width:1279px){body.desk .dright{display:none}body.desk .app{margin-right:0}}
+@media (max-width:1023px){body.desk .dside{width:200px;left:12px}body.desk .app{margin-left:224px;padding:18px 20px 60px}}
+body.desk .nav,body.desk nav.nav{display:none!important}
+
+@media (min-width:1024px),(min-width:820px) and (hover:hover) and (pointer:fine){nav.nav{display:none!important}}
 </style>
 </head>
 <body>
@@ -3158,7 +3162,7 @@ Object.assign(ACTX,{
   winDel:el=>{del("owin_"+el.dataset.id)},
 });
 /* ---------------- Laptop layout: sidebar + main + "Today" panel (same app, same data) ---------------- */
-const DESK=window.matchMedia("(min-width:1024px)");
+const DESK=window.matchMedia("(min-width:1024px), (min-width:820px) and (hover:hover) and (pointer:fine)");
 function deskSetup(){const on=DESK.matches;document.body.classList.toggle("desk",on);
   if(on&&!$("#dside")){const a=document.createElement("aside");a.id="dside";a.className="dside";document.body.appendChild(a);
     const r=document.createElement("aside");r.id="dright";r.className="dright";document.body.appendChild(r)}
