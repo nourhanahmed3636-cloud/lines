@@ -668,6 +668,12 @@ html.dark .mwarn{background:rgba(251,146,60,.15);color:#fdba74}
 .lpd.late{background:color-mix(in srgb,#f97316 7%,transparent)}.lpd.rev{background:color-mix(in srgb,#8b5cf6 7%,transparent)}
 .lph{display:flex;justify-content:space-between;gap:8px;font-size:12.5px}.lph span{color:var(--muted);text-align:right}
 .lpb{display:flex;gap:10px;align-items:flex-start;margin-top:8px}.lpt{flex:1;min-width:0;font-size:13px;line-height:1.4}.lpt small{display:block;color:var(--muted);font-size:11.5px;font-weight:700;margin-bottom:2px}
+body.wdg .nav,body.wdg .top,body.wdg #dside,body.wdg #dright,body.wdg .sync{display:none!important}
+body.wdg .app{padding:10px 10px 14px!important;max-width:none!important;margin:0!important}body.wdg #view{padding:0!important}
+.wdgx .g{margin:0 0 10px;padding:14px}.wtime{font-size:46px;font-weight:900;text-align:center;letter-spacing:-.02em;margin:4px 0 6px;font-variant-numeric:tabular-nums}
+.wbar{height:6px;border-radius:4px;background:color-mix(in srgb,var(--v1) 14%,transparent);overflow:hidden}.wbar i{display:block;height:100%;background:var(--grad)}
+.wph{font-size:13px}.wtask{display:block;width:100%;margin-top:10px;font-size:12.5px;font-weight:700;color:var(--v1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wpomo .seg{margin-top:10px}.wlist{margin-top:6px;max-height:none}.wopen{display:block;text-align:center;font-size:12px;font-weight:800;color:var(--v1);text-decoration:none;padding:4px}
 .mempty{text-align:center}.mempty h3{margin:8px 0 4px}
 .srings{display:flex;gap:12px;overflow-x:auto;padding:10px 2px 4px;scrollbar-width:none}.srings::-webkit-scrollbar{display:none}
 .sring{flex:none;text-align:center;width:62px}.sring small{display:block;font-size:10.5px;color:var(--muted);margin-top:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -1621,7 +1627,7 @@ async function upload(file){
 
 /* ---------------- render ---------------- */
 const NAV=[["home","Home"],["plan","Plan"],["med","Medicine"],null,["ocd","OCD"],["body","Body"],["lib","Library"]];
-const VIEWS={home:()=>vHome(),lib:()=>vLib(),rev:()=>vRev(),plan:()=>vPlan(),jour:()=>vJour(),stats:()=>vStats(),body:()=>vBody(),focus:()=>vFocus(),med:()=>vMedicine(),mrcp:()=>vMrcp(),ocd:()=>vOcd()};
+const VIEWS={home:()=>vHome(),lib:()=>vLib(),rev:()=>vRev(),plan:()=>vPlan(),jour:()=>vJour(),stats:()=>vStats(),body:()=>vBody(),focus:()=>vFocus(),med:()=>vMedicine(),mrcp:()=>vMrcp(),widget:()=>vWidget(),ocd:()=>vOcd()};
 let lastTab=null;
 /* theme: auto (follows the phone) · light · dark */
 const MQ=window.matchMedia?matchMedia("(prefers-color-scheme: dark)"):null;
@@ -1642,12 +1648,12 @@ function toggleTheme(ev){
     t.ready.then(()=>document.documentElement.animate({clipPath:[`circle(0px at ${x}px ${y}px)`,`circle(${r}px at ${x}px ${y}px)`]},{duration:650,easing:"cubic-bezier(.22,1,.36,1)",pseudoElement:"::view-transition-new(root)"})).catch(()=>{});
   }else run();
 }
-function render(){if(!window._dsk&&typeof deskSetup==="function"){window._dsk=1;deskSetup()}applyTheme();syncBg();
+function render(){if(S.tab==="widget")window._dsk=1;if(!window._dsk&&typeof deskSetup==="function"){window._dsk=1;deskSetup()}applyTheme();syncBg();
   const nav=$("#nav");
   if(!nav.children.length){const tb=n=>`<button class="tab" data-act="tab" data-v="${n[0]}">${ico(n[0])}${n[1]}<span class="dot"></span></button>`,k=NAV.indexOf(null);
     nav.innerHTML=`<div class="ng">${NAV.slice(0,k).map(tb).join("")}</div><button class="plus" data-act="quick" aria-label="Add">${ico("plus",2.4)}</button><div class="ng">${NAV.slice(k+1).map(tb).join("")}</div>`}
   nav.querySelectorAll(".tab").forEach(b=>b.classList.toggle("on",b.dataset.v===S.tab||(b.dataset.v==="med"&&S.tab==="mrcp")));
-  document.body.classList.toggle("home",S.tab==="home");const bb=$("#backbtn");const sub=["rev","stats","jour","focus","mrcp"].includes(S.tab);
+  document.body.classList.toggle("home",S.tab==="home");document.body.classList.toggle("wdg",S.tab==="widget");const bb=$("#backbtn");const sub=["rev","stats","jour","focus","mrcp"].includes(S.tab);
   bb.innerHTML=sub?ico("back",2.2):`<span class="dots4"><i></i><i></i><i></i><i></i></span>`;bb.dataset.act=sub?"back":"go";bb.dataset.v=sub?"":"stats";
   const v=$("#view");const fn=VIEWS[S.tab]||VIEWS.home;
   const active=document.activeElement;const keep=active&&v.contains(active)&&active.id?active.id:null;const pos=keep&&active.selectionStart;
@@ -2421,7 +2427,7 @@ let lastTitle="";
 setInterval(()=>{const p=meta().pomo;if(!p||!p.running){if(lastTitle){document.title="Lines — Make them Real";lastTitle=""}return}
   const left=pLeft(Object.assign(pomo(),p));const t=mmss(left);
   const el=$("#ptime");if(el){el.textContent=t;const r=$("#pring");if(r)r.style.strokeDashoffset=(+r.dataset.c)*(left/(+r.dataset.tot))}
-  const hm=$("#pmini");if(hm)hm.textContent=t;
+  const hm=$("#pmini");if(hm)hm.textContent=t;const wb=$("#wbari");if(wb)wb.style.width=Math.round((1-left/(+wb.dataset.tot||1))*100)+"%";
   const nt=`${t} · ${PH[p.phase][0]}`;if(nt!==lastTitle){document.title=nt;lastTitle=nt}
   if(left<=0){pNext(true)}
 },500);
@@ -3084,6 +3090,20 @@ function medSchedTab(){const t=today();const dn=LPLAN.filter(r=>lpS(r[0]).l).len
    <div class="mbar" style="margin-top:10px;max-width:none"><i style="width:${Math.round(dn/LPLAN.length*100)}%"></i></div></div>
   <div class="g lpw">${rows}</div>`}
 Object.assign(ACTX,{lpTog:el=>{const d=el.dataset.d,f=el.dataset.f,st=lpS(d);const v=!st[f];const t=get("task_lp"+f+"_"+d);if(t)put(Object.assign({},t,{done:v,doneAt:v?Date.now():null}));if(v){sfx("success");addXP("med",f==="l"?20:10,f==="l"?"Lectures: "+d:"Revision: "+d)}}});
+/* ---------------- Windows widget: compact focus timer + today's to-do (open index.html#widget) ---------------- */
+function vWidget(){const c=pcfg(),p=pomo(),left=pLeft(p),tot=phaseLen(p.phase,c),pct=Math.round((1-left/tot)*100);const t=p.taskId&&get("task_"+p.taskId);
+  const tt=tasksFor(today()),done=tt.filter(x=>x.done).length;const od=all("task").filter(x=>!x.done&&x.date&&(x.end||x.date)<today()).length;
+  return `<div class="wdgx">
+   <div class="g wpomo ${p.phase}"><div class="row between"><b class="wph">${p.phase==="focus"?"🍅":"☕"} ${PH[p.phase][0]}${p.running?"":" · paused"}</b><span class="muted" style="font-size:12px">${focusMin(today())} min today</span></div>
+    <div class="wtime" id="ptime">${mmss(left)}</div><div class="wbar"><i id="wbari" data-tot="${tot}" style="width:${pct}%"></i></div>
+    <button class="wtask" data-act="pTask">${t?`🎯 <span dir="auto">${esc(t.title)}</span>`:"＋ Choose a task to focus on"}</button>
+    <div class="row" style="justify-content:center;gap:10px;margin-top:10px"><button class="iconbtn" data-act="pReset" aria-label="Reset">↺</button><button class="btn indigo" style="flex:1;height:44px" data-act="pToggle">${p.running?"❚❚ Pause":"▶ Start"}</button><button class="iconbtn" data-act="pSkip" aria-label="Skip">⏭</button></div>
+    ${seg([["focus","Focus"],["short","Short"],["long","Long"]],p.phase,"pPhase")}</div>
+   <div class="g"><div class="row between"><h3 style="margin:0">Today · ${fmt(today(),{weekday:"short",day:"numeric",month:"short"})}</h3><span class="count">${done}/${tt.length}</span></div>
+    ${od?`<div class="muted" style="font-size:12px;margin-top:4px">⚠️ ${od} overdue — open Lines to sort them</div>`:""}
+    <div class="wlist">${tt.length?tt.map(taskRow).join(""):`<div class="muted" style="padding:8px 0">Nothing planned today ✨</div>`}</div>
+    ${qa("qa-wdg",today(),"Add a task for today…")}</div>
+   <a class="wopen" href="./" target="_blank">Open Lines ↗</a></div>`}
 function vMrcp(){if(S.medTab==="anki")S.medTab="today";S.medTab=S.medTab||"today";if(S.medTab==="sched")S.medTab="plan";const T=[["today","Today"],["plan","Plan"],["exam","Study"],["todo","To-do"]];
   const pk=mcfg().pack;if(!QP&&pk&&pk.n)medPack().then(p=>{if(p&&S.tab==="mrcp")render()});
   if(pk&&pk.n&&(pk.v||1)<3&&localStorage.getItem("lines-code")&&!window._pkUp){window._pkUp=1;setTimeout(()=>medLoadPack(null,false),600)}
