@@ -1192,7 +1192,7 @@ const BGDATA={"cotton":{"n":"Cotton sky","m":"light","ph":["#b6bdee","#d4c2e1","
 const SCENES={bg:{name:"Daily review"}};const sceneNow=()=>"bg";let sceneN=0;
 const LSG=k=>{try{return localStorage.getItem(k)}catch(e){return null}},LSS=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}};
 /* laptop-only wallpapers from her Pinterest board "lines" — kept locked on the site (like the HD pack) and unlocked once per laptop with the code */
-const PBV=1;
+const PBV=2;
 function pbList(){try{const d=JSON.parse(LSG("lines-pbg")||"null");return d&&d.v===PBV?d.l:[]}catch(e){return []}}
 const isWideScr=()=>window.matchMedia("(min-width:1024px), (min-width:820px) and (hover:hover) and (pointer:fine)").matches;
 function bgInfo(id){if(!id)return null;if(id.startsWith("p:")){const l=pbList(),i=l.findIndex(x=>x.id===id.slice(2));if(i<0)return null;const p=l[i];return {n:"Pinterest "+(i+1),m:p.m,ph:p.ph,acc:p.acc,fx:p.fx,src:"local:pbg_"+p.id,pb:1}}if(id.startsWith("u:")){const u=get("ubg_"+id.slice(2));return u?{n:u.n||"My photo",m:u.m,ph:u.ph,acc:u.acc,fx:u.fx||"dust",src:u.assetId}:null}return BGDATA[id]||null}
@@ -1358,8 +1358,8 @@ async function pbLoad(code,quiet){if(pbBusy)return;const raw=String(code||LSG("l
       const u=URL.createObjectURL(bl);const im=await new Promise((ok,no)=>{const i=new Image();i.onload=()=>ok(i);i.onerror=no;i.src=u});const sm=sampleBg(im);LOCALURL[lid]=u;
       l.push({id,ph:sm.ph,acc:sm.acc,m:sm.m,fx:sm.fx});toast(`Adding laptop wallpapers ${++got}/${ids.length}…`,1500)}};
     await Promise.all([w(),w()]);l.sort((a,b)=>a.id<b.id?-1:1);
-    LSS("lines-pbg",JSON.stringify({v:PBV,l}));LSS("lines-code",raw);
-    toast(`${l.length} Pinterest wallpapers added for the laptop ✨`,3000);syncBg(true);render()}
+    LSS("lines-pbg",JSON.stringify({v:PBV,l}));LSS("lines-code",raw);for(let k=ids.length+1;k<=24;k++)idbDel("local:pbg_"+String(k).padStart(2,"0")).catch(()=>{});
+    toast(quiet?`Laptop wallpapers updated ✨`:`${l.length} Pinterest wallpapers added for the laptop ✨`,3000);syncBg(true);render()}
   catch(e){if(!quiet)toast(e==="code"?"That code didn't work — check it and try again":"No connection — try again in a moment",3500)}
   finally{pbBusy=false}}
 document.addEventListener("keydown",ev=>{if(ev.key==="Enter"&&ev.target&&ev.target.id==="pb-code"){ev.preventDefault();pbLoad(ev.target.value)}});
