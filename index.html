@@ -1067,6 +1067,14 @@ html.dark body.desk .dday b,html.dark body.desk .dday small{text-shadow:0 0 14px
 
 /* laptop: show wallpapers still and pixel-sharp (the slow zoom made them look soft) */
 body.desk #bgimg.wide img{animation:none;transform:none;will-change:auto}
+
+/* Windows app window buttons */
+.wctl{position:fixed;top:8px;right:10px;z-index:300;display:flex;gap:6px}
+.wctl button{width:34px;height:28px;border-radius:10px;border:1px solid rgba(255,255,255,.55);background:rgba(255,255,255,.55);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);color:var(--ink);display:grid;place-items:center;cursor:pointer;transition:background .2s,color .2s}
+html.dark .wctl button{background:rgba(20,16,44,.55);border-color:rgba(255,255,255,.14)}
+.wctl button:hover{background:rgba(255,255,255,.85)}
+.wctl button.x:hover{background:#e5484d;color:#fff;border-color:#e5484d}
+body.lapp.desk .dday{padding-right:84px}
 </style>
 </head>
 <body>
@@ -1339,6 +1347,9 @@ async function addPhotos(files){
   if(hd)setMetaQ({hdDone:true},true);
   render();toast(n?(rep?`${n} HD backgrounds ✨ (${rep} old copies replaced)`:`Added ${n} background${n>1?"s":""} ✨`):"Couldn't add those photos",3000);return n;
 }
+function appUpdBanner(){if(window.LINES_APP!==1)return "";
+  return `<div class="g hdban"><span class="hdic">🪟</span><div style="flex:1;min-width:0"><b>Update the Windows app</b><small>Full screen, no white bar, and no gaps at the sides. Download, open it, click Install — your data stays.</small>
+  <div class="hdrow"><a class="btn" style="text-decoration:none;display:inline-flex;align-items:center;justify-content:center;padding:10px 16px;border-radius:14px;background:var(--grad);color:#fff;font-weight:800" href="download/Lines-Setup.exe" download>⬇ Download update</a></div></div></div>`}
 function pbBanner(){if(!isWideScr()||pbList().length||meta().pbX)return "";
   return `<div class="g hdban"><span class="hdic">📌</span><div style="flex:1;min-width:0"><b>Your Pinterest wallpapers</b><small>HD wallpapers from your “lines” board, for the laptop only — paste your code once</small>
   <div class="hdrow"><input id="pb-code" placeholder="Paste code" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false" enterkeyhint="go" value="${esc(LSG("lines-code")||"")}"><button data-act="pbget">Get</button></div></div>
@@ -1741,7 +1752,7 @@ function vHome(){
    <div class="hh"><div class="hrow"><button class="avatar" data-act="go" data-v="stats" aria-label="Insights"><b>N</b></button>
     <div class="pills"><span>🔥 ${st}</span><span>✨ ${hls.length}</span><button class="iconbtn themebtn" style="width:36px;height:36px;border-radius:12px" data-act="theme" aria-label="Light or dark"></button><button class="iconbtn" style="width:36px;height:36px;border-radius:12px" data-act="settings" aria-label="Settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></button></div></div>
     <div class="greet"><h1>${hi}, Nourhan</h1><p>${st?`Day ${st} — keep the streak alive ✨`:"Make today productive and creative ✨"}</p></div></div></div>
-  <div class="lift">${hdBanner()}${pbBanner()}${pomoMini()}
+  <div class="lift">${appUpdBanner()}${hdBanner()}${pbBanner()}${pomoMini()}
   <div class="g"><div class="row between"><h3 style="margin:0">Today's focus</h3><span class="count">${tt.length?`${tt.length-left.length}/${tt.length}`:"0"}</span></div>
    <div class="mini">${minis.map(m=>`<div class="${m.c}"><span${dir(m.t)}>${esc(m.t)}</span><small>${esc(m.s)}</small></div>`).join("")}</div>
    <button class="btn indigo block" data-act="goReview">${done?"Review again":"Start daily review"}</button></div>
@@ -3347,6 +3358,10 @@ Object.assign(ACTX,{installApp:async()=>{if(DEFER){DEFER.prompt();const r=await 
 
 ACTX.pbget=()=>{const i=document.getElementById("pb-code");pbLoad(i&&i.value)};
 ACTX.pbx=()=>{setMetaQ({pbX:1})};
+
+/* Windows app (v2+): no title bar, so the page carries its own minimise / close buttons */
+if(window.LINES_APP>=2){document.body.classList.add("lapp");document.body.insertAdjacentHTML("beforeend",`<div class="wctl" aria-label="Window"><button type="button" data-w="min" aria-label="Minimise"><svg viewBox="0 0 12 12" width="12" height="12"><path d="M2 6.5h8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button><button type="button" data-w="close" class="x" aria-label="Close"><svg viewBox="0 0 12 12" width="12" height="12"><path d="M2.5 2.5l7 7M9.5 2.5l-7 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button></div>`);
+  document.querySelector(".wctl").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;try{b.dataset.w==="min"?window.linesMin():window.linesClose()}catch(err){}})}
 function settingsSheet(){
   const m=meta();const canN="Notification" in window;let scene=m.scene||"auto";
   sheet(`<h3 style="font-size:20px">Settings</h3>
