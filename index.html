@@ -1770,7 +1770,7 @@ function vHome(){
    <div class="hh"><div class="hrow"><button class="avatar" data-act="go" data-v="stats" aria-label="Insights"><b>N</b></button>
     <div class="pills"><span>🔥 ${st}</span><span>✨ ${hls.length}</span><button class="iconbtn themebtn" style="width:36px;height:36px;border-radius:12px" data-act="theme" aria-label="Light or dark"></button><button class="iconbtn" style="width:36px;height:36px;border-radius:12px" data-act="settings" aria-label="Settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></button></div></div>
     <div class="greet"><h1>${hi}, Nourhan</h1><p>${st?`Day ${st} — keep the streak alive ✨`:"Make today productive and creative ✨"}</p></div></div></div>
-  <div class="lift">${appUpdBanner()}${hdBanner()}${pbBanner()}${pomoMini()}
+  <div class="lift">${hdBanner()}${pbBanner()}${pomoMini()}
   <div class="g"><div class="row between"><h3 style="margin:0">Today's focus</h3><span class="count">${tt.length?`${tt.length-left.length}/${tt.length}`:"0"}</span></div>
    <div class="mini">${minis.map(m=>`<div class="${m.c}"><span${dir(m.t)}>${esc(m.t)}</span><small>${esc(m.s)}</small></div>`).join("")}</div>
    <button class="btn indigo block" data-act="goReview">${done?"Review again":"Start daily review"}</button></div>

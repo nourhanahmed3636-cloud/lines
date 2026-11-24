@@ -1,4 +1,4 @@
-const C="lines-v1795547522";
+const C="lines-v1795548176";
 const CORE=["./","./index.html","./manifest.json","./icon-180.png","./icon-192.png","./icon-512.png","./jszip.min.js"];
 const THUMBS=["./bg/t/aurora.jpg", "./bg/t/cotton.jpg", "./bg/t/darkglass.jpg", "./bg/t/dawn.jpg", "./bg/t/dusk.jpg", "./bg/t/glass.jpg", "./bg/t/glowtide.jpg", "./bg/t/midsilk.jpg", "./bg/t/mistlake.jpg", "./bg/t/moonlake.jpg", "./bg/t/night.jpg", "./bg/t/nightbokeh.jpg", "./bg/t/northern.jpg", "./bg/t/peachsilk.jpg", "./bg/t/ribbons.jpg", "./bg/t/rosecloud.jpg", "./bg/t/sea.jpg", "./bg/t/silk.jpg", "./bg/t/swirl.jpg"];
 self.addEventListener("install",e=>{e.waitUntil(caches.open(C).then(c=>c.addAll(CORE.map(u=>new Request(u,{cache:"reload"}))).then(()=>c.addAll(THUMBS).catch(()=>{}))));self.skipWaiting()});
