@@ -3607,7 +3607,7 @@ loadLocal();
     history.replaceState(null,"",location.pathname);S.tab="home";setTimeout(()=>toast(`Your data is here ✓ (${n} items added)`,3500),600);
   }catch(e){history.replaceState(null,"",location.pathname);setTimeout(()=>toast("That import link didn't work"),600)}})();
 render();setSync();initCloud();
-if("serviceWorker" in navigator&&location.protocol==="https:"){const hadSW=!!navigator.serviceWorker.controller;let rl=0;navigator.serviceWorker.addEventListener("controllerchange",()=>{if(!hadSW||rl)return;rl=1;const go=()=>{const p=meta().pomo;if(p&&p.running)setTimeout(go,4000);else location.reload()};go()});navigator.serviceWorker.register("sw.js").then(r=>{document.addEventListener("visibilitychange",()=>{if(!document.hidden)r.update().catch(()=>{})})}).catch(()=>{})}
+if("serviceWorker" in navigator&&location.protocol==="https:"){const hadSW=!!navigator.serviceWorker.controller;let rl=0;navigator.serviceWorker.addEventListener("controllerchange",()=>{if(!hadSW||rl)return;rl=1;const go=()=>{const p=meta().pomo;if(p&&p.running)setTimeout(go,4000);else location.reload()};go()});navigator.serviceWorker.addEventListener("message",e=>{if(e.data!=="lines-updated"||rl)return;rl=1;const go=()=>{const p=meta().pomo,ae=document.activeElement;if((p&&p.running)||(ae&&/INPUT|TEXTAREA/.test(ae.tagName)))setTimeout(go,4000);else location.reload()};go()});navigator.serviceWorker.register("sw.js").then(r=>{document.addEventListener("visibilitychange",()=>{if(!document.hidden)r.update().catch(()=>{})})}).catch(()=>{})}
 </script>
 </body>
 </html>
