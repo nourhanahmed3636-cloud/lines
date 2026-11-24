@@ -1060,6 +1060,10 @@ html.dark .sndt{background:rgba(255,255,255,.08)}
 .sndvols{margin-top:14px;display:grid;gap:10px}
 .sndv{display:grid;grid-template-columns:minmax(110px,40%) 1fr;align-items:center;gap:12px;font-size:13px;font-weight:700;color:var(--ink)}
 .sndr{width:100%;accent-color:var(--v1)}
+
+/* date heading on the right stays readable over busy wallpapers */
+body.desk .dday b,body.desk .dday small{text-shadow:0 0 14px rgba(255,255,255,.85),0 0 3px rgba(255,255,255,.7)}
+html.dark body.desk .dday b,html.dark body.desk .dday small{text-shadow:0 0 14px rgba(0,0,0,.75),0 0 3px rgba(0,0,0,.6)}
 </style>
 </head>
 <body>
@@ -1184,11 +1188,15 @@ const IDEAS=[
 const BGDATA={"cotton":{"n":"Cotton sky","m":"light","ph":["#b6bdee","#d4c2e1","#b4a8dd"],"acc":["#3a23db","#6350eb","#db64eb","#9284f5"],"fx":"dust"},"dawn":{"n":"Lilac dawn","m":"light","ph":["#9393e1","#f2d2c0","#a792c9"],"acc":["#6823db","#8a50eb","#eb64db","#ae84f5"],"fx":"dust"},"rosecloud":{"n":"Rose clouds","m":"light","ph":["#c0a9e8","#edc8c9","#d0a2c6"],"acc":["#db23c4","#eb50d8","#9764eb","#f584e6"],"fx":"petals"},"aurora":{"n":"Aurora mesh","m":"light","ph":["#dcb6ee","#d1c0e0","#e1bae1"],"acc":["#9623db","#b150eb","#eb64b9","#ca84f5"],"fx":"dust"},"silk":{"n":"Lilac silk","m":"light","ph":["#b38dcf","#deb0d4","#d5a2b9"],"acc":["#9623db","#b150eb","#eb7564","#ca84f5"],"fx":"sparkle"},"peachsilk":{"n":"Peach silk","m":"light","ph":["#dcadb9","#e2bbde","#cba7cc"],"acc":["#db2368","#eb508a","#9764eb","#f584ae"],"fx":"petals"},"ribbons":{"n":"Rose silk ribbons","m":"light","ph":["#eed2dc","#eed6df","#e9cbd7"],"acc":["#db2368","#eb508a","#eb9764","#f584ae"],"fx":"petals"},"swirl":{"n":"Pastel flow","m":"light","ph":["#e6bcd6","#debcdd","#e6cdde"],"acc":["#db2368","#eb508a","#eb9764","#f584ae"],"fx":"sparkle"},"sea":{"n":"Sparkling sea","m":"light","ph":["#237dd9","#62c5f1","#e7d7ed"],"acc":["#2396db","#50b1eb","#7564eb","#84caf5"],"fx":"sparkle"},"glass":{"n":"Iridescent glass","m":"light","ph":["#d2b3ee","#d8b3dd","#e1c4c6"],"acc":["#6823db","#8a50eb","#eb64b9","#ae84f5"],"fx":"bubbles"},"mistlake":{"n":"Misty lake","m":"light","ph":["#b0b7ee","#a895c6","#b1a3d6"],"acc":["#6823db","#8a50eb","#eb64db","#ae84f5"],"fx":"dust"},"dusk":{"n":"Blue hour","m":"dark","ph":["#3b3587","#dca0af","#6b579a"],"acc":["#3a23db","#6350eb","#db64eb","#9284f5"],"fx":"stars"},"night":{"n":"Starry night","m":"dark","ph":["#312b57","#2a2364","#282455"],"acc":["#3a23db","#6350eb","#db64eb","#9284f5"],"fx":"stars"},"moonlake":{"n":"Moon lake","m":"dark","ph":["#2d2d53","#211d54","#262359"],"acc":["#3a23db","#6350eb","#db64eb","#9284f5"],"fx":"stars"},"northern":{"n":"Northern lights","m":"dark","ph":["#6267b5","#181954","#05051b"],"acc":["#3a23db","#6350eb","#64b9eb","#9284f5"],"fx":"stars"},"midsilk":{"n":"Midnight silk","m":"dark","ph":["#281d59","#68439c","#4f2f7c"],"acc":["#3a23db","#6350eb","#db64eb","#9284f5"],"fx":"dust"},"darkglass":{"n":"Neon glass","m":"dark","ph":["#4d2c97","#5a3980","#38337f"],"acc":["#6823db","#8a50eb","#eb64db","#ae84f5"],"fx":"bubbles"},"nightbokeh":{"n":"City glow","m":"dark","ph":["#4a3586","#864a94","#905e6f"],"acc":["#6823db","#8a50eb","#eb64db","#ae84f5"],"fx":"dust"},"glowtide":{"n":"Glowing tide","m":"dark","ph":["#162030","#234b59","#28505d"],"acc":["#23c4db","#50d8eb","#6475eb","#84e6f5"],"fx":"sparkle"}};
 const SCENES={bg:{name:"Daily review"}};const sceneNow=()=>"bg";let sceneN=0;
 const LSG=k=>{try{return localStorage.getItem(k)}catch(e){return null}},LSS=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}};
-function bgInfo(id){if(!id)return null;if(id.startsWith("u:")){const u=get("ubg_"+id.slice(2));return u?{n:u.n||"My photo",m:u.m,ph:u.ph,acc:u.acc,fx:u.fx||"dust",src:u.assetId}:null}return BGDATA[id]||null}
-function bgList(){return Object.keys(BGDATA).concat(all("ubg").map(u=>"u:"+u.id))}
+/* laptop-only wallpapers from her Pinterest board "lines" — kept locked on the site (like the HD pack) and unlocked once per laptop with the code */
+const PBV=1;
+function pbList(){try{const d=JSON.parse(LSG("lines-pbg")||"null");return d&&d.v===PBV?d.l:[]}catch(e){return []}}
+const isWideScr=()=>window.matchMedia("(min-width:1024px), (min-width:820px) and (hover:hover) and (pointer:fine)").matches;
+function bgInfo(id){if(!id)return null;if(id.startsWith("p:")){const l=pbList(),i=l.findIndex(x=>x.id===id.slice(2));if(i<0)return null;const p=l[i];return {n:"Pinterest "+(i+1),m:p.m,ph:p.ph,acc:p.acc,fx:p.fx,src:"local:pbg_"+p.id,pb:1}}if(id.startsWith("u:")){const u=get("ubg_"+id.slice(2));return u?{n:u.n||"My photo",m:u.m,ph:u.ph,acc:u.acc,fx:u.fx||"dust",src:u.assetId}:null}return BGDATA[id]||null}
+function bgList(){const base=Object.keys(BGDATA).concat(all("ubg").map(u=>"u:"+u.id));return isWideScr()?pbList().map(p=>"p:"+p.id).concat(base):base}
 const bgSrc=(id,thumb)=>{const b=bgInfo(id);if(!b)return "";if(b.src)return blobUrl(b.src);return `bg/${thumb?"t/":""}${id}.jpg`};
 const bgHid=()=>meta().bgHidden||[];
-function bgPool(dark){const h=bgHid();let l=bgList().filter(k=>!h.includes(k));if(!l.length)l=bgList();const f=l.filter(k=>{const m=bgInfo(k).m;return dark?m!=="light":m!=="dark"});return f.length?f:l}
+function bgPool(dark){const h=bgHid();if(isWideScr()){const pb=bgList().filter(k=>k.startsWith("p:")&&!h.includes(k)).filter(k=>{const m=bgInfo(k).m;return dark?m!=="light":m!=="dark"});if(pb.length)return pb}let l=bgList().filter(k=>!h.includes(k));if(!l.length)l=bgList();const f=l.filter(k=>{const m=bgInfo(k).m;return dark?m!=="light":m!=="dark"});return f.length?f:l}
 function pickBg(dark){
   const pin=meta().bgPin;if(pin&&bgInfo(pin))return pin;
   let hist=[];try{hist=JSON.parse(LSG("lines-bg-hist")||"[]")}catch(e){}
@@ -1207,9 +1215,9 @@ function applyBg(id){
   const ph=b.ph||["#e3d6ff","#f6d9ee","#ffe3cf"];const bg=$(".bg");if(bg)bg.style.background=`linear-gradient(180deg,${ph[0]},${ph[1]} 55%,${ph[2]})`;
   const holder=$("#bgimg");if(holder){const img=new Image();img.alt="";img.decoding="async";
     img.onload=()=>{holder.querySelectorAll("img").forEach(o=>{o.classList.remove("on");setTimeout(()=>o.remove(),900)});holder.appendChild(img);holder.style.setProperty("--bgurl",`url("${img.src}")`);requestAnimationFrame(()=>requestAnimationFrame(()=>img.classList.add("on")));tbTint(img)};
+    const wide=isWideScr()&&(b.pb||!b.src);holder.classList.toggle("wide",!!wide);
     if(b.src&&String(b.src).startsWith("local:")&&!LOCALURL[b.src])idbGet(b.src).then(bl=>{if(bl){LOCALURL[b.src]=URL.createObjectURL(bl);img.src=LOCALURL[b.src]}}).catch(()=>{});
-    else{const wide=!String(id).startsWith("u:")&&window.matchMedia("(min-width:1024px), (min-width:820px) and (hover:hover) and (pointer:fine)").matches;holder.classList.toggle("wide",wide);img.src=wide?`bg/w/${id}.jpg`:bgSrc(id)}
-    if(String(b.src||"").startsWith("local:")||String(id).startsWith("u:"))holder.classList.remove("wide")}
+    else img.src=b.src?bgSrc(id):(wide?`bg/w/${id}.jpg`:bgSrc(id))}
   applyAccent(b.acc);startFx(b.fx);
   const m=document.querySelector('meta[name=theme-color]');if(m)m.content=ph[0];
 }
@@ -1328,6 +1336,31 @@ async function addPhotos(files){
   if(hd)setMetaQ({hdDone:true},true);
   render();toast(n?(rep?`${n} HD backgrounds ✨ (${rep} old copies replaced)`:`Added ${n} background${n>1?"s":""} ✨`):"Couldn't add those photos",3000);return n;
 }
+function pbBanner(){if(!isWideScr()||pbList().length||meta().pbX)return "";
+  return `<div class="g hdban"><span class="hdic">📌</span><div style="flex:1;min-width:0"><b>Your Pinterest wallpapers</b><small>HD wallpapers from your “lines” board, for the laptop only — paste your code once</small>
+  <div class="hdrow"><input id="pb-code" placeholder="Paste code" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false" enterkeyhint="go" value="${esc(LSG("lines-code")||"")}"><button data-act="pbget">Get</button></div></div>
+  <button class="iconbtn" data-act="pbx" aria-label="Dismiss" style="width:30px;height:30px;border-radius:10px;align-self:flex-start">×</button></div>`}
+let pbBusy=false;
+async function pbLoad(code,quiet){if(pbBusy)return;const raw=String(code||LSG("lines-code")||"").toUpperCase().replace(/[^A-Z0-9]/g,"");
+  if(raw.length!==12){if(!quiet)toast("Paste the 12-character code",2500);return}
+  if(!(window.crypto&&crypto.subtle))return;pbBusy=true;
+  try{if(!quiet)toast("Unlocking…",1500);
+    const get=async n=>{let r;try{r=await fetch("hd/"+n,{cache:"no-store"})}catch(e){throw "net"}if(!r.ok)throw "net";return r};
+    const m=await (await get("meta.json")).json(),pm=await (await get("p/meta.json")).json();
+    const base=await crypto.subtle.importKey("raw",new TextEncoder().encode(raw),"PBKDF2",false,["deriveKey"]);
+    const key=await crypto.subtle.deriveKey({name:"PBKDF2",salt:new Uint8Array(m.salt.match(/../g).map(h=>parseInt(h,16))),iterations:m.iter,hash:"SHA-256"},base,{name:"AES-GCM",length:256},false,["decrypt"]);
+    const dec=async n=>{const b=new Uint8Array(await (await get(n)).arrayBuffer());try{return await crypto.subtle.decrypt({name:"AES-GCM",iv:b.subarray(0,12)},key,b.subarray(12))}catch(e){throw "code"}};
+    const ids=[...Array(pm.n)].map((_,i)=>String(i+1).padStart(2,"0")),l=[];let nx=0,got=0;
+    const w=async()=>{while(nx<ids.length){const id=ids[nx++],lid="local:pbg_"+id;const bl=new Blob([await dec("p/"+id+".bin")],{type:"image/jpeg"});await idbPut(lid,bl);
+      const u=URL.createObjectURL(bl);const im=await new Promise((ok,no)=>{const i=new Image();i.onload=()=>ok(i);i.onerror=no;i.src=u});const sm=sampleBg(im);LOCALURL[lid]=u;
+      l.push({id,ph:sm.ph,acc:sm.acc,m:sm.m,fx:sm.fx});toast(`Adding laptop wallpapers ${++got}/${ids.length}…`,1500)}};
+    await Promise.all([w(),w()]);l.sort((a,b)=>a.id<b.id?-1:1);
+    LSS("lines-pbg",JSON.stringify({v:PBV,l}));LSS("lines-code",raw);
+    toast(`${l.length} Pinterest wallpapers added for the laptop ✨`,3000);syncBg(true);render()}
+  catch(e){if(!quiet)toast(e==="code"?"That code didn't work — check it and try again":"No connection — try again in a moment",3500)}
+  finally{pbBusy=false}}
+document.addEventListener("keydown",ev=>{if(ev.key==="Enter"&&ev.target&&ev.target.id==="pb-code"){ev.preventDefault();pbLoad(ev.target.value)}});
+setTimeout(()=>{try{if(isWideScr()&&!pbList().length&&LSG("lines-code"))pbLoad(null,true)}catch(e){}},2500);
 function hdBanner(){if(meta().hdDone)return "";
   return `<div class="g hdban"><span class="hdic">🖼️</span><div style="flex:1;min-width:0"><b>HD backgrounds</b><small>Paste your code and tap Get — no files needed</small>
   <div class="hdrow"><input id="hd-code" placeholder="Paste code" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false" enterkeyhint="go"><button data-act="hdget">Get</button></div>
@@ -1350,7 +1383,7 @@ async function hdUnlock(code){if(hdBusy)return;const raw=String(code||"").toUppe
   const ids=[...Array(m.n)].map((_,i)=>String(i+1).padStart(2,"0")),files=[];let nx=0,got=0;
   const w=async()=>{while(nx<ids.length){const id=ids[nx++];try{files.push(new File([await dec(id+".bin")],"HD_"+id+".jpg",{type:"image/jpeg"}))}catch(e){}toast(`Downloading ${++got}/${ids.length}…`,1500)}};
   await Promise.all([w(),w(),w()]);files.sort((a,b)=>a.name<b.name?-1:1);
-  if(!files.length)throw "net";await addPhotos(files)}
+  if(!files.length)throw "net";LSS("lines-code",raw);await addPhotos(files)}
   catch(e){toast(e==="code"?"That code didn't work — check it and try again":"No connection — try again in a moment",3500)}
   finally{hdBusy=false}}
 
@@ -1705,7 +1738,7 @@ function vHome(){
    <div class="hh"><div class="hrow"><button class="avatar" data-act="go" data-v="stats" aria-label="Insights"><b>N</b></button>
     <div class="pills"><span>🔥 ${st}</span><span>✨ ${hls.length}</span><button class="iconbtn themebtn" style="width:36px;height:36px;border-radius:12px" data-act="theme" aria-label="Light or dark"></button><button class="iconbtn" style="width:36px;height:36px;border-radius:12px" data-act="settings" aria-label="Settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></button></div></div>
     <div class="greet"><h1>${hi}, Nourhan</h1><p>${st?`Day ${st} — keep the streak alive ✨`:"Make today productive and creative ✨"}</p></div></div></div>
-  <div class="lift">${hdBanner()}${pomoMini()}
+  <div class="lift">${hdBanner()}${pbBanner()}${pomoMini()}
   <div class="g"><div class="row between"><h3 style="margin:0">Today's focus</h3><span class="count">${tt.length?`${tt.length-left.length}/${tt.length}`:"0"}</span></div>
    <div class="mini">${minis.map(m=>`<div class="${m.c}"><span${dir(m.t)}>${esc(m.t)}</span><small>${esc(m.s)}</small></div>`).join("")}</div>
    <button class="btn indigo block" data-act="goReview">${done?"Review again":"Start daily review"}</button></div>
@@ -3308,6 +3341,9 @@ Object.assign(ACTX,{installApp:async()=>{if(DEFER){DEFER.prompt();const r=await 
    ${saf?`<ol class="isteps"><li>In the Safari menu at the top, click <b>File</b>.</li><li>Click <b>Add to Dock…</b></li><li>Click <b>Add</b>. Lines appears in your Dock.</li></ol>`
    :`<ol class="isteps"><li>Look at the right end of the address bar for the <b>install icon</b> (a little screen with an arrow ⤓).</li><li>Click it, then <b>Install</b>.</li><li>Or open the browser menu <b>⋮</b> → <b>Cast, save and share</b> → <b>Install page as app</b> (in Edge: <b>Apps → Install this site as an app</b>).</li></ol>`}
    <p class="muted" style="font-size:12.5px;margin-top:12px">Same link, same app — it just gets its own window.</p>`)}});
+
+ACTX.pbget=()=>{const i=document.getElementById("pb-code");pbLoad(i&&i.value)};
+ACTX.pbx=()=>{setMetaQ({pbX:1})};
 function settingsSheet(){
   const m=meta();const canN="Notification" in window;let scene=m.scene||"auto";
   sheet(`<h3 style="font-size:20px">Settings</h3>
